@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Supplementparquets list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Etat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for supplementParquet in supplementParquets %}
+            <tr>
+                <td><a href="{{ path('supplementparquet_show', { 'id': supplementParquet.id }) }}">{{ supplementParquet.id }}</a></td>
+                <td>{{ supplementParquet.designation }}</td>
+                <td>{{ supplementParquet.etat }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('supplementparquet_show', { 'id': supplementParquet.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('supplementparquet_edit', { 'id': supplementParquet.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('supplementparquet_new') }}">Create a new supplementParquet</a>
+        </li>
+    </ul>
+{% endblock %}

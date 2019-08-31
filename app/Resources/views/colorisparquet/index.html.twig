@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Colorisparquets list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Codecouleur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for colorisParquet in colorisParquets %}
+            <tr>
+                <td><a href="{{ path('colorisparquet_show', { 'id': colorisParquet.id }) }}">{{ colorisParquet.id }}</a></td>
+                <td>{{ colorisParquet.nom }}</td>
+                <td>{{ colorisParquet.codeCouleur }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('colorisparquet_show', { 'id': colorisParquet.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('colorisparquet_edit', { 'id': colorisParquet.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('colorisparquet_new') }}">Create a new colorisParquet</a>
+        </li>
+    </ul>
+{% endblock %}

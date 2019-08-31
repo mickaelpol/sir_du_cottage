@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bien</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bien.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ bien.nom }}</td>
+            </tr>
+            <tr>
+                <th>Preparationparquet</th>
+                <td>{{ bien.preparationParquet }}</td>
+            </tr>
+            <tr>
+                <th>Parquetparquet</th>
+                <td>{{ bien.parquetParquet }}</td>
+            </tr>
+            <tr>
+                <th>Plintheparquet</th>
+                <td>{{ bien.plintheParquet }}</td>
+            </tr>
+            <tr>
+                <th>Acryliqueparquet</th>
+                <td>{{ bien.acryliqueParquet }}</td>
+            </tr>
+            <tr>
+                <th>Seuilparquet</th>
+                <td>{{ bien.seuilParquet }}</td>
+            </tr>
+            <tr>
+                <th>Superficieparquet</th>
+                <td>{{ bien.superficieParquet }}</td>
+            </tr>
+            <tr>
+                <th>Cadreterrasse</th>
+                <td>{{ bien.cadreTerrasse }}</td>
+            </tr>
+            <tr>
+                <th>Platelageterrasse</th>
+                <td>{{ bien.platelageTerrasse }}</td>
+            </tr>
+            <tr>
+                <th>Vissageterrasse</th>
+                <td>{{ bien.vissageTerrasse }}</td>
+            </tr>
+            <tr>
+                <th>Superficieterrasse</th>
+                <td>{{ bien.superficieTerrasse }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bien_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('bien_edit', { 'id': bien.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
