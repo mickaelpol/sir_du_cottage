@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Biens list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Preparationparquet</th>
+                <th>Parquetparquet</th>
+                <th>Plintheparquet</th>
+                <th>Acryliqueparquet</th>
+                <th>Seuilparquet</th>
+                <th>Superficieparquet</th>
+                <th>Cadreterrasse</th>
+                <th>Platelageterrasse</th>
+                <th>Vissageterrasse</th>
+                <th>Superficieterrasse</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bien in biens %}
+            <tr>
+                <td><a href="{{ path('bien_show', { 'id': bien.id }) }}">{{ bien.id }}</a></td>
+                <td>{{ bien.nom }}</td>
+                <td>{{ bien.preparationParquet }}</td>
+                <td>{{ bien.parquetParquet }}</td>
+                <td>{{ bien.plintheParquet }}</td>
+                <td>{{ bien.acryliqueParquet }}</td>
+                <td>{{ bien.seuilParquet }}</td>
+                <td>{{ bien.superficieParquet }}</td>
+                <td>{{ bien.cadreTerrasse }}</td>
+                <td>{{ bien.platelageTerrasse }}</td>
+                <td>{{ bien.vissageTerrasse }}</td>
+                <td>{{ bien.superficieTerrasse }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('bien_show', { 'id': bien.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('bien_edit', { 'id': bien.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bien_new') }}">Create a new bien</a>
+        </li>
+    </ul>
+{% endblock %}

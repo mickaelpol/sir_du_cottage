@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Supplementterrasses list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Etat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for supplementTerrasse in supplementTerrasses %}
+            <tr>
+                <td><a href="{{ path('supplementterrasse_show', { 'id': supplementTerrasse.id }) }}">{{ supplementTerrasse.id }}</a></td>
+                <td>{{ supplementTerrasse.designation }}</td>
+                <td>{{ supplementTerrasse.etat }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('supplementterrasse_show', { 'id': supplementTerrasse.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('supplementterrasse_edit', { 'id': supplementTerrasse.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('supplementterrasse_new') }}">Create a new supplementTerrasse</a>
+        </li>
+    </ul>
+{% endblock %}
