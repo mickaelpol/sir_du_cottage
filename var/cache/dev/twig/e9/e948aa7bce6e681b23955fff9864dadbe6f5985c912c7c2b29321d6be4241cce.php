@@ -59,6 +59,7 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
         // line 4
         echo "    <h1>Chantiers list</h1>
 
+
     <table>
         <thead>
             <tr>
@@ -72,45 +73,45 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
         </thead>
         <tbody>
         ";
-        // line 18
+        // line 19
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["chantiers"] ?? $this->getContext($context, "chantiers")));
         foreach ($context['_seq'] as $context["_key"] => $context["chantier"]) {
-            // line 19
-            echo "            <tr>
-                <td><a href=\"";
             // line 20
-            echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("chantier_show", ["id" => $this->getAttribute($context["chantier"], "id", [])]), "html", null, true);
-            echo "\">";
-            echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "id", []), "html", null, true);
-            echo "</a></td>
+            echo "            <tr>
                 <td>";
             // line 21
-            echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "nom", []), "html", null, true);
+            echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "id", []), "html", null, true);
             echo "</td>
-                <td>";
+                <td><a href=\"";
             // line 22
+            echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("chantier_show", ["id" => $this->getAttribute($context["chantier"], "id", [])]), "html", null, true);
+            echo "\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "nom", []), "html", null, true);
+            echo "</a></td>
+                <td>";
+            // line 23
             echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "adresse", []), "html", null, true);
             echo "</td>
                 <td>";
-            // line 23
+            // line 24
             echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "type", []), "html", null, true);
             echo "</td>
                 <td>";
-            // line 24
+            // line 25
             echo twig_escape_filter($this->env, $this->getAttribute($context["chantier"], "nombreBiens", []), "html", null, true);
             echo "</td>
                 <td>
                     <ul>
                         <li>
                             <a href=\"";
-            // line 28
+            // line 29
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("chantier_show", ["id" => $this->getAttribute($context["chantier"], "id", [])]), "html", null, true);
             echo "\">show</a>
                         </li>
                         <li>
                             <a href=\"";
-            // line 31
+            // line 32
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("chantier_edit", ["id" => $this->getAttribute($context["chantier"], "id", [])]), "html", null, true);
             echo "\">edit</a>
                         </li>
@@ -122,14 +123,14 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['chantier'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 37
+        // line 38
         echo "        </tbody>
     </table>
 
     <ul>
         <li>
             <a href=\"";
-        // line 42
+        // line 43
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("chantier_new");
         echo "\">Create a new chantier</a>
         </li>
@@ -155,7 +156,7 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
 
     public function getDebugInfo()
     {
-        return array (  133 => 42,  126 => 37,  114 => 31,  108 => 28,  101 => 24,  97 => 23,  93 => 22,  89 => 21,  83 => 20,  80 => 19,  76 => 18,  60 => 4,  51 => 3,  29 => 1,);
+        return array (  134 => 43,  127 => 38,  115 => 32,  109 => 29,  102 => 25,  98 => 24,  94 => 23,  88 => 22,  84 => 21,  81 => 20,  77 => 19,  60 => 4,  51 => 3,  29 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -173,6 +174,7 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
 {% block body %}
     <h1>Chantiers list</h1>
 
+
     <table>
         <thead>
             <tr>
@@ -187,8 +189,8 @@ class __TwigTemplate_7680b747bd8bc46947f390cbe0dce2201a71a39a9d5ed84e4e0608ca1bb
         <tbody>
         {% for chantier in chantiers %}
             <tr>
-                <td><a href=\"{{ path('chantier_show', { 'id': chantier.id }) }}\">{{ chantier.id }}</a></td>
-                <td>{{ chantier.nom }}</td>
+                <td>{{ chantier.id }}</td>
+                <td><a href=\"{{ path('chantier_show', { 'id': chantier.id }) }}\">{{ chantier.nom }}</a></td>
                 <td>{{ chantier.adresse }}</td>
                 <td>{{ chantier.type }}</td>
                 <td>{{ chantier.nombreBiens }}</td>

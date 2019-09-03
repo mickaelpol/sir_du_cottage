@@ -4,7 +4,35 @@
     <h1>Bien creation</h1>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_widget(form.nom) }}
+
+        {{ form_row(form.preparationParquet) }}
+        {{ form_row(form.parquetParquet) }}
+        {{ form_row(form.plintheParquet) }}
+        {{ form_row(form.acryliqueParquet) }}
+        {{ form_row(form.seuilParquet) }}
+        {{ form_row(form.superficieParquet) }}
+
+        <ul class="coloris" data-prototype="{{ form_widget(form.colorisParquets.vars.prototype)|e('html_attr') }}">
+
+            {% for coloris in form.colorisParquets %}
+                <li>
+                    {{ form_widget(coloris.nom) }}
+                    {{ form_widget(coloris.codeCouleur) }}
+                </li>
+            {% endfor %}
+
+        </ul>
+
+        {{ form_row(form.cadreTerrasse) }}
+        {{ form_row(form.platelageTerrasse) }}
+        {{ form_row(form.vissageTerrasse) }}
+        {{ form_row(form.superficieTerrasse) }}
+
+        {% dump(form.colorisParquets.vars.prototype) %}
+
+        {#{{ form_row(form.supplementParquet) }}#}
+
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
@@ -13,4 +41,14 @@
             <a href="{{ path('bien_index') }}">Back to the list</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+
+    </script>
+    <script src="{{ asset('Js/creation_bien.js') }}"></script>
 {% endblock %}

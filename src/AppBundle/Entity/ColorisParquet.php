@@ -38,7 +38,7 @@ class ColorisParquet
 
 	/**
 	 * Many ColorisParquet have one Bien. This is the owning side.
-	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Bien", inversedBy="colorisParquets")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Bien", inversedBy="colorisParquets", cascade={"persist"}))
 	 * @ORM\JoinColumn(name="bien_id", referencedColumnName="id")
 	 */
 	private $bien;

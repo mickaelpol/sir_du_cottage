@@ -1,24 +1,37 @@
 <?php
 
+
 namespace AppBundle\Form;
 
+
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SupplementTerrasseType extends AbstractType
+class ChantierEditType extends AbstractType
 {
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
+
 		$builder
-			->add('etat', IntegerType::class, [
-				'label' => false,
+			->add('nom')
+			->add('adresse')
+			->add('biens', CollectionType::class, [
+				'label'         => false,
+				'entry_type'    => BienType::class,
+				'entry_options' => [
+					'label' => false,
+				],
+				'allow_add'     => true,
+				'allow_delete'  => true,
+				'by_reference'  => false,
 			]);
+
 	}
 
 	/**
@@ -27,7 +40,7 @@ class SupplementTerrasseType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\SupplementTerrasse',
+			'data_class' => 'AppBundle\Entity\Chantier',
 		));
 	}
 
@@ -36,8 +49,7 @@ class SupplementTerrasseType extends AbstractType
 	 */
 	public function getBlockPrefix()
 	{
-		return 'appbundle_supplementterrasse';
+		return 'appbundle_chantier';
 	}
-
 
 }

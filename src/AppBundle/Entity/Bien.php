@@ -111,7 +111,7 @@ class Bien
 
 	/**
 	 * One Bien has many ColorisParquet. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\ColorisParquet", mappedBy="bien")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\ColorisParquet", mappedBy="bien", orphanRemoval=true, cascade={"persist"}))
 	 */
 	private $colorisParquets;
 
@@ -133,8 +133,13 @@ class Bien
 		$this->supplementTerrasses = new ArrayCollection();
 	}
 
+	public function __toString()
+	{
+		return $this->nom;
+	}
 
-    /**
+
+	/**
      * Get id
      *
      * @return int
@@ -434,8 +439,9 @@ class Bien
     public function addColorisParquet(ColorisParquet $colorisParquet)
     {
         $this->colorisParquets[] = $colorisParquet;
-
-        return $this;
+	    // *** This is what you are missing ***
+	    $colorisParquet->setBien($this);
+	    return $this;
     }
 
     /**

@@ -44,7 +44,12 @@ class SupplementParquet
 	private $bien;
 
 
-    /**
+	public function __toString()
+	{
+		return $this->designation;
+	}
+
+	/**
      * Get id
      *
      * @return int

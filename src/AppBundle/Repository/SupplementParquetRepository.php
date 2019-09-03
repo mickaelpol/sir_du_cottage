@@ -10,4 +10,7 @@ namespace AppBundle\Repository;
  */
 class SupplementParquetRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
+
 }
