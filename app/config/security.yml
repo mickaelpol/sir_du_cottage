@@ -1,8 +1,11 @@
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
+#        SuperAdmin > Admin > Directeur > Chef > User
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+        ROLE_CHEF: ROLE_USER
+        ROLE_DIRECTEUR: ROLE_CHEF
+        ROLE_ADMIN: ROLE_DIRECTEUR
         ROLE_SUPER_ADMIN: ROLE_ADMIN
     providers:
         fos_userbundle:
