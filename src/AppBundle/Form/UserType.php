@@ -18,11 +18,6 @@ class UserType extends AbstractType
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-//		$roles = [
-//			'ROLE_DIRECTEUR' => 0,
-//			'ROLE_CHEF',
-//			'ROLE_USER'
-//		];
 
 		$builder
 			->add('username', TextType::class, [

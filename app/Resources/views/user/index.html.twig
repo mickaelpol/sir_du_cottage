@@ -17,6 +17,7 @@
             <li>{{ user.firstRole(user) }}</li>
             <li>
                 <a href="{{ path('user_delete', { 'id': user.id }) }}">X</a>
+                <a href="{{ path('user_edit', { 'id': user.id }) }}">Editer</a>
             </li>
         </ul>
     {% endfor %}
