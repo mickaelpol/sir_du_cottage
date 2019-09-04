@@ -18,6 +18,7 @@
             <li>
                 <a href="{{ path('user_delete', { 'id': user.id }) }}">X</a>
                 <a href="{{ path('user_edit', { 'id': user.id }) }}">Editer</a>
+                <a href="{{ path('user_password_edit', { 'id': user.id }) }}">Modifier son mot de passe</a>
             </li>
         </ul>
     {% endfor %}

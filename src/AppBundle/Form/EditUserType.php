@@ -31,6 +31,15 @@ class EditUserType extends AbstractType
 					'Ouvrier'        => 'ROLE_USER',
 				],
 				'preferred_choices' => ['ROLE_DIRECTEUR'],
+			])
+			->add('enabled', ChoiceType::class, [
+				'label'    => 'Activer l\'utilisateur',
+				'choices'  => [
+					'Activé'     => true,
+					'Désactiver' => false,
+				],
+				'multiple' => false,
+				'expanded' => true,
 			]);
 	}
 

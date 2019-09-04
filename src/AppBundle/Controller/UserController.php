@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\EditUserPasswordType;
 use AppBundle\Form\EditUserType;
 use AppBundle\Form\UserEditType;
 use AppBundle\Form\UserType;
@@ -85,6 +86,34 @@ class UserController extends Controller
 		return $this->render('user/edit.html.twig', array(
 			'user' => $user,
 			'edit_form' => $editForm->createView(),
+		));
+	}
+
+
+	/**
+	 * Displays a form to edit password an existing user entity.
+	 * @Route(path="/{id}/edit-password", name="user_password_edit", methods={"GET", "POST"})
+	 * @param Request $request
+	 * @param User $user
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function editPasswordAction(Request $request, User $user)
+	{
+		$form = $this->createForm(EditUserPasswordType::class, $user);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$userManager = $this->container->get('fos_user.user_manager');
+			$userManager->updatePassword($user);
+			$em->flush();
+
+			return $this->redirectToRoute('user_index');
+		}
+
+		return $this->render('user/edit-password.html.twig', array(
+			'user' => $user,
+			'edit_form' => $form->createView(),
 		));
 	}
 
