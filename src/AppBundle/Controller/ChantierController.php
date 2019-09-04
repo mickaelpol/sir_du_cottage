@@ -8,9 +8,9 @@ use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
 use AppBundle\Form\ChantierEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Chantier controller.
@@ -21,9 +21,7 @@ class ChantierController extends Controller
 {
 	/**
 	 * Lists all chantier entities.
-	 *
-	 * @Route("/", name="chantier_index")
-	 * @Method("GET")
+	 * @Route(path="/", name="chantier_index", methods={"GET"})
 	 */
 	public function indexAction()
 	{
@@ -38,9 +36,7 @@ class ChantierController extends Controller
 
 	/**
 	 * Creates a new chantier entity.
-	 *
-	 * @Route("/new", name="chantier_new")
-	 * @Method({"GET", "POST"})
+	 * @Route(path="/new", name="chantier_new", methods={"GET", "POST"})
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
@@ -230,9 +226,7 @@ class ChantierController extends Controller
 
 	/**
 	 * Finds and displays a chantier entity.
-	 *
-	 * @Route("/{id}", name="chantier_show")
-	 * @Method("GET")
+	 * @Route(path="/{id}", name="chantier_show", methods={"GET"})
 	 * @param Chantier $chantier
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -265,9 +259,10 @@ class ChantierController extends Controller
 
 	/**
 	 * Displays a form to edit an existing chantier entity.
-	 *
-	 * @Route("/{id}/edit", name="chantier_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route(path="/{id}/edit", name="chantier_edit", methods={"GET", "POST"})
+	 * @param Request $request
+	 * @param Chantier $chantier
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
 	public function editAction(Request $request, Chantier $chantier)
 	{
@@ -290,9 +285,7 @@ class ChantierController extends Controller
 
 	/**
 	 * Deletes a chantier entity.
-	 *
-	 * @Route("/{id}", name="chantier_delete")
-	 * @Method("DELETE")
+	 * @Route(path="/{id}", name="chantier_delete", methods={"DELETE"})
 	 */
 	public function deleteAction(Request $request, Chantier $chantier)
 	{

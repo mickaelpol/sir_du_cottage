@@ -3,10 +3,10 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 #        SuperAdmin > Admin > Directeur > Chef > User
     role_hierarchy:
-        ROLE_CHEF: ROLE_USER
-        ROLE_DIRECTEUR: ROLE_CHEF
-        ROLE_ADMIN: ROLE_DIRECTEUR
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_CHEF: [ ROLE_USER ]
+        ROLE_DIRECTEUR: [ ROLE_CHEF, ROLE_USER ]
+        ROLE_ADMIN: [ ROLE_DIRECTEUR, ROLE_CHEF, ROLE_USER ]
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_DIRECTEUR, ROLE_CHEF, ROLE_USER ]
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
@@ -14,11 +14,29 @@ security:
         main:
             pattern: ^/
             form_login:
+                login_path: /login
+                check_path: fos_user_security_check
+                remember_me: true
+                default_target_path: /
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-            logout: true
+            logout:
+                path: /logout
+                target: /login
             anonymous: true
+            remember_me:
+                secret: '%secret%'
+                lifetime: 604800 # 1week in seconds
+                path: /
+            logout_on_user_change: true
+
+
     access_control:
+        - { path: ^/supplementterrasse, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
+        - { path: ^/supplementparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
+        - { path: ^/colorisparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
+        - { path: ^/bien, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
+        - { path: ^/chantier, role: [ ROLE_DIRECTEUR, ROLE_CHEF ] }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
