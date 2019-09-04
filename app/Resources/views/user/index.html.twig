@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Liste des utilisateurs</h1>
+
+    {% for user in users %}
+        <ul>
+            <li>{{ user.username }}</li>
+            <li>
+                {% if user.enabled == 1 %}
+                    Actif
+                    {% else %}
+                    Désactivé
+                {% endif %}
+            </li>
+            <li>{{ user.firstRole(user) }}</li>
+            <li>
+                <a href="{{ path('user_delete', { 'id': user.id }) }}">X</a>
+            </li>
+        </ul>
+    {% endfor %}
+
+    <ul>
+        <li>
+            <a href="{{ path('user_new') }}">Ajouter un utilisateur</a>
+        </li>
+    </ul>
+
+{% endblock %}
