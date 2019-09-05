@@ -1,0 +1,152 @@
+<?php
+
+namespace AppBundle\Controller;
+
+use AppBundle\Entity\User;
+use AppBundle\Form\EditUserPasswordType;
+use AppBundle\Form\EditUserType;
+use AppBundle\Form\UserEditType;
+use AppBundle\Form\UserType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * Class UserController
+ * @Route("user")
+ * @package AppBundle\Controller
+ */
+class UserController extends Controller
+{
+	CONST CHEF = 'Chef d\'équipe';
+
+	/**
+	 * Lists all users entities.
+	 * @Route(path="/", name="user_index", methods={"GET", "POST"})
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @Security("is_granted('ROLE_CHEF')")
+	 */
+	public function indexAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$userActif = $this->getUser();
+		$userActifRole = $userActif->getFirstRole($userActif);
+		$listUsers = $em->getRepository(User::class)->findAll();
+		$userChefRole = $em->getRepository(User::class)->getUserByRole();
+		/* Opération ternaire permettant de lister que les chef et ouvrier si lutilisateur courant
+		 * Est un chef d'équipe
+		 * Sinon on affiche tous les utlilisateur pour le grade au dessus
+		*/
+		$users = $userActifRole === self::CHEF ? $userChefRole : $listUsers;
+
+		return $this->render('user/index.html.twig', array(
+			'users'     => $users,
+		));
+	}
+
+	/**
+	 * Creates a new user entity.
+	 * @Route(path="/new", name="user_new", methods={"GET", "POST"})
+	 * @param Request $request
+	 * @Security("is_granted('ROLE_CHEF')")
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function newAction(Request $request)
+	{
+		$user = new User();
+		$form = $this->createForm(UserType::class, $user);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$user->setEnabled(true);
+			$em->persist($user);
+			$em->flush();
+
+			/*, array('id' => $bien->getId())*/
+			return $this->redirectToRoute('user_index');
+		}
+
+		return $this->render('user/new.html.twig', array(
+			'user' => $user,
+			'form' => $form->createView(),
+		));
+	}
+
+	/**
+	 * Displays a form to edit an existing user entity.
+	 * @Route(path="/{id}/edit", name="user_edit", methods={"GET", "POST"})
+	 * @param Request $request
+	 * @param User $user
+	 * @Security("is_granted('ROLE_CHEF')")
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function editAction(Request $request, User $user)
+	{
+		$editForm = $this->createForm(EditUserType::class, $user);
+		$editForm->handleRequest($request);
+
+		if ($editForm->isSubmitted() && $editForm->isValid()) {
+			$newRole = [$request->request->get('appbundle_user')['role']];
+			$user->removeRole($user->getFirstRole($user));
+			$user->setRoles($newRole);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
+		}
+
+		return $this->render('user/edit.html.twig', array(
+			'user' => $user,
+			'edit_form' => $editForm->createView(),
+		));
+	}
+
+
+	/**
+	 * Displays a form to edit password an existing user entity.
+	 * @Route(path="/{id}/edit-password", name="user_password_edit", methods={"GET", "POST"})
+	 * @Security("is_granted('ROLE_CHEF')")
+	 * @param Request $request
+	 * @param User $user
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function editPasswordAction(Request $request, User $user)
+	{
+		$form = $this->createForm(EditUserPasswordType::class, $user);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$userManager = $this->container->get('fos_user.user_manager');
+			$userManager->updatePassword($user);
+			$em->flush();
+
+			return $this->redirectToRoute('user_index');
+		}
+
+		return $this->render('user/edit-password.html.twig', array(
+			'user' => $user,
+			'edit_form' => $form->createView(),
+		));
+	}
+
+
+	/**
+	 * Deletes a user entity.
+	 * @Route(path="/{id}", name="user_delete", methods={"GET"})
+	 * @param Request $request
+	 * @param User $user
+	 * @Security("is_granted('RROLE_DIRECTEUR')")
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	public function deleteAction(Request $request, User $user)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($user);
+		$em->flush();
+
+		return $this->redirectToRoute('user_index');
+	}
+
+}

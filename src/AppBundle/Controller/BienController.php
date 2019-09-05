@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bien;
+use AppBundle\Form\BienType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Bien controller.
@@ -31,16 +33,18 @@ class BienController extends Controller
         ));
     }
 
-    /**
-     * Creates a new bien entity.
-     *
-     * @Route("/new", name="bien_new")
-     * @Method({"GET", "POST"})
-     */
+	/**
+	 * Creates a new bien entity.
+	 *
+	 * @Route("/new", name="bien_new")
+	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function newAction(Request $request)
     {
         $bien = new Bien();
-        $form = $this->createForm('AppBundle\Form\BienType', $bien);
+        $form = $this->createForm(BienType::class, $bien);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

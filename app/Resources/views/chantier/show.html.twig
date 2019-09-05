@@ -1,32 +1,136 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Chantier</h1>
 
-    <table>
+    {% set nombreSuppTerrasse = 0 %}
+    {% set nombreSuppParquet = 0 %}
+
+    {% set colspanTerrasse = 0 %}
+    {% set colspanParquet = 0 %}
+
+    {% for bien in chantier.biens %}
+        {% set nombreSuppTerrasse = bien.supplementTerrasses|length %}
+        {% set colspanTerrasse = 4 + nombreSuppTerrasse %}
+        {% set nombreSuppParquet = bien.supplementParquets|length %}
+        {% set colspanParquet = 7 + nombreSuppParquet %}
+    {% endfor %}
+
+    {% set pourcentTd  = 100 / (colspanParquet + colspanTerrasse + 1) %}
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th {
+            height: 50px;
+        }
+
+        td {
+            width: {{ pourcentTd }}%;
+            height: auto;
+        }
+    </style>
+    {{ form_start(form) }}
+
+    <h1>Chantier {{ form_widget(form.nom) }}</h1>
+    <h2>
+        <label for="">Adresse</label>
+        {{ form_widget(form.adresse) }}
+    </h2>
+    <h3>{{ chantier.type }}</h3>
+    <h4>{{ chantier.nombreBiens }}</h4>
+
+    <table style="width: 100%;" border="1">
         <tbody>
+        <tr>
+            <th colspan="1" bgcolor="black"></th>
+            {% if nombreSuppParquet > 0 %}
+                <th colspan="{{ colspanParquet }}">Parquet</th>
+            {% endif %}
+            {% if nombreSuppTerrasse > 0 %}
+                <th colspan="{{ colspanTerrasse }}">Terrasse</th>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>Nom</th>
+            {% if nombreSuppParquet > 0 %}
+                <th>Superficie</th>
+                <th>Coloris</th>
+                <th>Préparation</th>
+                <th>Parquet</th>
+                <th>Plinthe</th>
+                <th>Acrylique</th>
+                <th>Seuil</th>
+                {% for supplementParquet in oneBien.supplementParquets %}
+                    <th>{{ supplementParquet.designation }}</th>
+                {% endfor %}
+            {% endif %}
+            {% if nombreSuppTerrasse > 0 %}
+                <th>Superficie</th>
+                <th>Cadre</th>
+                <th>Platelage</th>
+                <th>Vissage</th>
+                {% for supplementTerrasse in oneBien.supplementTerrasses %}
+                    <th>{{ supplementTerrasse.designation }}</th>
+                {% endfor %}
+            {% endif %}
+
+        </tr>
+        {% for formulaire in form.biens.children %}
             <tr>
-                <th>Id</th>
-                <td>{{ chantier.id }}</td>
+                <td>{{ form_widget(formulaire.children.nom) }}</td>
+                {% if nombreSuppParquet > 0 %}
+                    <td>{{ form_widget(formulaire.children.superficieParquet) }}</td>
+                    <td>
+                        <ul class="coloris" data-prototype="{{ form_widget(formulaire.colorisParquets.vars.prototype)|e('html_attr') }}">
+                            {% for coloris in formulaire.colorisParquets %}
+                                <li>
+                                    <div class="row js-delete-row">
+                                        <div class="js-coloris-parquet-item">
+                                            {{ form_widget(coloris.nom) }}
+                                            {{ form_widget(coloris.codeCouleur) }}
+                                            <a href="#" class="js-remove-coloris-parquet pull-right">
+                                                X
+                                                <span class="fa fa-close"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ form_widget(formulaire.children.preparationParquet) }}</td>
+                    <td>{{ form_widget(formulaire.children.parquetParquet) }}</td>
+                    <td>{{ form_widget(formulaire.children.plintheParquet) }}</td>
+                    <td>{{ form_widget(formulaire.children.acryliqueParquet) }}</td>
+                    <td>{{ form_widget(formulaire.children.seuilParquet) }}</td>
+                    {% for supplementParquet in oneBien.supplementParquets %}
+                        <td>{{ form_widget(formulaire.children.supplementParquets[loop.index0]) }}</td>
+                    {% endfor %}
+                {% endif %}
+                {% if nombreSuppTerrasse > 0 %}
+                    <td>{{ form_widget(formulaire.children.superficieTerrasse) }}</td>
+                    <td>{{ form_widget(formulaire.children.cadreTerrasse) }}</td>
+                    <td>{{ form_widget(formulaire.children.platelageTerrasse) }}</td>
+                    <td>{{ form_widget(formulaire.children.vissageTerrasse) }}</td>
+                    {% for supplementTerrasse in oneBien.supplementTerrasses %}
+                        <td>
+                            {{ form_widget(formulaire.children.supplementTerrasses[loop.index0].etat) }}
+                        </td>
+                    {% endfor %}
+                {% endif %}
             </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ chantier.nom }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ chantier.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ chantier.type }}</td>
-            </tr>
-            <tr>
-                <th>Nombrebiens</th>
-                <td>{{ chantier.nombreBiens }}</td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
+    <input type="submit" class="hidden" value="editer">
+    {{ form_end(form) }}
+
 
     <ul>
         <li>
@@ -41,4 +145,15 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+
+    </script>
+    <script src="{{ asset('Js/creation_bien.js') }}"></script>
 {% endblock %}

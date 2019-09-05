@@ -3,6 +3,7 @@
 {% block body %}
     <h1>Chantiers list</h1>
 
+
     <table>
         <thead>
             <tr>
@@ -17,8 +18,8 @@
         <tbody>
         {% for chantier in chantiers %}
             <tr>
-                <td><a href="{{ path('chantier_show', { 'id': chantier.id }) }}">{{ chantier.id }}</a></td>
-                <td>{{ chantier.nom }}</td>
+                <td>{{ chantier.id }}</td>
+                <td><a href="{{ path('chantier_show', { 'id': chantier.id }) }}">{{ chantier.nom }}</a></td>
                 <td>{{ chantier.adresse }}</td>
                 <td>{{ chantier.type }}</td>
                 <td>{{ chantier.nombreBiens }}</td>
