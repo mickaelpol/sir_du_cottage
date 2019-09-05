@@ -7,6 +7,7 @@ use AppBundle\Form\EditUserPasswordType;
 use AppBundle\Form\EditUserType;
 use AppBundle\Form\UserEditType;
 use AppBundle\Form\UserType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,16 +19,26 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends Controller
 {
+	CONST CHEF = 'Chef d\'équipe';
 
 	/**
 	 * Lists all users entities.
 	 * @Route(path="/", name="user_index", methods={"GET", "POST"})
 	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @Security("is_granted('ROLE_CHEF')")
 	 */
 	public function indexAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$users = $em->getRepository(User::class)->findAll();
+		$userActif = $this->getUser();
+		$userActifRole = $userActif->getFirstRole($userActif);
+		$listUsers = $em->getRepository(User::class)->findAll();
+		$userChefRole = $em->getRepository(User::class)->getUserByRole();
+		/* Opération ternaire permettant de lister que les chef et ouvrier si lutilisateur courant
+		 * Est un chef d'équipe
+		 * Sinon on affiche tous les utlilisateur pour le grade au dessus
+		*/
+		$users = $userActifRole === self::CHEF ? $userChefRole : $listUsers;
 
 		return $this->render('user/index.html.twig', array(
 			'users'     => $users,
@@ -38,6 +49,7 @@ class UserController extends Controller
 	 * Creates a new user entity.
 	 * @Route(path="/new", name="user_new", methods={"GET", "POST"})
 	 * @param Request $request
+	 * @Security("is_granted('ROLE_CHEF')")
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
 	public function newAction(Request $request)
@@ -67,6 +79,7 @@ class UserController extends Controller
 	 * @Route(path="/{id}/edit", name="user_edit", methods={"GET", "POST"})
 	 * @param Request $request
 	 * @param User $user
+	 * @Security("is_granted('ROLE_CHEF')")
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
 	public function editAction(Request $request, User $user)
@@ -93,6 +106,7 @@ class UserController extends Controller
 	/**
 	 * Displays a form to edit password an existing user entity.
 	 * @Route(path="/{id}/edit-password", name="user_password_edit", methods={"GET", "POST"})
+	 * @Security("is_granted('ROLE_CHEF')")
 	 * @param Request $request
 	 * @param User $user
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
@@ -123,6 +137,7 @@ class UserController extends Controller
 	 * @Route(path="/{id}", name="user_delete", methods={"GET"})
 	 * @param Request $request
 	 * @param User $user
+	 * @Security("is_granted('RROLE_DIRECTEUR')")
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	public function deleteAction(Request $request, User $user)

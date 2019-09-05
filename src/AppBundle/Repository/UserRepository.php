@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+
 /**
  * UserRepository
  *
@@ -10,4 +12,19 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function getUserByRole()
+	{
+		$qb = $this->_em->createQueryBuilder();
+		$qb->select('u')
+			->from(User::class, 'u')
+			->where('u.roles LIKE :roles OR u.roles LIKE :roles2')
+			->andWhere('u.enabled = :enabled')
+			->setParameter('roles', '%"ROLE_CHEF"%')
+			->setParameter('roles2', '%"ROLE_USER"%')
+			->setParameter('enabled', true);
+
+		return $qb->getQuery()->getResult();
+	}
+
 }

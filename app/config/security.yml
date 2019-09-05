@@ -32,7 +32,6 @@ security:
 
 
     access_control:
-        - { path: ^/user, role: ROLE_DIRECTEUR }
         - { path: ^/supplementterrasse, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
         - { path: ^/supplementparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
         - { path: ^/colorisparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
