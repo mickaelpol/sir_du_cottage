@@ -7,10 +7,10 @@ use AppBundle\Entity\Chantier;
 use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
 use AppBundle\Form\ChantierEditType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Chantier controller.
@@ -20,27 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ChantierController extends Controller
 {
 	/**
-	 * Lists all chantier entities.
-	 *
-	 * @Route("/", name="chantier_index")
-	 * @Method("GET")
-	 */
-	public function indexAction()
-	{
-		$em = $this->getDoctrine()->getManager();
-
-		$chantiers = $em->getRepository('AppBundle:Chantier')->findAll();
-
-		return $this->render('chantier/index.html.twig', array(
-			'chantiers' => $chantiers,
-		));
-	}
-
-	/**
 	 * Creates a new chantier entity.
-	 *
-	 * @Route("/new", name="chantier_new")
-	 * @Method({"GET", "POST"})
+	 * @Route(path="/new", name="chantier_new", methods={"GET", "POST"})
+	 * @Security("is_granted('ROLE_CHEF')")
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
@@ -230,9 +212,8 @@ class ChantierController extends Controller
 
 	/**
 	 * Finds and displays a chantier entity.
-	 *
-	 * @Route("/{id}", name="chantier_show")
-	 * @Method("GET")
+	 * @Route(path="/{id}", name="chantier_show", methods={"GET"})
+	 * @Security("is_granted('ROLE_CHEF')")
 	 * @param Chantier $chantier
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\Response
@@ -265,9 +246,11 @@ class ChantierController extends Controller
 
 	/**
 	 * Displays a form to edit an existing chantier entity.
-	 *
-	 * @Route("/{id}/edit", name="chantier_edit")
-	 * @Method({"GET", "POST"})
+	 * @Route(path="/{id}/edit", name="chantier_edit", methods={"GET", "POST"})
+	 * @Security("is_granted('ROLE_SUPER_ADMIN')")
+	 * @param Request $request
+	 * @param Chantier $chantier
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
 	public function editAction(Request $request, Chantier $chantier)
 	{
@@ -290,9 +273,11 @@ class ChantierController extends Controller
 
 	/**
 	 * Deletes a chantier entity.
-	 *
-	 * @Route("/{id}", name="chantier_delete")
-	 * @Method("DELETE")
+	 * @Route(path="/{id}", name="chantier_delete", methods={"DELETE"})
+	 * @Security("is_granted('ROLE_DIRECTEUR')")
+	 * @param Request $request
+	 * @param Chantier $chantier
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	public function deleteAction(Request $request, Chantier $chantier)
 	{
