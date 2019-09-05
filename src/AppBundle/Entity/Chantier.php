@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Bien;
+use AppBundle\Entity\CommentaireChantier;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -52,6 +53,12 @@ class Chantier
     private $nombreBiens;
 
 	/**
+	 * Un Chantier peut avoir plusieurs Commentaire.
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist"}, orphanRemoval=true)
+	 */
+	private $commentaires;
+
+	/**
 	 * One Chantier has many Bien. This is the inverse side.
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier")
 	 */
@@ -59,6 +66,7 @@ class Chantier
 
 	public function __construct() {
 		$this->biens = new ArrayCollection();
+		$this->commentaires = new ArrayCollection();
 	}
 
 
@@ -206,5 +214,40 @@ class Chantier
     public function removeBien(Bien $bien)
     {
         $this->biens->removeElement($bien);
+    }
+
+    /**
+     * Add commentaire
+     *
+     * @param CommentaireChantier $commentaire
+     *
+     * @return Chantier
+     */
+    public function addCommentaire(CommentaireChantier $commentaire)
+    {
+	    $this->commentaires->add($commentaire);
+	    $commentaire->setChantier($this);
+
+	    return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param CommentaireChantier $commentaire
+     */
+    public function removeCommentaire(CommentaireChantier $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 }

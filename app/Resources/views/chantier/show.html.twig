@@ -89,18 +89,18 @@
                     <td>
                         <ul class="coloris" data-prototype="{{ form_widget(formulaire.colorisParquets.vars.prototype)|e('html_attr') }}">
                             {% for coloris in formulaire.colorisParquets %}
-                                <li>
-                                    <div class="row js-delete-row">
-                                        <div class="js-coloris-parquet-item">
+                                <div class="row js-delete-row">
+                                    <div class="js-coloris-parquet-item">
+                                        <li>
                                             {{ form_widget(coloris.nom) }}
                                             {{ form_widget(coloris.codeCouleur) }}
                                             <a href="#" class="js-remove-coloris-parquet pull-right">
                                                 X
                                                 <span class="fa fa-close"></span>
                                             </a>
-                                        </div>
+                                        </li>
                                     </div>
-                                </li>
+                                </div>
                             {% endfor %}
                         </ul>
                     </td>
@@ -128,6 +128,20 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <ul class="commentaires" data-prototype="{{ form_widget(form.commentaires.vars.prototype)|e('html_attr') }}">
+        {% for com in form.commentaires %}
+            <div class="row js-genus-scientist-wrapper">
+                <div class="col-xs-4 js-genus-scientist-item">
+                    <li>{{ form_row(com.commentaire) }}</li>
+                    <a href="#" class="js-remove-scientist pull-right">
+                        <span class="fa fa-close">X</span>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </ul>
+
     <input type="submit" class="hidden" value="editer">
     {{ form_end(form) }}
 

@@ -212,7 +212,7 @@ class ChantierController extends Controller
 
 	/**
 	 * Finds and displays a chantier entity.
-	 * @Route(path="/{id}", name="chantier_show", methods={"GET"})
+	 * @Route(path="/{id}", name="chantier_show", methods={"GET", "POST"})
 	 * @Security("is_granted('ROLE_CHEF')")
 	 * @param Chantier $chantier
 	 * @param Request $request
