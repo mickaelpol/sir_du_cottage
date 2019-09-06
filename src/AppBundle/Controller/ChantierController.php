@@ -245,33 +245,6 @@ class ChantierController extends Controller
 	}
 
 	/**
-	 * Displays a form to edit an existing chantier entity.
-	 * @Route(path="/{id}/edit", name="chantier_edit", methods={"GET", "POST"})
-	 * @Security("is_granted('ROLE_SUPER_ADMIN')")
-	 * @param Request $request
-	 * @param Chantier $chantier
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-	 */
-	public function editAction(Request $request, Chantier $chantier)
-	{
-		$deleteForm = $this->createDeleteForm($chantier);
-		$editForm = $this->createForm('AppBundle\Form\ChantierType', $chantier);
-		$editForm->handleRequest($request);
-
-		if ($editForm->isSubmitted() && $editForm->isValid()) {
-			$this->getDoctrine()->getManager()->flush();
-
-			return $this->redirectToRoute('chantier_edit', array('id' => $chantier->getId()));
-		}
-
-		return $this->render('chantier/edit.html.twig', array(
-			'chantier'    => $chantier,
-			'edit_form'   => $editForm->createView(),
-			'delete_form' => $deleteForm->createView(),
-		));
-	}
-
-	/**
 	 * Deletes a chantier entity.
 	 * @Route(path="/{id}", name="chantier_delete", methods={"DELETE"})
 	 * @Security("is_granted('ROLE_DIRECTEUR')")

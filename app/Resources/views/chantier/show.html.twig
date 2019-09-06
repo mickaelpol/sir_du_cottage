@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Chantier : {{ chantier.nom }}
+{% endblock %}
+
 {% block body %}
 
     {% set nombreSuppTerrasse = 0 %}
@@ -149,9 +153,6 @@
     <ul>
         <li>
             <a href="{{ path('chantier_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('chantier_edit', { 'id': chantier.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

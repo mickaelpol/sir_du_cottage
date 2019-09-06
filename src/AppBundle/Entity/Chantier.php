@@ -54,13 +54,13 @@ class Chantier
 
 	/**
 	 * Un Chantier peut avoir plusieurs Commentaire.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $commentaires;
 
 	/**
 	 * One Chantier has many Bien. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $biens;
 

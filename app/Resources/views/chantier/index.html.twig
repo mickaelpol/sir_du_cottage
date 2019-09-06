@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Liste des chantiers
+{% endblock %}
+
 {% block body %}
     <h1>Chantiers list</h1>
 
@@ -27,9 +31,6 @@
                     <ul>
                         <li>
                             <a href="{{ path('chantier_show', { 'id': chantier.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('chantier_edit', { 'id': chantier.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
