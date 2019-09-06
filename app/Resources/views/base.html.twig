@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}{{ app_name }}{% endblock %}</title>
+        <link rel="stylesheet" href="">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     </head>
     <body>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
 
-        {% block body %}{% endblock %}
 
-
+        <script src="{{ asset('node_modules/jquery/dist/jquery.js') }}"></script>
+        <script src="{{ asset('node_modules/popper.js/dist/umd/popper.js') }}"></script>
+        <script src="{{ asset('node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
