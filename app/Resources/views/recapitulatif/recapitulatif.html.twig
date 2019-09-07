@@ -5,12 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid" id="main">
+    <div id="main">
         <div class="row row-offcanvas row-offcanvas-left">
             <!--/col-->
-
             <div class="col main pt-5 mt-3">
-                <div class="alert alert-warning fade collapse" role="alert" id="myAlert">
+                <div class="alert alert-warning" role="alert" id="myAlert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         <span class="sr-only">Close</span>
@@ -19,13 +18,13 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-xl-3 col-sm-6 py-2">
-                        <div class="card bg-success h-100">
+                        <div class="card bg-darkin h-100">
                             <a class="text-white link-unstyled" href="{{ path('chantier_index') }}">
-                                <div class="card-body bg-success">
+                                <div class="card-body">
                                     <h6 class="text-uppercase text-white text-center font-weight-bold">
                                         Nombre de chantiers
                                     </h6>
-                                    <div class="text-center">
+                                    <div class="text-center text-primary">
                                         <i class="material-icons md-48">
                                             build
                                         </i>
@@ -36,12 +35,12 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-sm-6 py-2">
-                        <div class="card text-white bg-danger h-100">
-                            <div class="card-body bg-info">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
                                 <h6 class="text-uppercase text-white text-center font-weight-bold">
                                     Nombre de biens
                                 </h6>
-                                <div class="text-center">
+                                <div class="text-center text-primary">
                                     <i class="material-icons md-48">
                                         home
                                     </i>
@@ -51,12 +50,27 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-sm-6 py-2">
-                        <div class="card text-white bg-info h-100">
-                            <div class="card-body bg-warning">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
+                                <h6 class="text-uppercase text-white text-center font-weight-bold">
+                                    Nombre d'utilisateurs
+                                </h6>
+                                <div class="text-center text-primary">
+                                    <i class="material-icons md-48">
+                                        people
+                                    </i>
+                                </div>
+                                <h1 class="display-4 text-center font-weight-bold ft-56">{{ nombreDutilisateurs }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 py-2">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
                                 <h6 class="text-uppercase text-white text-center font-weight-bold">
                                     Nombre de warnings
                                 </h6>
-                                <div class="text-center">
+                                <div class="text-center text-warning">
                                     <i class="material-icons md-48">
                                         warning
                                     </i>
@@ -65,55 +79,59 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 py-2">
-                        <div class="card text-white bg-warning h-100">
-                            <div class="card-body bg-warning">
-                                <h6 class="text-uppercase text-white text-center font-weight-bold">
-                                    Nombre d'utilisateurs
-                                </h6>
-                                <div class="text-center">
-                                    <i class="material-icons md-48">
-                                        people
-                                    </i>
-                                </div>
-                                <h1 class="display-4 text-center font-weight-bold ft-56">8</h1>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!--/row-->
-
                 <hr>
                 <div class="row placeholders mb-3">
-                    <div class="col-6 col-sm-2 placeholder text-center">
-                        <img src="//placehold.it/200/dddddd/fff?text=1" class="mx-auto img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-                        <h4>Responsive</h4>
-                        <span class="text-muted">Device agnostic</span>
+                    <div class="col-6 col-sm-2 placeholder text-center image">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle bg-darkin" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">80%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Anatalia</h4>
+                        <span class="text-light">Parquet / Terrasse</span>
+                    </div>
+                    <div class="col-6 col-sm-2 placeholder text-center image">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Magenta</h4>
+                        <span class="text-light">Terrasse</span>
                     </div>
                     <div class="col-6 col-sm-2 placeholder text-center">
-                        <img src="//placehold.it/200/e4e4e4/fff?text=2" class="mx-auto img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-                        <h4>Frontend</h4>
-                        <span class="text-muted">UI / UX oriented</span>
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Overview</h4>
+                        <span class="text-light">Parquet</span>
                     </div>
                     <div class="col-6 col-sm-2 placeholder text-center">
-                        <img src="//placehold.it/200/d6d6d6/fff?text=3" class="mx-auto img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-                        <h4>HTML5</h4>
-                        <span class="text-muted">Standards-based</span>
-                    </div>
-                    <div class="col-6 col-sm-2 placeholder text-center">
-                        <img src="//placehold.it/200/e0e0e0/fff?text=4" class="center-block img-fluid rounded-circle" alt="Generic placeholder thumbnail">
-                        <h4>Framework</h4>
-                        <span class="text-muted">CSS and JavaScript</span>
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">SV9</h4>
+                        <span class="text-light">Parquet / Terrasse</span>
                     </div>
                     <div class="col-sm-4">
                         <div id="accordion" role="tablist" aria-multiselectable="true">
-                            <div class="card">
-                                <div class="card-header ft-24 text-center text-uppercase font-weight-bold">Commentaires récent</div>
+                            <div class="card bg-secondary text-white">
+                                <div class="card-header ft-24 text-center text-uppercase font-weight-bold">Commentaires récents</div>
                                 {% for commentaire in cinqDernierComChantier %}
                                     <div class="card-header mouse-over-card-header" role="tab" id="heading{{ loop.index }}"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
                                         <blockquote class="text-uppercase font-weight-bold">{{ commentaire.chantier }} - ({{ commentaire.utilisateur }})</blockquote>
                                     </div>
-                                    <div id="collapse{{ loop.index }}" class="card-block collapse in" role="tabpanel" aria-labelledby="heading{{ loop.index }}">
+                                    <div id="collapse{{ loop.index }}" class="card-block collapse in bg-darkin" role="tabpanel" aria-labelledby="heading{{ loop.index }}">
                                         <p>{{ commentaire.commentaire }}</p>
                                     </div>
                                 {% endfor %}

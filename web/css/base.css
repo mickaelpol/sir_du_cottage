@@ -1,6 +1,5 @@
 body, html {
     background-image: url("../image/background-material.jpeg");
-    height: 100%;
 }
 
 .flex-grow {
@@ -20,6 +19,7 @@ body, html {
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
+
 .ft-14 {font-size: 14px;}
 .ft-16 {font-size: 16px;}
 .ft-18 {font-size: 18px;}
@@ -27,6 +27,8 @@ body, html {
 .ft-36 {font-size: 36px;}
 .ft-48 {font-size: 48px;}
 .ft-56 {font-size: 56px;}
+.ft-80 {font-size: 80px;}
+.ft-90 {font-size: 90px;}
 
 .bmd-layout-drawer[aria-expanded="true"] {
     width: 300px !important;
@@ -48,4 +50,19 @@ body, html {
     box-shadow: inherit;
     padding: inherit;
     vertical-align: inherit;
+}
+
+.alert-success {
+    color: #eeeeee;
+    background-color: #4caf50;
+}
+
+.alert-danger {
+    color: #37474F;
+    background-color: #f44336;
+}
+
+.alert-warning {
+    color: #37474F;
+    background-color: #ffeb3b;
 }

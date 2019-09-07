@@ -6,6 +6,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
 use AppBundle\Entity\CommentaireChantier;
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,14 @@ class DefaultController extends Controller
 		$cinqDernierComChantiers = $em->getRepository(CommentaireChantier::class)->findBy([], [
 			'id' => 'DESC',
 		], 5);
+		$nombreDutilisateurs = $em->getRepository(User::class)->nombreDutilisateur();
 
 
 		return $this->render('recapitulatif/recapitulatif.html.twig', array(
 			'nombreChantiers'        => $nombreChantiers,
 			'nombreBiens'            => $nombreBiens,
 			'cinqDernierComChantier' => $cinqDernierComChantiers,
+			'nombreDutilisateurs'    => $nombreDutilisateurs,
 		));
 	}
 }
