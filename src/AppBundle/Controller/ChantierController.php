@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
+use AppBundle\Entity\CommentaireChantier;
 use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
+use AppBundle\Entity\User;
 use AppBundle\Form\ChantierEditType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

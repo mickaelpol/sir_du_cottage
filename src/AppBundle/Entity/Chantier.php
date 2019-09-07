@@ -69,8 +69,13 @@ class Chantier
 		$this->commentaires = new ArrayCollection();
 	}
 
+	public function __toString()
+	{
+		return $this->nom;
+	}
 
-    /**
+
+	/**
      * Get id
      *
      * @return int
@@ -216,13 +221,13 @@ class Chantier
         $this->biens->removeElement($bien);
     }
 
-    /**
-     * Add commentaire
-     *
-     * @param CommentaireChantier $commentaire
-     *
-     * @return Chantier
-     */
+	/**
+	 * Add commentaire
+	 *
+	 * @param CommentaireChantier $commentaire
+	 *
+	 * @return Chantier
+	 */
     public function addCommentaire(CommentaireChantier $commentaire)
     {
 	    $this->commentaires->add($commentaire);

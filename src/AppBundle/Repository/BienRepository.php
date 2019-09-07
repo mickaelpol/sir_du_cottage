@@ -13,7 +13,7 @@ use AppBundle\Entity\Bien;
 class BienRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function countBien()
+	public function nombreBiens()
 	{
 		$qb = $this->_em->createQueryBuilder();
 

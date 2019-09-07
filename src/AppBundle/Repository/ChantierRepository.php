@@ -13,7 +13,7 @@ use AppBundle\Entity\Chantier;
 class ChantierRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function countChantier()
+	public function nombreChantiers()
 	{
 		$qb = $this->_em->createQueryBuilder();
 

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
+use AppBundle\Entity\CommentaireChantier;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +21,17 @@ class DefaultController extends Controller
 	public function backOfficeAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$nombreChantiers = $em->getRepository(Chantier::class)->countChantier();
-		$nombreBiens = $em->getRepository(Bien::class)->countBien();
+		$nombreChantiers = $em->getRepository(Chantier::class)->nombreChantiers();
+		$nombreBiens = $em->getRepository(Bien::class)->nombreBiens();
+		$cinqDernierComChantiers = $em->getRepository(CommentaireChantier::class)->findBy([], [
+			'id' => 'DESC',
+		], 5);
 
 
 		return $this->render('recapitulatif/recapitulatif.html.twig', array(
-			'nombreChantiers' => $nombreChantiers,
-			'nombreBiens' => $nombreBiens,
+			'nombreChantiers'        => $nombreChantiers,
+			'nombreBiens'            => $nombreBiens,
+			'cinqDernierComChantier' => $cinqDernierComChantiers,
 		));
 	}
 }
