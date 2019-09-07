@@ -1,3 +1,51 @@
-body {
+body, html {
     background-image: url("../image/background-material.jpeg");
+    height: 100%;
+}
+
+.flex-grow {
+    flex: 1 0 auto;
+}
+
+.bmd-layout-canvas {
+    flex-grow: 1;
+}
+
+.bg-darkin {
+    background-color: #37474F;
+}
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+.ft-14 {font-size: 14px;}
+.ft-16 {font-size: 16px;}
+.ft-18 {font-size: 18px;}
+.ft-24 {font-size: 24px;}
+.ft-36 {font-size: 36px;}
+.ft-48 {font-size: 48px;}
+.ft-56 {font-size: 56px;}
+
+.bmd-layout-drawer[aria-expanded="true"] {
+    width: 300px !important;
+}
+
+.link-unstyled, .link-unstyled:visited, .link-unstyled:hover, .link-unstyled:active, .link-unstyled:focus, .link-unstyled:active:hover {
+    font-style: inherit;
+    color: inherit;
+    background-color: transparent;
+    font-size: inherit;
+    text-decoration: none;
+    font-variant: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    border-radius: inherit;
+    border: inherit;
+    outline: inherit;
+    box-shadow: inherit;
+    padding: inherit;
+    vertical-align: inherit;
 }

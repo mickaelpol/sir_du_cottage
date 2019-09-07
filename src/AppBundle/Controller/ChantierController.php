@@ -19,6 +19,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ChantierController extends Controller
 {
+
+	/**
+	 * Lists all chantier entities.
+	 * @Route(path="/", name="chantier_index", methods={"GET"})
+	 * @Security("is_granted('ROLE_CHEF')")
+	 */
+	public function indexAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$chantiers = $em->getRepository('AppBundle:Chantier')->findAll();
+
+		return $this->render('chantier/index.html.twig', array(
+			'chantiers' => $chantiers,
+		));
+	}
+
 	/**
 	 * Creates a new chantier entity.
 	 * @Route(path="/new", name="chantier_new", methods={"GET", "POST"})

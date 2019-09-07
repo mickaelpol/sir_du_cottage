@@ -7,26 +7,28 @@
             {% endif %}
             <div class="text-center mb-7">
                 {% if error %}
-                    <span class="mb-3 font-weight-normal text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                    <span class="mb-3 font-weight-normal text-danger ft-18">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
                 {% endif %}
             </div>
 
-            <div class="form-label-group">
-                <input type="text" id="inputUsername" name="_username" value="{{ last_username }}" class="form-control text-white" placeholder="Nom d'utilisateur" required autofocus/>
-                <label for="inputUsername">{{ 'security.login.username'|trans }}</label>
+            <div class="form-group bmd-form-group">
+                <label for="inputUsername" class="bmd-label-floating text-light ft-24">{{ 'security.login.username'|trans }}</label>
+                <input type="text" class="form-control text-white ft-24" id="inputUsername" name="_username" value="{{ last_username }}" required autofocus/>
             </div>
 
-            <div class="form-label-group">
-                <input type="password" id="password" name="_password" class="form-control text-white" placeholder="Mot de passe " required autocomplete="current-password" />
-                <label for="password">{{ 'security.login.password'|trans }}</label>
+            <div class="form-group bmd-form-group">
+                <label class="bmd-label-floating text-light ft-24" for="password">{{ 'security.login.password'|trans }}</label>
+                <input type="password" id="password" name="_password" class="form-control text-white ft-24" required />
             </div>
 
             <div class="checkbox mb-3">
-
                 <label class="text-light" for="remember_me">
                     <input type="checkbox" id="remember_me" name="_remember_me" value="on"/> Se souvenir de moi
                 </label>
             </div>
-            <input type="submit" class="btn btn-lg btn-success btn-block active" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+            <button class="btn btn-lg btn-success btn-block active" type="submit" id="_submit" name="_submit">
+                {{ 'security.login.submit'|trans }} &nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="material-icons">done_all</i>
+            </button>
         </form>
     </div>
