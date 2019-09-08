@@ -14,9 +14,11 @@
         <div class="row"> {# Row #}
             <div class="col">
                 <span class="btn-group-lg">
-                  <button type="button" class="btn btn-secondary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Ajouter un chantier">
-                    <i class="material-icons">add circle</i>
-                  </button>
+                  <a href="{{ path('chantier_new') }}">
+                      <button type="button" class="btn btn-secondary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Ajouter un chantier">
+                        <i class="material-icons">add circle</i>
+                      </button>
+                  </a>
                 </span>
             </div>
             <div class="col-xl-4 col-sm-3 col-md-4 offset-xl-4 offset-sm-8 offset-md-4">
