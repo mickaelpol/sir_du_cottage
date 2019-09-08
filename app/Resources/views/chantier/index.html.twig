@@ -5,43 +5,117 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Chantiers list</h1>
+
+    <style>
+        input.search::placeholder {
+            color: white !important;
+            opacity: 1; /* Firefox */
+        }
+
+        .hover-chantier {
+            transition: transform 0.3s, transition 0.5s;
+        }
+
+        /*.hover-chantier:hover {*/
+            /*font-size: 25px;*/
+            /*transform: scale(1.05);*/
+            /*z-index: 2;*/
+        /*}*/
+        .pagination li {
+            display:inline-block;
+            padding:5px;
+        }
+
+    </style>
+    {# ====================================================== #}
+    <div id="chantiers-list" class="text-white text-center mt-5">
+        <div class="row"> {# Row #}
+            <div class="col-xl-4 col-sm-3 col-md-4 offset-xl-4 offset-sm-8 offset-md-4">
+                <div class="bmd-form-group bmd-collapse-inline pull-sm-right">
+                    <button class="btn bmd-btn-icon" for="search" data-toggle="collapse" data-target="#collapse-search" aria-expanded="false" aria-controls="collapse-search">
+                        <i class="material-icons md-36">search</i>
+                    </button>
+                    <span id="collapse-search" class="collapse">
+                        <input class="form-control text-white search ft-24 text-center" type="text" id="search" placeholder="Recherchez un chantier">
+                    </span>
+                </div>
+            </div>
+        </div> {# Row #}
+
+        <div class="row mt-5 bg-secondary font-weight-bold text-uppercase"> {# Row #}
+            <div class="col-xl-1 col-sm-1"><i class="material-icons md-24">warning</i></div>
+            <div class="col-xl-2 col-sm-2">Nom</div>
+            <div class="col-xl-3 col-sm-3">Adresse</div>
+            <div class="col-xl-3 col-sm-3">Type</div>
+            <div class="col-xl-1 col-sm-1">Biens</div>
+            <div class="col-xl-1 col-sm-1"><i class="material-icons md-24">sync</i></div>
+            <div class="col-xl-1 col-sm-1"><i class="material-icons md-24 align-middle">message</i></div>
+        </div> {# Row #}
+
+        <div class="list">
+            {% for chantier in chantiers %}
+                <a class="link-unstyled" href="{{ path('chantier_show', {'id': chantier.id}) }}">
+                    <div class="row bg-secondary mt-2 hover-chantier">
+                        <div class="col-xl-1 col-sm-1">12</div>
+                        <div class="col-xl-2 col-sm-2"><p class="chantier-nom">{{ chantier.nom }}</p></div>
+                        <div class="col-xl-3 col-sm-3"><p>{{ chantier.adresse }}</p></div>
+                        <div class="col-xl-3 col-sm-3"><p>{{ chantier.type }}</p></div>
+                        <div class="col-xl-1 col-sm-1"><p>{{ chantier.nombreBiens }}</p></div>
+                        <div class="col-xl-1 col-sm-1">50%</div>
+                        <div class="col-xl-1 col-sm-1">25</div>
+                    </div>
+                </a>
+            {% endfor %}
+            <div class="text-center">
+                <ul class="pagination"></ul>
+            </div>
+        </div>
+    </div>
 
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Adresse</th>
-                <th>Type</th>
-                <th>Nombrebiens</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for chantier in chantiers %}
-            <tr>
-                <td>{{ chantier.id }}</td>
-                <td><a href="{{ path('chantier_show', { 'id': chantier.id }) }}">{{ chantier.nom }}</a></td>
-                <td>{{ chantier.adresse }}</td>
-                <td>{{ chantier.type }}</td>
-                <td>{{ chantier.nombreBiens }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('chantier_show', { 'id': chantier.id }) }}">show</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {# ====================================================== #}
+    {#<h1>Chantiers list</h1>#}
+
+
+    {#<table>#}
+        {#<thead>#}
+            {#<tr>#}
+                {#<th>Id</th>#}
+                {#<th>Nom</th>#}
+                {#<th>Adresse</th>#}
+                {#<th>Type</th>#}
+                {#<th>Nombrebiens</th>#}
+                {#<th>Actions</th>#}
+            {#</tr>#}
+        {#</thead>#}
+        {#<tbody>#}
+        {#{% for chantier in chantiers %}#}
+            {#<tr>#}
+                {#<td>{{ chantier.id }}</td>#}
+                {#<td><a href="{{ path('chantier_show', { 'id': chantier.id }) }}">{{ chantier.nom }}</a></td>#}
+                {#<td>{{ chantier.adresse }}</td>#}
+                {#<td>{{ chantier.type }}</td>#}
+                {#<td>{{ chantier.nombreBiens }}</td>#}
+                {#<td>#}
+                    {#<ul>#}
+                        {#<li>#}
+                            {#<a href="{{ path('chantier_show', { 'id': chantier.id }) }}">show</a>#}
+                        {#</li>#}
+                    {#</ul>#}
+                {#</td>#}
+            {#</tr>#}
+        {#{% endfor %}#}
+        {#</tbody>#}
+    {#</table>#}
 
     <ul>
         <li>
             <a href="{{ path('chantier_new') }}">Create a new chantier</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('node_modules/list.js/dist/list.js') }}"></script>
+    <script src="{{ asset('Js/chantier/index.js') }}"></script>
 {% endblock %}
