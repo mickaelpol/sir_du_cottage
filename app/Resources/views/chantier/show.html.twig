@@ -21,48 +21,33 @@
 
     {% set pourcentTd  = 100 / (colspanParquet + colspanTerrasse + 1) %}
 
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-        }
-
-        th {
-            height: 50px;
-        }
-
-        td {
-            width: {{ pourcentTd }}%;
-            height: auto;
-        }
-    </style>
     {{ form_start(form) }}
 
     <h1>Chantier {{ form_widget(form.nom) }}</h1>
     <h2>
         <label for="">Adresse</label>
         {{ form_widget(form.adresse) }}
+        <a target="_blank" href="{{ chantier.linkAdress }}">
+            <i class="material-icons">add_location</i>
+        </a>
     </h2>
     <h3>{{ chantier.type }}</h3>
     <h4>{{ chantier.nombreBiens }}</h4>
 
-    <table style="width: 100%;" border="1">
+    <table border="1" class="bg-darkin">
         <tbody>
         <tr>
             <th colspan="1" bgcolor="black"></th>
-            {% if nombreSuppParquet > 0 %}
+            {% if chantier.type == 'Parquet' %}
                 <th colspan="{{ colspanParquet }}">Parquet</th>
             {% endif %}
-            {% if nombreSuppTerrasse > 0 %}
+            {% if chantier.type == 'Terrasse' %}
                 <th colspan="{{ colspanTerrasse }}">Terrasse</th>
             {% endif %}
         </tr>
         <tr>
             <th>Nom</th>
-            {% if nombreSuppParquet > 0 %}
+            {% if chantier.type == 'Parquet' %}
                 <th>Superficie</th>
                 <th>Coloris</th>
                 <th>Préparation</th>
@@ -74,7 +59,7 @@
                     <th>{{ supplementParquet.designation }}</th>
                 {% endfor %}
             {% endif %}
-            {% if nombreSuppTerrasse > 0 %}
+            {% if chantier.type == 'Terrasse' %}
                 <th>Superficie</th>
                 <th>Cadre</th>
                 <th>Platelage</th>
@@ -88,7 +73,7 @@
         {% for formulaire in form.biens.children %}
             <tr>
                 <td>{{ form_widget(formulaire.children.nom) }}</td>
-                {% if nombreSuppParquet > 0 %}
+                {% if chantier.type == 'Parquet' %}
                     <td>{{ form_widget(formulaire.children.superficieParquet) }}</td>
                     <td>
                         <ul class="coloris" data-prototype="{{ form_widget(formulaire.colorisParquets.vars.prototype)|e('html_attr') }}">
@@ -117,7 +102,7 @@
                         <td>{{ form_widget(formulaire.children.supplementParquets[loop.index0]) }}</td>
                     {% endfor %}
                 {% endif %}
-                {% if nombreSuppTerrasse > 0 %}
+                {% if chantier.type == 'Terrasse' %}
                     <td>{{ form_widget(formulaire.children.superficieTerrasse) }}</td>
                     <td>{{ form_widget(formulaire.children.cadreTerrasse) }}</td>
                     <td>{{ form_widget(formulaire.children.platelageTerrasse) }}</td>

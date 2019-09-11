@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Chantier
 {
+
+	CONST GOOLE_MAP_LINK = 'https://maps.google.com/?q=';
+
     /**
      * @var int
      *
@@ -121,6 +124,16 @@ class Chantier
         $this->adresse = $adresse;
 
         return $this;
+    }
+
+	/**
+	 * get adresse
+	 *
+	 * @return string
+	 */
+    public function getLinkAdress()
+    {
+		return self::GOOLE_MAP_LINK . $this->adresse;
     }
 
     /**

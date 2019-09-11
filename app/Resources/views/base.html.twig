@@ -14,7 +14,27 @@
         <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     </head>
     <body>
-        <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+
+    <div class="notification-global">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="notification-global">
+                <div class="notification">
+                    <div class="notification-header">
+                        <div class="mr-2 cercle cercle-{{ label }}"></div>
+                        <strong class="mr-auto">Notification</strong>
+                        <small>{{ "now"|date("H:i") }}</small>
+                    </div>
+                    <div class="notification-body">
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    </div>
+
+    <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
             {% if route != '/login' %}
                 <header class="bmd-layout-header">
                     <div class="navbar bg-darkin navbar-dark bg-faded">
@@ -66,11 +86,12 @@
                 </div>
             </main>
         </div>
+        {% block modal %}{% endblock %}
 
 
         <script src="{{ asset('node_modules/jquery/dist/jquery.js') }}"></script>
         <script src="{{ asset('node_modules/popper.js/dist/umd/popper.js') }}"></script>
-        <script src="{{ asset('node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.js') }}"></script>
+        <script src="{{ asset('node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js') }}"></script>
         <script src="{{ asset('Js/initialisation_material_design.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>

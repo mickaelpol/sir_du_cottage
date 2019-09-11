@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block body %}
-
     <div id="chantiers-list" class="text-white text-center mt-5">
         <div class="row"> {# Row #}
             <div class="col">
@@ -37,10 +36,11 @@
             <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24">warning</i></div>
             <div class="col-xl-2 col-sm-2 d-none d-md-block">Nom</div>
             <div class="col-xl-3 col-sm-3 d-none d-md-block">Adresse</div>
-            <div class="col-xl-3 col-sm-3 d-none d-md-block">Type</div>
+            <div class="col-xl-2 col-sm-2 d-none d-md-block">Type</div>
             <div class="col-xl-1 col-sm-1 d-none d-md-block">Biens</div>
             <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24">sync</i></div>
             <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">message</i></div>
+            <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">delete</i></div>
         </div> {# Row #}
 
         <div class="list">
@@ -50,10 +50,11 @@
                         <div class="col-xl-1 col-sm-1"><p><i class="material-icons d-block d-sm-none mx-auto">warnings</i>12</p></div>
                         <div class="col-xl-2 col-sm-2"><p class="chantier-nom"><i class="material-icons d-block d-sm-none mx-auto">home</i>{{ chantier.nom }}</p></div>
                         <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">my_location</i>{{ chantier.adresse }}</p></div>
-                        <div class="col-xl-3 col-sm-3"><p class="chantier-type"><i class="material-icons d-block d-sm-none mx-auto">merge_type</i>{{ chantier.type }}</p></div>
+                        <div class="col-xl-2 col-sm-2"><p class="chantier-type"><i class="material-icons d-block d-sm-none mx-auto">merge_type</i>{{ chantier.type }}</p></div>
                         <div class="col-xl-1 col-sm-1"><p><i class="material-icons d-block d-sm-none mx-auto">location_city</i>{{ chantier.nombreBiens }}</p></div>
                         <div class="col-xl-1 col-sm-1"><p><i class="material-icons d-block d-sm-none mx-auto">sync</i>50%</p></div>
-                        <div class="col-xl-1 col-sm-1"><p><i class="material-icons d-block d-sm-none mx-auto">message</i>25</p></div>
+                        <div class="col-xl-1 col-sm-1"><p><i class="material-icons d-block d-sm-none mx-auto">message</i>{{ chantier.commentaires|length }}</p></div>
+                        <div class="col-xl-1 col-sm-1 deleting-btn" data-toggle="modal" data-chantier="{{ chantier.nom }}" data-route="{{ path('chantier_remove', {'id': chantier.id }) }}" data-target="#exampleModalCenter"><p><i class="material-icons mx-auto">delete_outline</i></p></div>
                     </div>
                 </a>
             {% endfor %}
@@ -64,6 +65,8 @@
     </div>
 
 {% endblock %}
+
+{% block modal %}{% include('modal/delete_chantier.html.twig') %}{% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('node_modules/list.js/dist/list.js') }}"></script>

@@ -1,5 +1,7 @@
 body, html {
     background-image: url("../image/background-material.jpeg");
+    height: 100%;
+    width: 100%;
 }
 
 .flex-grow {
@@ -52,17 +54,64 @@ body, html {
     vertical-align: inherit;
 }
 
-.alert-success {
+
+.notification {
+    z-index: 1024;
+    position: absolute;
+    min-height: 10%;
+    top: 1%;
+    right: 1%;
+    display: block;
+    max-width: 350px;
+    min-width: 350px;
+    overflow: hidden;
+    font-size: .875rem;
+    background-color: rgba(255,255,255,.85);
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.1);
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: .25rem;
+}
+
+.notification-header {
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .25rem .75rem;
+    color: #6c757d;
+    background-color: rgba(255,255,255,.85);
+    background-clip: padding-box;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.notification-body {
+    padding: .75rem;
+}
+
+
+.cercle {
+    border-radius:50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid lightgrey;
+}
+
+.cercle-success {
     color: #eeeeee;
     background-color: #4caf50;
 }
-
-.alert-danger {
+.cercle-danger {
     color: #37474F;
     background-color: #f44336;
 }
+.cercle-info {
+    color:  black;
+    background-color: #03A9F4;
 
-.alert-warning {
+}
+.cercle-warning {
     color: #37474F;
     background-color: #ffeb3b;
 }

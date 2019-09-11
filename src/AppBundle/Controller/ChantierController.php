@@ -77,14 +77,16 @@ class ChantierController extends Controller
 						->setChantier($chantier);
 
 					// Supplément terrasse remplis par défaut
-					$suppTerrasse = $postChantier['supplementTerrasse'];
+					if (array_key_exists('supplementTerrasse', $postChantier)) {
+						$suppTerrasse = $postChantier['supplementTerrasse'];
 
-					for ($j = 0; $j < count($suppTerrasse); $j++) {
-						$newSuppTerrasse = new SupplementTerrasse();
-						$newSuppTerrasse->setEtat(0);
-						$newSuppTerrasse->setDesignation($suppTerrasse[$j]);
-						$newSuppTerrasse->setBien($bien);
-						$em->persist($newSuppTerrasse);
+						for ($j = 0; $j < count($suppTerrasse); $j++) {
+							$newSuppTerrasse = new SupplementTerrasse();
+							$newSuppTerrasse->setEtat(0);
+							$newSuppTerrasse->setDesignation($suppTerrasse[$j]);
+							$newSuppTerrasse->setBien($bien);
+							$em->persist($newSuppTerrasse);
+						}
 					}
 
 					// Si des supplément terrasse sont renseigné
@@ -112,14 +114,16 @@ class ChantierController extends Controller
 					}
 
 					// Supplément parquet par défaut
-					$suppParquet = $postChantier['supplementParquet'];
+					if (array_key_exists('supplementParquet', $postChantier)) {
+						$suppParquet = $postChantier['supplementParquet'];
 
-					for ($k = 0; $k < count($suppParquet); $k++) {
-						$newSuppParquet = new SupplementParquet();
-						$newSuppParquet->setEtat(0);
-						$newSuppParquet->setDesignation($suppParquet[$k]);
-						$newSuppParquet->setBien($bien);
-						$em->persist($newSuppParquet);
+						for ($k = 0; $k < count($suppParquet); $k++) {
+							$newSuppParquet = new SupplementParquet();
+							$newSuppParquet->setEtat(0);
+							$newSuppParquet->setDesignation($suppParquet[$k]);
+							$newSuppParquet->setBien($bien);
+							$em->persist($newSuppParquet);
+						}
 					}
 
 					$em->persist($bien);
@@ -147,14 +151,16 @@ class ChantierController extends Controller
 						->setChantier($chantier);
 
 					// Supplément terrasse remplis par défaut
-					$suppTerrasse = $postChantier['supplementTerrasse'];
+					if (array_key_exists('supplementTerrasse', $postChantier)) {
+						$suppTerrasse = $postChantier['supplementTerrasse'];
 
-					for ($j = 0; $j < count($suppTerrasse); $j++) {
-						$newSuppTerrasse = new SupplementTerrasse();
-						$newSuppTerrasse->setEtat(0);
-						$newSuppTerrasse->setDesignation($suppTerrasse[$j]);
-						$newSuppTerrasse->setBien($bien);
-						$em->persist($newSuppTerrasse);
+						for ($j = 0; $j < count($suppTerrasse); $j++) {
+							$newSuppTerrasse = new SupplementTerrasse();
+							$newSuppTerrasse->setEtat(0);
+							$newSuppTerrasse->setDesignation($suppTerrasse[$j]);
+							$newSuppTerrasse->setBien($bien);
+							$em->persist($newSuppTerrasse);
+						}
 					}
 
 					// Si des supplément terrasse sont renseigné
@@ -172,6 +178,7 @@ class ChantierController extends Controller
 					$em->persist($bien);
 				}
 			}
+
 			// Si la checkbox parquet est coché
 			if ($trueParquet === 1 && $trueTerrasse === 0) {
 				$bien = new Bien();
@@ -192,15 +199,18 @@ class ChantierController extends Controller
 						->setSuperficieTerrasse(0)
 						->setChantier($chantier);
 
-					$suppParquet = $postChantier['supplementParquet'];
-
-					for ($k = 0; $k < count($suppParquet); $k++) {
-						$newSuppParquet = new SupplementParquet();
-						$newSuppParquet->setEtat(0);
-						$newSuppParquet->setDesignation($suppParquet[$k]);
-						$newSuppParquet->setBien($bien);
-						$em->persist($newSuppParquet);
+					// Si les fonds de placards sont coché on les ajoutes à chacun des biens du chantier
+					if (array_key_exists('supplementParquet', $postChantier)) {
+						$suppParquet = $postChantier['supplementParquet'];
+						for ($k = 0; $k < count($suppParquet); $k++) {
+							$newSuppParquet = new SupplementParquet();
+							$newSuppParquet->setEtat(0);
+							$newSuppParquet->setDesignation($suppParquet[$k]);
+							$newSuppParquet->setBien($bien);
+							$em->persist($newSuppParquet);
+						}
 					}
+
 
 					// Si des supplément parquet sont renseigné
 					if (array_key_exists('ajoutManuelSuppParquets', $postChantier)) {
@@ -219,6 +229,11 @@ class ChantierController extends Controller
 			}
 			$em->persist($chantier);
 			$em->flush();
+
+			$this->addFlash(
+				'success',
+				sprintf('Le chantier %s à bien été créer !', $chantier)
+			);
 
 			return $this->redirectToRoute('chantier_show', array('id' => $chantier->getId()));
 		}
@@ -253,50 +268,46 @@ class ChantierController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($chantier);
 			$em->flush();
+
+			$this->addFlash(
+				'success',
+				sprintf('Les changements sur le chantier %s ont bien été pris en compte', $chantier)
+			);
 		}
 
 		return $this->render('chantier/show.html.twig', array(
 			'chantier'    => $chantier,
-			'oneBien'   => $oneBien,
+			'oneBien'     => $oneBien,
 			'form'        => $form_edit->createView(),
 			'delete_form' => $deleteForm->createView(),
 		));
 	}
 
 	/**
-	 * Deletes a chantier entity.
-	 * @Route(path="/{id}", name="chantier_delete", methods={"DELETE"})
+	 * @Route(path="/remove/{id}", name="chantier_remove")
 	 * @Security("is_granted('ROLE_DIRECTEUR')")
-	 * @param Request $request
-	 * @param Chantier $chantier
+	 *
+	 * @param $id
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
-	public function deleteAction(Request $request, Chantier $chantier)
+	public function remove($id)
 	{
-		$form = $this->createDeleteForm($chantier);
-		$form->handleRequest($request);
-
-		if ($form->isSubmitted() && $form->isValid()) {
+		if ($this->getUser()) {
 			$em = $this->getDoctrine()->getManager();
-			$em->remove($chantier);
-			$em->flush();
+			$chantier = $em->getRepository(Chantier::class)->find($id);
+
+			if ($chantier) {
+				$em->remove($chantier);
+				$em->flush();
+			}
+
+			$this->addFlash(
+				'danger',
+				sprintf('Le chantier %s à bien été supprimé !', $chantier)
+			);
 		}
 
 		return $this->redirectToRoute('chantier_index');
-	}
 
-	/**
-	 * Creates a form to delete a chantier entity.
-	 *
-	 * @param Chantier $chantier The chantier entity
-	 *
-	 * @return \Symfony\Component\Form\Form The form
-	 */
-	private function createDeleteForm(Chantier $chantier)
-	{
-		return $this->createFormBuilder()
-			->setAction($this->generateUrl('chantier_delete', array('id' => $chantier->getId())))
-			->setMethod('DELETE')
-			->getForm();
 	}
 }
