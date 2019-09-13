@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Chantier;
+
 /**
  * ChantierRepository
  *
@@ -10,4 +12,15 @@ namespace AppBundle\Repository;
  */
 class ChantierRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function nombreChantiers()
+	{
+		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('COUNT(c)')
+			->from(Chantier::class, 'c');
+
+		return $qb->getQuery()->getSingleScalarResult();
+	}
+
 }

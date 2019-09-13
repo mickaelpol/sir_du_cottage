@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Chantier;
+use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,21 +14,28 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CommentaireChantier
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="commentaire", type="string", length=255)
-     */
-    private $commentaire;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="commentaire", type="string", length=255)
+	 */
+	private $commentaire;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="utilisateur", type="string", length=255, nullable=false)
+	 */
+	private $utilisateur;
 
 	/**
 	 * Plusieurs commentaire peuvent appartenir à un chantier.
@@ -42,60 +50,77 @@ class CommentaireChantier
 	}
 
 	/**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	 * Get id
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * Set commentaire
-     *
-     * @param string $commentaire
-     *
-     * @return CommentaireChantier
-     */
-    public function setCommentaire($commentaire)
-    {
-        $this->commentaire = $commentaire;
+	/**
+	 * Set commentaire
+	 *
+	 * @param string $commentaire
+	 *
+	 * @return CommentaireChantier
+	 */
+	public function setCommentaire($commentaire)
+	{
+		$this->commentaire = $commentaire;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get commentaire
-     *
-     * @return string
-     */
-    public function getCommentaire()
-    {
-        return $this->commentaire;
-    }
+	/**
+	 * Get commentaire
+	 *
+	 * @return string
+	 */
+	public function getCommentaire()
+	{
+		return $this->commentaire;
+	}
 
-    /**
-     * Set chantier
-     *
-     * @param Chantier $chantier
-     *
-     * @return CommentaireChantier
-     */
-    public function setChantier(Chantier $chantier = null)
-    {
-        $this->chantier = $chantier;
+	/**
+	 * Set chantier
+	 *
+	 * @param Chantier $chantier
+	 *
+	 * @return CommentaireChantier
+	 */
+	public function setChantier(Chantier $chantier = null)
+	{
+		$this->chantier = $chantier;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get chantier
-     *
-     * @return Chantier
-     */
-    public function getChantier()
-    {
-        return $this->chantier;
-    }
+	/**
+	 * Get chantier
+	 *
+	 * @return Chantier
+	 */
+	public function getChantier()
+	{
+		return $this->chantier;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUtilisateur()
+	{
+		return $this->utilisateur;
+	}
+
+	/**
+	 * @param string $utilisateur
+	 */
+	public function setUtilisateur($utilisateur)
+	{
+		$this->utilisateur = $utilisateur;
+	}
+
 }

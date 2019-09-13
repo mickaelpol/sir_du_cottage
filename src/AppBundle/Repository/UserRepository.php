@@ -27,4 +27,13 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 		return $qb->getQuery()->getResult();
 	}
 
+	public function nombreDutilisateur()
+	{
+		$qb = $this->_em->createQueryBuilder();
+		$qb->select('COUNT(u)')
+			->from(User::class, 'u');
+
+		return $qb->getQuery()->getSingleScalarResult();
+	}
+
 }

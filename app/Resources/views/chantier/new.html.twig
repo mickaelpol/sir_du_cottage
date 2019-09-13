@@ -1,76 +1,150 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Nouveau chantier
+{% endblock %}
+
 {% block body %}
-    <h1>Chantier creation</h1>
 
-    {{ form_start(form) }}
+    <style>
+        [class^='bmd-label'], [class*=' bmd-label'] {
+            color: grey;
+        }
 
-        <div>
-            {{ form_label(form.nom) }}
-            {{ form_widget(form.nom) }}
-            {{ form_label(form.adresse) }}
-            {{ form_widget(form.adresse) }}
-            {{ form_label(form.type) }}
-            {{ form_widget(form.type) }}
-            {{ form_label(form.nombreBiens) }}
-            {{ form_widget(form.nombreBiens) }}
+        .bmd-form-group.is-focused .bmd-label-floating, .bmd-form-group .is-focused .bmd-label-floating, .bmd-form-group.is-filled .bmd-label-floating, .bmd-form-group .is-filled .bmd-label-floating {
+            font-size: 1rem;
+        }
+
+        .is-focused [class^='bmd-label'], .is-focused [class*=' bmd-label'], .is-focused [class^='bmd-label'], .is-focused [class*=' bmd-label'] {
+            color: white;
+        }
+
+        .bmd-form-group .bmd-help {
+            font-size: 0.90rem;
+            color: lightgrey;
+        }
+
+        .bmd-form-group .checkbox label, .bmd-form-group .radio label, .bmd-form-group label {
+            color: white;
+        }
+    </style>
+    <div class="row mt-5">
+        <div class="col">
+            <h1 class="text-center font-weigh-bold text-uppercase text-white">Création d'un chantier</h1>
         </div>
+    </div>
 
-    <hr>
+    <div class="border border-light p-5 bg-darkin mt-5">
 
-        <div>
-            {{ form_row(form.messageTerrasse) }}
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="h4 mb-4 text-center">Information sur le chantier</p>
+
+                <div class="form-group">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.adresse) }}
+                    {{ form_widget(form.adresse) }}
+                    <span class="bmd-help">Ajouter le code postal et la ville permettra de mieux cibler l'adresse exacte !</span>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.type) }}
+                    {{ form_widget(form.type) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.nombreBiens) }}
+                    {{ form_widget(form.nombreBiens) }}
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+                <p class="h4 mb-4 text-center">Information complémentaire</p>
+
+                Ce chantier comporte t-il des terrasses ?
+                <div class="radio">
+                    <label class="p-4">
+                        {{ form_widget(form.messageTerrasse[0]) }} Oui
+                    </label>
+                    <label>
+                        {{ form_widget(form.messageTerrasse[1]) }} Non
+                    </label>
+                </div>
+                <div class="mt-3" id="terrasse">
+                    <div class="checkbox">
+                        <label>
+                            {{ form_widget(form.supplementTerrasse[0]) }} U
+                        </label>
+                        <label>
+                            {{ form_widget(form.supplementTerrasse[1]) }} Rive
+                        </label>
+                        <label>
+                            {{ form_widget(form.supplementTerrasse[2]) }} Grille
+                        </label>
+                    </div>
+                    <ul class="suppTerrasse list-unstyled form-group bmd-form-group" data-prototype="{{ form_row(form.ajoutManuelSuppTerrasses.vars.prototype)|e('html_attr') }}">
+                        {% for suppTerrasse in form.ajoutManuelSuppTerrasses %}
+                            <li>
+                                <div class="form-group">
+                                    {{ form_label(suppTerrasse) }}
+                                    {{ form_widget(suppTerrasse) }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                Ce chantier comporte t-il du parquet ?
+                <div class="radio">
+                    <label class="p-4">
+                        {{ form_widget(form.messageParquet[0]) }} Oui
+                    </label>
+                    <label>
+                        {{ form_widget(form.messageParquet[1]) }} Non
+                    </label>
+                </div>
+                <div class="mt-3" id="parquet">
+                    <div class="checkbox">
+                        <label>
+                            {{ form_widget(form.supplementParquet[0]) }} Fond de placard
+                        </label>
+                    </div>
+                    <ul class="tags list-unstyled form-group bmd-form-group" data-prototype="{{ form_row(form.ajoutManuelSuppParquets.vars.prototype)|e('html_attr') }}">
+                        {% for suppParquet in form.ajoutManuelSuppParquets %}
+                            <li>
+                            <li>
+                                <div class="form-group">
+                                    {{ form_row(suppParquet) }}
+                                </div>
+                            </li>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div id="terrasse">
-            {{ form_row(form.supplementTerrasse) }}
-            <ul class="suppTerrasse" data-prototype="{{ form_widget(form.ajoutManuelSuppTerrasses.vars.prototype)|e('html_attr') }}">
-
-                {% for suppTerrasse in form.ajoutManuelSuppTerrasses %}
-                    <li>
-                        {{ form_label(suppTerrasse) }}
-                        {{ form_widget(suppTerrasse) }}
-                    </li>
-                {% endfor %}
-
-            </ul>
+        <div class="row">
+            <button class="btn btn-raised btn-lg btn-secondary btn-block mt-4" type="submit">Créer le chantier</button>
         </div>
+        {{ form_end(form) }}
+    </div>
 
-    <hr>
-        <div>
-            {{ form_row(form.messageParquet) }}
-        </div>
-        <div id="parquet">
-            {{ form_row(form.supplementParquet) }}
-            <ul class="tags" data-prototype="{{ form_widget(form.ajoutManuelSuppParquets.vars.prototype)|e('html_attr') }}">
-
-                {% for suppParquet in form.ajoutManuelSuppParquets %}
-                    <li>
-                        {{ form_label(suppParquet) }}
-                        {{ form_widget(suppParquet) }}
-                    </li>
-                {% endfor %}
-
-            </ul>
-        </div>
-
-    <hr>
-
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
+    <ul class="list-unstyled mt-5">
         <li>
-            <a href="{{ path('chantier_index') }}">Back to the list</a>
+            <a href="{{ path('chantier_index') }}">
+                <button type="button" class="btn btn-info">
+                    <i class="material-icons md-24 text-primary">arrow_back</i>
+                </button>
+            </a>
         </li>
     </ul>
 {% endblock %}
 
 {% block javascripts %}
-    <script
-            src="https://code.jquery.com/jquery-3.4.1.js"
-            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-            crossorigin="anonymous">
-
-    </script>
-    <script src="{{ asset('Js/creation_chantier.js') }}"></script>
+    <script src="{{ asset('Js/chantier/creation_chantier.js') }}"></script>
 {% endblock %}

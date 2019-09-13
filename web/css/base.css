@@ -1,0 +1,117 @@
+body, html {
+    background-image: url("../image/background-material.jpeg");
+    height: 100%;
+    width: 100%;
+}
+
+.flex-grow {
+    flex: 1 0 auto;
+}
+
+.bmd-layout-canvas {
+    flex-grow: 1;
+}
+
+.bg-darkin {
+    background-color: #37474F;
+}
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+
+.ft-14 {font-size: 14px;}
+.ft-16 {font-size: 16px;}
+.ft-18 {font-size: 18px;}
+.ft-24 {font-size: 24px;}
+.ft-36 {font-size: 36px;}
+.ft-48 {font-size: 48px;}
+.ft-56 {font-size: 56px;}
+.ft-80 {font-size: 80px;}
+.ft-90 {font-size: 90px;}
+
+.bmd-layout-drawer[aria-expanded="true"] {
+    width: 300px !important;
+}
+
+.link-unstyled, .link-unstyled:visited, .link-unstyled:hover, .link-unstyled:active, .link-unstyled:focus, .link-unstyled:active:hover {
+    font-style: inherit;
+    color: inherit;
+    background-color: transparent;
+    font-size: inherit;
+    text-decoration: none;
+    font-variant: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    border-radius: inherit;
+    border: inherit;
+    outline: inherit;
+    box-shadow: inherit;
+    padding: inherit;
+    vertical-align: inherit;
+}
+
+
+.notification {
+    z-index: 1024;
+    position: absolute;
+    min-height: 10%;
+    top: 1%;
+    right: 1%;
+    display: block;
+    max-width: 350px;
+    min-width: 350px;
+    overflow: hidden;
+    font-size: .875rem;
+    background-color: rgba(255,255,255,.85);
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.1);
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,.1);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: .25rem;
+}
+
+.notification-header {
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .25rem .75rem;
+    color: #6c757d;
+    background-color: rgba(255,255,255,.85);
+    background-clip: padding-box;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.notification-body {
+    padding: .75rem;
+}
+
+
+.cercle {
+    border-radius:50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid lightgrey;
+}
+
+.cercle-success {
+    color: #eeeeee;
+    background-color: #4caf50;
+}
+.cercle-danger {
+    color: #37474F;
+    background-color: #f44336;
+}
+.cercle-info {
+    color:  black;
+    background-color: #03A9F4;
+
+}
+.cercle-warning {
+    color: #37474F;
+    background-color: #ffeb3b;
+}

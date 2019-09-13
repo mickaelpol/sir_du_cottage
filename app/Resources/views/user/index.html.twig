@@ -1,32 +1,263 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/user/index.css') }}">
+{% endblock %}
+
 {% block body %}
 
-    <h1>Liste des utilisateurs</h1>
+    <div id="users-list" class="text-white text-center mt-5">
+        <div class="row"> {# Row #}
+            <div class="col">
+                <span class="btn-group-lg">
+                  <a href="{{ path('user_new') }}">
+                      <button type="button" class="btn btn-secondary bmd-btn-fab" data-toggle="tooltip" data-placement="top" title="Ajouter un utilisateur">
+                        <i class="material-icons">add circle</i>
+                      </button>
+                  </a>
+                </span>
+            </div>
+            <div class="col-xl-4 col-sm-3 col-md-4 offset-xl-4 offset-sm-8 offset-md-4">
+                <div class="bmd-form-group bmd-collapse-inline pull-sm-right">
+                    <button class="btn bmd-btn-icon" for="search" data-toggle="collapse" data-target="#collapse-search" aria-expanded="false" aria-controls="collapse-search">
+                        <i class="material-icons md-36" data-toggle="tooltip" data-placement="top" title="Recherchez un chantier">search</i>
+                    </button>
+                    <span id="collapse-search" class="collapse">
+                        <input class="form-control text-white search ft-24 text-center" type="text" id="search" placeholder="Recherchez un chantier">
+                    </span>
+                </div>
+            </div>
+        </div> {# Row #}
 
-    {% for user in users %}
-        <ul>
-            <li>{{ user.username }}</li>
-            <li>
-                {% if user.enabled == 1 %}
-                    Actif
-                    {% else %}
-                    Désactivé
-                {% endif %}
-            </li>
-            <li>{{ user.firstRole(user) }}</li>
-            <li>
-                <a href="{{ path('user_delete', { 'id': user.id }) }}">X</a>
-                <a href="{{ path('user_edit', { 'id': user.id }) }}">Editer</a>
-                <a href="{{ path('user_password_edit', { 'id': user.id }) }}">Modifier son mot de passe</a>
-            </li>
-        </ul>
-    {% endfor %}
+        <div class="row mt-5 bg-secondary font-weight-bold text-uppercase"> {# Row #}
+            <div class="col-xl-3 col-sm-3 d-none d-md-block">Nom</div>
+            <div class="col-xl-2 col-sm-2 d-none d-md-block">Roles</div>
+            <div class="col-xl-2 col-sm-2 d-none d-md-block">actif</div>
+            <div class="col-xl-3 col-sm-3 d-none d-md-block">dernière connexion</div>
+            <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">edit</i></div>
+            <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">delete</i></div>
+        </div> {# Row #}
 
-    <ul>
-        <li>
-            <a href="{{ path('user_new') }}">Ajouter un utilisateur</a>
-        </li>
-    </ul>
+        <div class="list">
+            {% for user in users %}
 
+                <style>
+                    .material-switch {
+                        position: relative;
+                        display: inline-block;
+                        vertical-align: middle;
+                        cursor: pointer;
+                        width: 36px;
+                        height: 24px;
+                    }
+                    .material-switch.active .bar {
+                        background-color: rgba(158, 158, 158, 0.5);
+                    }
+                    .material-switch.active .thumb-container {
+                        -moz-transform: translate(100%, 0);
+                        -ms-transform: translate(100%, 0);
+                        -webkit-transform: translate(100%, 0);
+                        transform: translate(100%, 0);
+                    }
+                    .material-switch.active .thumb::before {
+                        background-color: #9E9E9E;
+                    }
+                    .material-switch.active .ripple {
+                        -moz-animation: switchRipple 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -webkit-animation: switchRipple 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        animation: switchRipple 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                    }
+                    .material-switch .bar {
+                        background-color: #9E9E9E;
+                        position: absolute;
+                        top: 5px;
+                        left: 1px;
+                        width: 34px;
+                        height: 14px;
+                        -moz-border-radius: 8px;
+                        -webkit-border-radius: 8px;
+                        border-radius: 8px;
+                        -moz-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -o-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -webkit-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                    }
+                    .material-switch .thumb-container {
+                        width: 16px;
+                        z-index: 1;
+                        position: absolute;
+                        top: 2px;
+                        left: 0;
+                        -moz-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -o-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -webkit-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -moz-transform: translate(0, 0);
+                        -ms-transform: translate(0, 0);
+                        -webkit-transform: translate(0, 0);
+                        transform: translate(0, 0);
+                    }
+                    .material-switch .thumb {
+                        width: 20px;
+                        height: 20px;
+                    }
+                    .material-switch .thumb::before {
+                        content: "";
+                        position: absolute;
+                        display: block;
+                        background-color: #FAFAFA;
+                        width: 20px;
+                        height: 20px;
+                        -moz-border-radius: 50%;
+                        -webkit-border-radius: 50%;
+                        border-radius: 50%;
+                        -moz-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+                        -webkit-box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+                        box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.26);
+                        -moz-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -o-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -webkit-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                    }
+                    .material-switch .ripple {
+                        background-color: rgba(0, 0, 0, 0.2);
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 48px;
+                        height: 48px;
+                        -moz-transform: translate(-50%, -50%) scale(0);
+                        -ms-transform: translate(-50%, -50%) scale(0);
+                        -webkit-transform: translate(-50%, -50%) scale(0);
+                        transform: translate(-50%, -50%) scale(0);
+                        -moz-border-radius: 50%;
+                        -webkit-border-radius: 50%;
+                        border-radius: 50%;
+                        -moz-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -o-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        -webkit-transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                        transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+                    }
+
+                    @-moz-keyframes switchRipple {
+                        0% {
+                            opacity: 0;
+                            -moz-transform: translate(-50%, -50%) scale(0);
+                            transform: translate(-50%, -50%) scale(0);
+                        }
+                        50% {
+                            opacity: 0.67;
+                        }
+                        75% {
+                            opacity: 0.1;
+                            -moz-transform: translate(-50%, -50%) scale(1);
+                            transform: translate(-50%, -50%) scale(1);
+                        }
+                        100% {
+                            opacity: 0;
+                        }
+                    }
+                    @-webkit-keyframes switchRipple {
+                        0% {
+                            opacity: 0;
+                            -webkit-transform: translate(-50%, -50%) scale(0);
+                            transform: translate(-50%, -50%) scale(0);
+                        }
+                        50% {
+                            opacity: 0.67;
+                        }
+                        75% {
+                            opacity: 0.1;
+                            -webkit-transform: translate(-50%, -50%) scale(1);
+                            transform: translate(-50%, -50%) scale(1);
+                        }
+                        100% {
+                            opacity: 0;
+                        }
+                    }
+                    @keyframes switchRipple {
+                        0% {
+                            opacity: 0;
+                            -moz-transform: translate(-50%, -50%) scale(0);
+                            -ms-transform: translate(-50%, -50%) scale(0);
+                            -webkit-transform: translate(-50%, -50%) scale(0);
+                            transform: translate(-50%, -50%) scale(0);
+                        }
+                        50% {
+                            opacity: 0.67;
+                        }
+                        75% {
+                            opacity: 0.1;
+                            -moz-transform: translate(-50%, -50%) scale(1);
+                            -ms-transform: translate(-50%, -50%) scale(1);
+                            -webkit-transform: translate(-50%, -50%) scale(1);
+                            transform: translate(-50%, -50%) scale(1);
+                        }
+                        100% {
+                            opacity: 0;
+                        }
+                    }
+                    .material-switch.active.red .bar, .material-switch.active.red .ripple {
+                        background-color: rgba(219, 68, 55, 0.5);
+                    }
+                    .material-switch.active.red .thumb::before {
+                        background-color: #db4437;
+                    }
+
+                    .material-switch.active.green .bar, .material-switch.active.green .ripple {
+                        background-color: rgba(15, 157, 88, 0.5);
+                    }
+                    .material-switch.active.green .thumb::before {
+                        background-color: #0f9d58;
+                    }
+
+                    .material-switch.active.blue .bar, .material-switch.active.blue .ripple {
+                        background-color: rgba(66, 133, 244, 0.5);
+                    }
+                    .material-switch.active.blue .thumb::before {
+                        background-color: #4285f4;
+                    }
+
+                    .material-switch.active.yellow .bar, .material-switch.active.yellow .ripple {
+                        background-color: rgba(244, 180, 0, 0.5);
+                    }
+                    .material-switch.active.yellow .thumb::before {
+                        background-color: #f4b400;
+                    }
+
+                    .material-switch.active.default .bar, .material-switch.active.default .ripple {
+                        background-color: rgba(231, 230, 221, 0.5);
+                    }
+                    .material-switch.active.default .thumb::before {
+                        background-color: #e7e6dd;
+                    }
+                </style>
+
+                    <div class="row bg-secondary mt-2 hover-user">
+                        <div class="col-xl-3 col-sm-3">
+                            <p class="user-nom" data-route="{{ path('user_edit_ajax', {'id': user.id}) }}" data-user="{{ user }}"><i class="material-icons d-block d-sm-none mx-auto">person</i>{{ user.username }}</p>
+                        </div>
+                        <div class="col-xl-2 col-sm-2"><p class="user-role"><i class="material-icons d-block d-sm-none mx-auto">verified_user</i>{{ user.firstRole(user) }}</p></div>
+                        {#<div class="col-xl-2 col-sm-2"><p class="user-actif">{{ user.enabled }}</p></div>#}
+                        <div class="col-xl-2 col-sm-2 mt-2">
+                            <div class="material-switch green{% if user.enabled == 1  %} active{% endif %}"></div>
+                        </div>
+                        <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">watch_later</i>{{ user.lastLogin|date('d/m/Y H:i') }}</p></div>
+                        <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_edit', { 'id': user.id }) }}">
+                            <p><i class="material-icons mx-auto">settings</i></p>
+                        </a>
+                        <div class="col-xl-1 col-sm-1 deleting-btn" data-toggle="modal" data-user="{{ user.username }}" data-route="{{ path('user_delete', {'id': user.id }) }}" data-target="#exampleModalCenter"><p><i class="material-icons mx-auto">delete_outline</i></p></div>
+                    </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5 justify-content-center">
+            <ul class="pagination"></ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('node_modules/list.js/dist/list.js') }}"></script>
+    <script src="{{ asset('Js/user/index.js') }}"></script>
 {% endblock %}

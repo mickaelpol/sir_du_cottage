@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Chantier
 {
+
+	CONST GOOLE_MAP_LINK = 'https://maps.google.com/?q=';
+
     /**
      * @var int
      *
@@ -54,13 +57,13 @@ class Chantier
 
 	/**
 	 * Un Chantier peut avoir plusieurs Commentaire.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $commentaires;
 
 	/**
 	 * One Chantier has many Bien. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $biens;
 
@@ -69,8 +72,13 @@ class Chantier
 		$this->commentaires = new ArrayCollection();
 	}
 
+	public function __toString()
+	{
+		return $this->nom;
+	}
 
-    /**
+
+	/**
      * Get id
      *
      * @return int
@@ -116,6 +124,16 @@ class Chantier
         $this->adresse = $adresse;
 
         return $this;
+    }
+
+	/**
+	 * get adresse
+	 *
+	 * @return string
+	 */
+    public function getLinkAdress()
+    {
+		return self::GOOLE_MAP_LINK . $this->adresse;
     }
 
     /**
@@ -216,13 +234,13 @@ class Chantier
         $this->biens->removeElement($bien);
     }
 
-    /**
-     * Add commentaire
-     *
-     * @param CommentaireChantier $commentaire
-     *
-     * @return Chantier
-     */
+	/**
+	 * Add commentaire
+	 *
+	 * @param CommentaireChantier $commentaire
+	 *
+	 * @return Chantier
+	 */
     public function addCommentaire(CommentaireChantier $commentaire)
     {
 	    $this->commentaires->add($commentaire);

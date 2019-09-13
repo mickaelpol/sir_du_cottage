@@ -111,19 +111,19 @@ class Bien
 
 	/**
 	 * One Bien has many ColorisParquet. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\ColorisParquet", mappedBy="bien", orphanRemoval=true, cascade={"persist"}))
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\ColorisParquet", mappedBy="bien", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $colorisParquets;
 
 	/**
 	 * One Bien has many SupplementParquet. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplementParquet", mappedBy="bien")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplementParquet", mappedBy="bien", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $supplementParquets;
 
 	/**
 	 * One Bien has many SupplementTerrasse. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplementTerrasse", mappedBy="bien")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplementTerrasse", mappedBy="bien", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $supplementTerrasses;
 
