@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
+use AppBundle\Constante\NotificationConstate as notif;
 
 /**
  * Class UserController
@@ -64,6 +65,11 @@ class UserController extends Controller
 			$em->persist($user);
 			$em->flush();
 
+			$this->addFlash(
+				notif::SUCCESS,
+				sprintf('L\'utilisateur %s à bien été créer !', $user)
+			);
+
 			/*, array('id' => $bien->getId())*/
 			return $this->redirectToRoute('user_index');
 		}
@@ -93,7 +99,12 @@ class UserController extends Controller
 			$user->setRoles($newRole);
 			$this->getDoctrine()->getManager()->flush();
 
-			return $this->redirectToRoute('user_edit', array('id' => $user->getId()));
+			$this->addFlash(
+				notif::INFO,
+				sprintf('Les changements concernant l\'utilisateur %s ont bien été pris en compte', $user)
+			);
+
+			return $this->redirectToRoute('user_index');
 		}
 
 		return $this->render('user/edit.html.twig', array(
@@ -122,6 +133,11 @@ class UserController extends Controller
 			$userManager->updatePassword($user);
 			$em->flush();
 
+			$this->addFlash(
+				notif::WARNING,
+				sprintf('Le mot de passe de l\utilisateur %s à bien été modifé', $user)
+			);
+
 			return $this->redirectToRoute('user_index');
 		}
 
@@ -137,7 +153,7 @@ class UserController extends Controller
 	 * @Route(path="/{id}", name="user_delete", methods={"GET"})
 	 * @param Request $request
 	 * @param User $user
-	 * @Security("is_granted('RROLE_DIRECTEUR')")
+	 * @Security("is_granted('ROLE_DIRECTEUR')")
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	public function deleteAction(Request $request, User $user)
@@ -146,7 +162,21 @@ class UserController extends Controller
 		$em->remove($user);
 		$em->flush();
 
+		$this->addFlash(
+			notif::DANGER,
+			sprintf('L\'utilisateur %s à bien été supprimé', $user)
+		);
+
 		return $this->redirectToRoute('user_index');
+	}
+
+	/**
+	 * @Route(path="/ajax/edit/{id}", name="user_edit_ajax", methods={"POST"})
+	 * @Security("is_granted('ROLE_DIRECTEUR')")
+	 */
+	public function editEnabledAjax()
+	{
+
 	}
 
 }

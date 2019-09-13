@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use AppBundle\Constante\NotificationConstate as notif;
 
 /**
  * Chantier controller.
@@ -231,7 +232,7 @@ class ChantierController extends Controller
 			$em->flush();
 
 			$this->addFlash(
-				'success',
+				notif::SUCCESS,
 				sprintf('Le chantier %s à bien été créer !', $chantier)
 			);
 
@@ -270,7 +271,7 @@ class ChantierController extends Controller
 			$em->flush();
 
 			$this->addFlash(
-				'success',
+				notif::INFO,
 				sprintf('Les changements sur le chantier %s ont bien été pris en compte', $chantier)
 			);
 		}
@@ -302,7 +303,7 @@ class ChantierController extends Controller
 			}
 
 			$this->addFlash(
-				'danger',
+				notif::DANGER,
 				sprintf('Le chantier %s à bien été supprimé !', $chantier)
 			);
 		}

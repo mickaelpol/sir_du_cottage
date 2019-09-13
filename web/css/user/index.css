@@ -1,0 +1,55 @@
+.hover-user div p {
+    margin-top: 1rem !important;
+}
+
+.link-unstyled p {
+    margin-top: 1rem !important;
+}
+
+.hover-user .deleting-btn {
+    cursor: pointer;
+}
+
+
+.pagination li {
+    display:inline-block;
+    padding:5px;
+}
+
+.pagination li {
+    margin-left: 0;
+    border-radius: 0.125rem;
+}
+
+.pagination li a.page {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    z-index: 1;
+    color: #fff;
+    text-decoration: none;
+}
+
+.pagination li.active {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.pagination li.active a.page {
+    z-index: 1;
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    text-decoration: none;
+    border-radius: 25%;
+}
+.pagination li.active a.page:hover {
+    z-index: 2;
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #6c757d;
+    border-color: #000000;
+}
