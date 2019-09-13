@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Bien;
+
 /**
  * BienRepository
  *
@@ -10,4 +12,14 @@ namespace AppBundle\Repository;
  */
 class BienRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function nombreBiens()
+	{
+		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('COUNT(b)')
+			->from(Bien::class, 'b');
+
+		return $qb->getQuery()->getSingleScalarResult();
+	}
 }

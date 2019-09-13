@@ -2,6 +2,11 @@
 
 namespace AppBundle\Controller;
 
+
+use AppBundle\Entity\Bien;
+use AppBundle\Entity\Chantier;
+use AppBundle\Entity\CommentaireChantier;
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,17 +16,25 @@ class DefaultController extends Controller
 {
 	/**
 	 * Lists all chantier entities.
-	 * @Route(path="/", name="chantier_index", methods={"GET"})
+	 * @Route(path="/", name="accueil", methods={"GET"})
 	 * @Security("is_granted('ROLE_CHEF')")
 	 */
-	public function indexAction()
+	public function backOfficeAction()
 	{
 		$em = $this->getDoctrine()->getManager();
+		$nombreChantiers = $em->getRepository(Chantier::class)->nombreChantiers();
+		$nombreBiens = $em->getRepository(Bien::class)->nombreBiens();
+		$cinqDernierComChantiers = $em->getRepository(CommentaireChantier::class)->findBy([], [
+			'id' => 'DESC',
+		], 5);
+		$nombreDutilisateurs = $em->getRepository(User::class)->nombreDutilisateur();
 
-		$chantiers = $em->getRepository('AppBundle:Chantier')->findAll();
 
-		return $this->render('chantier/index.html.twig', array(
-			'chantiers' => $chantiers,
+		return $this->render('recapitulatif/recapitulatif.html.twig', array(
+			'nombreChantiers'        => $nombreChantiers,
+			'nombreBiens'            => $nombreBiens,
+			'cinqDernierComChantier' => $cinqDernierComChantiers,
+			'nombreDutilisateurs'    => $nombreDutilisateurs,
 		));
 	}
 }

@@ -38,26 +38,70 @@ class ChantierType extends AbstractType
 		$ajoutManuelSuppTerrasses = [];
 
 		$builder
-			->add('nom', TextType::class)
-			->add('adresse', TextType::class)
+			->add('nom', TextType::class, [
+				'label'      => 'Nom du chantier',
+				'label_attr' => [
+					'class' => 'bmd-label-floating',
+				],
+				'attr'       => [
+					'class'        => 'form-control text-white ft-18',
+					'type'         => 'text',
+					'autocomplete' => 'off',
+				],
+			])
+			->add('adresse', TextType::class, [
+				'label'      => 'Adresse du chantier',
+				'label_attr' => [
+					'class' => 'bmd-label-floating',
+				],
+				'attr'       => [
+					'class'        => 'form-control text-white ft-18',
+					'type'         => 'text',
+					'autocomplete' => 'off',
+				],
+				'required'   => true,
+			])
 			->add('type', ChoiceType::class, [
-				'label'   => 'Type de chantier :',
-				'choices' => [
+				'label'             => false,
+				'label_attr'        => [
+					'class' => 'bmd-label-floating',
+				],
+				'attr'              => [
+					'class' => 'form-control text-white',
+				],
+				'choices'           => [
 					'Terrasse'           => 'Terrasse',
 					'Parquet'            => 'Parquet',
 					'Terrasse / Parquet' => 'Terrasse / Parquet',
 				],
+				'choices_as_values' => true,
+				'choice_attr'       => function ($allChoices, $currentChoiceKey) {
+					if ($currentChoiceKey) {
+						return array('class' => 'text-dark');
+					}
+				},
 			])
-			->add('nombreBiens', IntegerType::class)
+			->add('nombreBiens', IntegerType::class, [
+				'label'      => 'Nombre de biens à créer',
+				'label_attr' => [
+					'class' => 'bmd-label-floating',
+				],
+				'attr'       => [
+					'class'        => 'form-control text-white ft-18',
+					'type'         => 'text',
+					'autocomplete' => 'off',
+				],
+			])
 			->add('messageTerrasse', ChoiceType::class, [
-				'label'    => $terrasse['messageTerrasse'],
-				'multiple' => false,
-				'expanded' => true,
-				'choices'  => [
+				'label'        => false,
+				'multiple'     => false,
+				'expanded'     => true,
+				'choices'      => [
 					'Oui' => 1,
 					'Non' => 0,
 				],
-				'mapped'   => false,
+				'choice_label' => false,
+				'mapped'       => false,
 			])
 			->add('supplementTerrasse', ChoiceType::class, [
 				'label'    => false,
@@ -73,10 +117,15 @@ class ChantierType extends AbstractType
 				'entry_type'    => TextType::class,
 				'data'          => $ajoutManuelSuppTerrasses,
 				'entry_options' => [
-					'label' => false,
+					'label' => 'Ajouter une caractéristique aux terrasses',
+					'attr'  => [
+						'class'        => 'form-control mt-1 mb-1 text-white',
+						'autocomplete' => 'off',
+					],
 				],
 				'mapped'        => false,
 				'allow_add'     => true,
+				'prototype'     => true,
 			])
 			->add('messageParquet', ChoiceType::class, [
 				'label'    => $parquet['messageParquet'],
@@ -102,10 +151,15 @@ class ChantierType extends AbstractType
 				'entry_type'    => TextType::class,
 				'data'          => $ajoutManuelSuppParquets,
 				'entry_options' => [
-					'label' => false,
+					'label' => 'Ajouter une caractéristique aux parquets',
+					'attr'  => [
+						'class'        => 'form-control mt-1 mb-1 text-white',
+						'autocomplete' => 'off',
+					],
 				],
 				'mapped'        => false,
 				'allow_add'     => true,
+				'prototype'     => true,
 			]);
 	}
 

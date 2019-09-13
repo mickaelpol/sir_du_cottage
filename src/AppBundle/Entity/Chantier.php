@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Bien;
+use AppBundle\Entity\CommentaireChantier;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Chantier
 {
+
+	CONST GOOLE_MAP_LINK = 'https://maps.google.com/?q=';
+
     /**
      * @var int
      *
@@ -52,17 +56,29 @@ class Chantier
     private $nombreBiens;
 
 	/**
+	 * Un Chantier peut avoir plusieurs Commentaire.
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\CommentaireChantier", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
+	 */
+	private $commentaires;
+
+	/**
 	 * One Chantier has many Bien. This is the inverse side.
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier")
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Bien", mappedBy="chantier", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $biens;
 
 	public function __construct() {
 		$this->biens = new ArrayCollection();
+		$this->commentaires = new ArrayCollection();
+	}
+
+	public function __toString()
+	{
+		return $this->nom;
 	}
 
 
-    /**
+	/**
      * Get id
      *
      * @return int
@@ -108,6 +124,16 @@ class Chantier
         $this->adresse = $adresse;
 
         return $this;
+    }
+
+	/**
+	 * get adresse
+	 *
+	 * @return string
+	 */
+    public function getLinkAdress()
+    {
+		return self::GOOLE_MAP_LINK . $this->adresse;
     }
 
     /**
@@ -206,5 +232,40 @@ class Chantier
     public function removeBien(Bien $bien)
     {
         $this->biens->removeElement($bien);
+    }
+
+	/**
+	 * Add commentaire
+	 *
+	 * @param CommentaireChantier $commentaire
+	 *
+	 * @return Chantier
+	 */
+    public function addCommentaire(CommentaireChantier $commentaire)
+    {
+	    $this->commentaires->add($commentaire);
+	    $commentaire->setChantier($this);
+
+	    return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param CommentaireChantier $commentaire
+     */
+    public function removeCommentaire(CommentaireChantier $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 }

@@ -30,6 +30,16 @@ class ChantierEditType extends AbstractType
 				'allow_add'     => true,
 				'allow_delete'  => true,
 				'by_reference'  => false,
+			])
+			->add('commentaires', CollectionType::class, [
+				'label'         => false,
+				'entry_type'    => CommentaireChantierType::class,
+				'entry_options' => [
+					'label' => false,
+				],
+				'allow_add'     => true,
+				'allow_delete'  => true,
+				'by_reference'  => false,
 			]);
 
 	}

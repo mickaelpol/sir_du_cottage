@@ -2,9 +2,9 @@ var $collectionHolder;
 var $collectionHolder2;
 
 // setup an "add a tag" link
-var $addTagButton = $('<button type="button" class="add_tag_link">Ajouter une caractéristique supplémentaire au parquet</button>');
+var $addTagButton = $('<button type="button" class="btn btn-primary bmd-btn-fab"><i class="material-icons">add</i></button>');
 var $newLinkLi = $('<li></li>').append($addTagButton);
-var $addTagButton2 = $('<button type="button" class="add_tag_link">Ajouter une caractéristique supplémentaire en terrasse</button>');
+var $addTagButton2 = $('<button type="button" class="btn btn-primary bmd-btn-fab"><i class="material-icons">add</i></button>');
 var $newLinkLi2 = $('<li></li>').append($addTagButton2);
 
 function addTagForm($collectionHolder, $newLinkLi) {
@@ -58,9 +58,6 @@ function addTagForm2($collectionHolder2, $newLinkLi2) {
 }
 
 $(document).ready(function() {
-
-
-
     // Get the ul that holds the collection of tags
     $collectionHolder = $('ul.tags');
 

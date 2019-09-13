@@ -1,13 +1,98 @@
+{% set route = path(app.request.attributes.get('_route'),
+    app.request.attributes.get('_route_params')) %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
+        <link rel="stylesheet" href="">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css') }}">
+        <link rel="stylesheet" href="{{ asset('node_modules/bootstrap-material-design-icons/css/material-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+    <div class="notification-global">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="notification-global">
+                <div class="notification">
+                    <div class="notification-header">
+                        <div class="mr-2 cercle cercle-{{ label }}"></div>
+                        <strong class="mr-auto">Notification</strong>
+                        <small>{{ "now"|date("H:i") }}</small>
+                    </div>
+                    <div class="notification-body">
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    </div>
+
+    <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+            {% if route != '/login' %}
+                <header class="bmd-layout-header">
+                    <div class="navbar bg-darkin navbar-dark bg-faded">
+                        <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-p1">
+                            <span class="sr-only">Toggle drawer</span>
+                            <i class="material-icons">menu</i>
+                        </button>
+                        <div class="text-white">
+                            <a class="text-white link-unstyled" href="{{ path('accueil') }}">{{ app_name|upper }}</a>
+                        </div>
+                        <ul class="nav navbar-nav">
+                        </ul>
+                    </div>
+                </header>
+                <div id="dw-p1" class="bmd-layout-drawer bg-faded">
+                    <header>
+                        <img class="img-fluid" src="http://s1.lmcdn.fr/multimedia/cb4377532/produits/scie-circulaire-redstone-1800-w-230-mm.jpg" alt="">
+                    </header>
+                    <ul class="list-group">
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('chantier_index') }}" class="list-group-item text-dark font-weight-bold">
+                                <i class="material-icons md-24">
+                                    location_city
+                                </i>
+                                <div class="ft-16">Liste des chantiers</div>
+                            </a>
+                            <a href="{{ path('user_index') }}" class="list-group-item text-dark font-weight-bold">
+                                <i class="material-icons md-24">group</i>
+                                <div class="ft-16">Utilisateurs</div>
+                            </a>
+                            <a href="{{ path('fos_user_security_logout') }}" class="list-group-item text-dark font-weight-bold">
+                                <i class="material-icons md-24">exit_to_app</i>
+                                <div class="ft-16">Se deconnecter</div>
+                            </a>
+                        {% else %}
+                            <a href="{{ path('fos_user_security_login') }}" class="list-group-item text-dark font-weight-bold">
+                                <i class="material-icons md-24">
+                                    person
+                                </i>
+                                <div class="ft-16">Se connecter</div>
+                            </a>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+            <main class="bmd-layout-content">
+                <div class="{% if route == '/' %}container-fluid{% else %}container{% endif %}">
+                    {% block body %}{% endblock %}
+                </div>
+            </main>
+        </div>
+        {% block modal %}{% endblock %}
+
+
+        <script src="{{ asset('node_modules/jquery/dist/jquery.js') }}"></script>
+        <script src="{{ asset('node_modules/popper.js/dist/umd/popper.js') }}"></script>
+        <script src="{{ asset('node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js') }}"></script>
+        <script src="{{ asset('Js/initialisation_material_design.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

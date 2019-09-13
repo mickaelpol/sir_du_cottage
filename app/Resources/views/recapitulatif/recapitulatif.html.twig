@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/recapitulatif.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div id="main">
+        <div class="row row-offcanvas row-offcanvas-left">
+            <!--/col-->
+            <div class="col main pt-5 mt-3">
+                <div class="row mb-3">
+                    <div class="col-xl-3 col-sm-6 py-2">
+                        <div class="card bg-darkin h-100">
+                            <a class="text-white link-unstyled" href="{{ path('chantier_index') }}">
+                                <div class="card-body">
+                                    <h6 class="text-uppercase text-white text-center font-weight-bold">
+                                        Nombre de chantiers
+                                    </h6>
+                                    <div class="text-center text-primary">
+                                        <i class="material-icons md-48">
+                                            build
+                                        </i>
+                                    </div>
+                                    <h1 class="display-4 text-center font-weight-bold ft-56">{{ nombreChantiers }}</h1>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 py-2">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
+                                <h6 class="text-uppercase text-white text-center font-weight-bold">
+                                    Nombre de biens
+                                </h6>
+                                <div class="text-center text-primary">
+                                    <i class="material-icons md-48">
+                                        home
+                                    </i>
+                                </div>
+                                <h1 class="display-4 text-center font-weight-bold ft-56">{{ nombreBiens }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 py-2">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
+                                <h6 class="text-uppercase text-white text-center font-weight-bold">
+                                    Nombre d'utilisateurs
+                                </h6>
+                                <div class="text-center text-primary">
+                                    <i class="material-icons md-48">
+                                        people
+                                    </i>
+                                </div>
+                                <h1 class="display-4 text-center font-weight-bold ft-56">{{ nombreDutilisateurs }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 py-2">
+                        <div class="card text-white bg-darkin h-100">
+                            <div class="card-body">
+                                <h6 class="text-uppercase text-white text-center font-weight-bold">
+                                    Nombre de warnings
+                                </h6>
+                                <div class="text-center text-warning">
+                                    <i class="material-icons md-48">
+                                        warning
+                                    </i>
+                                </div>
+                                <h1 class="display-4 text-center font-weight-bold ft-56">8</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+                <hr>
+                <div class="row placeholders mb-3">
+                    <div class="col-6 col-sm-2 placeholder text-center image">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle bg-darkin" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">80%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Anatalia</h4>
+                        <span class="text-light">Parquet / Terrasse</span>
+                    </div>
+                    <div class="col-6 col-sm-2 placeholder text-center image">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Magenta</h4>
+                        <span class="text-light">Terrasse</span>
+                    </div>
+                    <div class="col-6 col-sm-2 placeholder text-center">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">Overview</h4>
+                        <span class="text-light">Parquet</span>
+                    </div>
+                    <div class="col-6 col-sm-2 placeholder text-center">
+                        <div class="overlay-image">
+                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
+                            <div class="text text-center">
+                                <div class="pourcentage font-weight-bold">20%</div>
+                            </div>
+                        </div>
+                        <h4 class="text-info text-center text-uppercase mt-3">SV9</h4>
+                        <span class="text-light">Parquet / Terrasse</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <div id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="card bg-secondary text-white">
+                                <div class="card-header ft-24 text-center text-uppercase font-weight-bold">Commentaires récents</div>
+                                {% for commentaire in cinqDernierComChantier %}
+                                    <div class="card-header mouse-over-card-header" role="tab" id="heading{{ loop.index }}"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
+                                        <blockquote class="text-uppercase font-weight-bold">{{ commentaire.chantier }} - ({{ commentaire.utilisateur }})</blockquote>
+                                    </div>
+                                    <div id="collapse{{ loop.index }}" class="card-block collapse in bg-darkin" role="tabpanel" aria-labelledby="heading{{ loop.index }}">
+                                        <p>{{ commentaire.commentaire }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div><!--/col-->
+                </div>
+
+                <a id="features"></a>
+                <hr>
+
+                <a id="more"></a>
+                <hr>
+                <h2 class="sub-header mt-5">Use card decks for equal height rows of cards</h2>
+                <div class="mb-3">
+                    <div class="card-deck">
+                        <div class="card card-inverse card-success text-center">
+                            <div class="card-body">
+                                <blockquote class="card-blockquote">
+                                    <p>It's really good news that the new Bootstrap 4 now has support for CSS 3 flexbox.</p>
+                                    <footer>Makes flexible layouts <cite title="Source Title">Faster</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="card card-inverse card-danger text-center">
+                            <div class="card-body">
+                                <blockquote class="card-blockquote">
+                                    <p>The Bootstrap 3.x element that was called "Panel" before, is now called a "Card".</p>
+                                    <footer>All of this makes more <cite title="Source Title">Sense</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="card card-inverse card-warning text-center">
+                            <div class="card-body">
+                                <blockquote class="card-blockquote">
+                                    <p>There are also some interesting new text classes for uppercase and capitalize.</p>
+                                    <footer>These handy utilities make it <cite title="Source Title">Easy</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="card card-inverse card-info text-center">
+                            <div class="card-body">
+                                <blockquote class="card-blockquote">
+                                    <p>If you want to use cool icons in Bootstrap 4, you'll have to find your own such as Font Awesome or Ionicons.</p>
+                                    <footer>The Glyphicons are not <cite title="Source Title">Included</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/row-->
+            </div>
+            <!--/main col-->
+        </div>
+
+    </div>
+    <!--/.container-->
+    <footer class="container-fluid">
+        <p class="text-right small">©2016-2018 Company</p>
+    </footer>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>This is a dashboard layout for Bootstrap 4. This is an example of the Modal component which you can use to show content.
+                        Any content can be placed inside the modal and it can use the Bootstrap grid classes.</p>
+                    <p>
+                        <a href="https://www.codeply.com/go/KrUO8QpyXP" target="_ext">Grab the code at Codeply</a>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary-outline" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
