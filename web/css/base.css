@@ -54,13 +54,16 @@ body, html {
     vertical-align: inherit;
 }
 
+#notif {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+}
 
 .notification {
     z-index: 1024;
-    position: absolute;
+    position: relative;
     min-height: 10%;
-    top: 1%;
-    right: 1%;
     display: block;
     max-width: 350px;
     min-width: 350px;
@@ -73,6 +76,10 @@ body, html {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: .25rem;
+}
+
+.notification:not(:last-child) {
+    margin-bottom: 0.75rem;
 }
 
 .notification-header {
