@@ -78,6 +78,13 @@ body, html {
     border-radius: .25rem;
 }
 
+@media screen and (max-width: 360px) {
+    .notification {
+        max-width: 100%;
+        min-width: 100%;
+    }
+}
+
 .notification:not(:last-child) {
     margin-bottom: 0.75rem;
 }
