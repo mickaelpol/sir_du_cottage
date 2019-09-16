@@ -29,28 +29,25 @@ class EditUserType extends AbstractType
 		$builder
 			->add('username', TextType::class, [
 				'label'    => 'Nom de l\'utilisateur',
+				'label_attr' => [
+                    'class' => 'bmd-label-floating text-white ft-24'
+                ],
 				'required' => true,
 			])
 			->add('role', ChoiceType::class, [
 				'mapped'            => false,
 				'label'             => false,
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white ft-24'
+                ],
 				'choices'           => [
 					'Directeur'      => 'ROLE_DIRECTEUR',
 					'Chef d\'équipe' => 'ROLE_CHEF',
 					'Ouvrier'        => 'ROLE_USER',
 				],
-//				'data'              => ,
-				'data' => $user->getFirstRole($user),
+				'preferred_choices' => ['ROLE_DIRECTEUR', 'ROLE_CHEF'],
 			])
-			->add('enabled', ChoiceType::class, [
-				'label'    => 'Activer l\'utilisateur',
-				'choices'  => [
-					'Activé'     => true,
-					'Désactiver' => false,
-				],
-				'multiple' => false,
-				'expanded' => true,
-			]);
+			;
 	}
 
 	/**

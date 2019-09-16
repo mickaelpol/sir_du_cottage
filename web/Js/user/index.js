@@ -74,7 +74,19 @@ $(document).ready(function () {
                     }
                 },
                 error: function (res, statut, code) {
-                    // console.log(res, statut, code)
+                    if (statut === 'error') {
+                        let notifDiv = `<div class="notification-global" data-index="${index}">
+                                        <div class="notification">
+                                            <div class="notification-header">
+                                                <div class="mr-2 cercle cercle-danger"></div>
+                                                <strong class="mr-auto">Notification</strong>
+                                                <small>${now}</small>
+                                            </div>
+                                            <div class="notification-body">Vous n'avez pas accès à cette fonctionnalité</div>
+                                        </div>
+                                    </div>`
+                        $(notifDiv).appendTo($('#notif'));
+                    }
                 },
                 complete: function (res, statut, code) {
                     // console.log(res, statut, code)
@@ -111,10 +123,21 @@ $(document).ready(function () {
                     }
                 },
                 error: function (res, statut, code) {
-                    // console.log(res, statut, code)
+                    if (statut === 'error') {
+                        let notifDiv = `<div class="notification-global" data-index="${index}">
+                                        <div class="notification">
+                                            <div class="notification-header">
+                                                <div class="mr-2 cercle cercle-danger"></div>
+                                                <strong class="mr-auto">Notification</strong>
+                                                <small>${now}</small>
+                                            </div>
+                                            <div class="notification-body">Vous n'avez pas accès à cette fonctionnalité</div>
+                                        </div>
+                                    </div>`
+                        $(notifDiv).appendTo($('#notif'));
+                    }
                 },
                 complete: function (res, statut, code) {
-                    // console.log(res, statut, code)
                 }
             })
         }

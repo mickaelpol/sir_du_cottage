@@ -32,33 +32,58 @@
         </div> {# Row #}
 
         <div class="row mt-5 bg-secondary font-weight-bold text-uppercase"> {# Row #}
-            <div class="col-xl-3 col-sm-3 d-none d-md-block">Nom</div>
-            <div class="col-xl-2 col-sm-2 d-none d-md-block">Roles</div>
-            <div class="col-xl-2 col-sm-2 d-none d-md-block">actif</div>
-            <div class="col-xl-3 col-sm-3 d-none d-md-block">dernière connexion</div>
-            <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">edit</i></div>
-            <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">delete</i></div>
+            {% if is_granted('ROLE_DIRECTEUR') %}
+                <div class="col-xl-2 col-sm-2 d-none d-md-block">Nom</div>
+                <div class="col-xl-2 col-sm-2 d-none d-md-block">Roles</div>
+                <div class="col-xl-2 col-sm-2 d-none d-md-block">actif</div>
+                <div class="col-xl-3 col-sm-3 d-none d-md-block">dernière connexion</div>
+                <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">edit</i></div>
+                <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">settings_applications</i></div>
+                <div class="col-xl-1 col-sm-1 d-none d-md-block"><i class="material-icons md-24 align-middle">delete</i></div>
+                {% else %}
+                <div class="col-xl-4 col-sm-4 d-none d-md-block">Nom</div>
+                <div class="col-xl-3 col-sm-3 d-none d-md-block">Roles</div>
+                <div class="col-xl-3 col-sm-3 d-none d-md-block">dernière connexion</div>
+                <div class="col-xl-2 col-sm-2 d-none d-md-block"><i class="material-icons md-24 align-middle">settings_applications</i></div>
+            {% endif %}
         </div> {# Row #}
 
         <div class="list">
             {% for user in users %}
                     <div class="row bg-secondary mt-2 hover-user">
-                        <div class="col-xl-3 col-sm-3">
-                            <p class="user-nom"><i class="material-icons d-block d-sm-none mx-auto">person</i>{{ user.username }}</p>
-                        </div>
-                        <div class="col-xl-2 col-sm-2"><p class="user-role"><i class="material-icons d-block d-sm-none mx-auto">verified_user</i>{{ user.firstRole(user) }}</p></div>
-                        <div class="col-xl-2 col-sm-2 mt-2">
-                            <div data-form="form-{{ user.id }}" data-now="{{ "now"|date("H:i") }}" data-url="{{ path('user_edit_ajax', {'id': user.id}) }}" data-user="{{ user.id }}" class="material-switch green {% if user.enabled == 1  %} active{% endif %}"></div>
-                        </div>
-                        <form id="form-{{ user.id }}" class="form-hidden">
-                            <input type="hidden" class="user-input">
-                            <input type="hidden" class="enabled-input">
-                        </form>
-                        <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">watch_later</i>{{ user.lastLogin|date('d/m/Y H:i') }}</p></div>
-                        <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_edit', { 'id': user.id }) }}">
-                            <p><i class="material-icons mx-auto">settings</i></p>
-                        </a>
-                        <div class="col-xl-1 col-sm-1 deleting-btn" data-toggle="modal" data-user="{{ user.username }}" data-route="{{ path('user_delete', {'id': user.id }) }}" data-target="#exampleModalCenter"><p><i class="material-icons mx-auto">delete_outline</i></p></div>
+                        {% if is_granted('ROLE_DIRECTEUR') %}
+                            <div class="col-xl-2 col-sm-2">
+                                <p class="user-nom"><i class="material-icons d-block d-sm-none mx-auto">person</i>{{ user.username }}</p>
+                            </div>
+                            <div class="col-xl-2 col-sm-2"><p class="user-role"><i class="material-icons d-block d-sm-none mx-auto">verified_user</i>{{ user.firstRole(user) }}</p></div>
+                            <div class="col-xl-2 col-sm-2 mt-2">
+                                <div data-form="form-{{ user.id }}" data-now="{{ "now"|date("H:i") }}" data-url="{{ path('user_edit_ajax', {'id': user.id}) }}" data-user="{{ user.id }}" class="material-switch green {% if user.enabled == 1  %} active{% endif %}"></div>
+                            </div>
+                            <form id="form-{{ user.id }}" class="form-hidden">
+                                <input type="hidden" class="user-input">
+                                <input type="hidden" class="enabled-input">
+                            </form>
+                            <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">watch_later</i>{{ user.lastLogin|date('d/m/Y H:i') }}</p></div>
+                            <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_edit', { 'id': user.id }) }}">
+                                <p><i class="material-icons mx-auto">settings</i></p>
+                            </a>
+                            <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_password_edit', { 'id': user.id }) }}">
+                                <p><i class="material-icons mx-auto">settings_applications</i></p>
+                            </a>
+                            <div class="col-xl-1 col-sm-1 deleting-btn" data-toggle="modal" data-user="{{ user.username }}" data-route="{{ path('user_delete', {'id': user.id }) }}" data-target="#exampleModalCenter">
+                                <p><i class="material-icons mx-auto">delete_outline</i></p>
+                            </div>
+                            {% else %}
+                                <div class="col-xl-4 col-sm-4">
+                                    <p class="user-nom"><i class="material-icons d-block d-sm-none mx-auto">person</i>{{ user.username }}</p>
+                                </div>
+                                <div class="col-xl-3 col-sm-3"><p class="user-role"><i class="material-icons d-block d-sm-none mx-auto">verified_user</i>{{ user.firstRole(user) }}</p></div>
+                                <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">watch_later</i>{{ user.lastLogin|date('d/m/Y H:i') }}</p></div>
+                                <a class="link-unstyled col-xl-2 col-sm-2" href="{{ path('user_password_edit', { 'id': user.id }) }}">
+                                    <p><i class="material-icons mx-auto">settings_applications</i></p>
+                                </a>
+                        {% endif %}
+
                     </div>
             {% endfor %}
         </div>

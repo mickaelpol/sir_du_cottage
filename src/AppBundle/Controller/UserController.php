@@ -8,8 +8,10 @@ use AppBundle\Form\EditUserType;
 use AppBundle\Form\UserEditType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Constante\NotificationConstate as notif;
 
@@ -25,21 +27,14 @@ class UserController extends Controller
     /**
      * Lists all users entities.
      * @Route(path="/", name="user_index", methods={"GET", "POST"})
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @Security("is_granted('ROLE_CHEF')")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $userActif = $this->getUser();
-        $userActifRole = $userActif->getFirstRole($userActif);
-        $listUsers = $em->getRepository(User::class)->findAll();
-        $userChefRole = $em->getRepository(User::class)->getUserByRole();
-        /* Opération ternaire permettant de lister que les chef et ouvrier si lutilisateur courant
-         * Est un chef d'équipe
-         * Sinon on affiche tous les utlilisateur pour le grade au dessus
-        */
-        $users = $userActifRole === self::CHEF ? $userChefRole : $listUsers;
+        $users = $em->getRepository(User::class)->getUserByRole($userActif);
 
         return $this->render('user/index.html.twig', array(
             'users' => $users,
@@ -51,7 +46,7 @@ class UserController extends Controller
      * @Route(path="/new", name="user_new", methods={"GET", "POST"})
      * @param Request $request
      * @Security("is_granted('ROLE_CHEF')")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {
@@ -86,7 +81,7 @@ class UserController extends Controller
      * @param Request $request
      * @param User $user
      * @Security("is_granted('ROLE_CHEF')")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, User $user)
     {
@@ -120,7 +115,7 @@ class UserController extends Controller
      * @Security("is_granted('ROLE_CHEF')")
      * @param Request $request
      * @param User $user
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function editPasswordAction(Request $request, User $user)
     {
@@ -154,7 +149,7 @@ class UserController extends Controller
      * @param Request $request
      * @param User $user
      * @Security("is_granted('ROLE_DIRECTEUR')")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function deleteAction(Request $request, User $user)
     {
@@ -172,7 +167,7 @@ class UserController extends Controller
 
     /**
      * @Route(path="/ajax/edit/{id}", name="user_edit_ajax", methods={"POST"})
-     * @Security("is_granted('ROLE_DIRECTEUR')")
+     * @Security("has_role('ROLE_DIRECTEUR')",message="You have to be logged in")
      * @param Request $request
      */
     public function editEnabledAjax(Request $request)
