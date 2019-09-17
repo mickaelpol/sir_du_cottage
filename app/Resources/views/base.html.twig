@@ -15,23 +15,23 @@
     </head>
     <body>
 
-    <div class="notification-global">
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="notification-global">
-                <div class="notification">
-                    <div class="notification-header">
-                        <div class="mr-2 cercle cercle-{{ label }}"></div>
-                        <strong class="mr-auto">Notification</strong>
-                        <small>{{ "now"|date("H:i") }}</small>
-                    </div>
-                    <div class="notification-body">
-                        {{ message }}
+    <div id="notif">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="notification-global">
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="mr-2 cercle cercle-{{ label }}"></div>
+                            <strong class="mr-auto">Notification</strong>
+                            <small>{{ "now"|date("H:i") }}</small>
+                        </div>
+                        <div class="notification-body">
+                            {{ message }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
     </div>
 
     <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">

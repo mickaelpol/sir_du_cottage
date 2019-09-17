@@ -257,7 +257,6 @@ class ChantierController extends Controller
 	{
 		$form_edit = $this->createForm(ChantierEditType::class, $chantier);
 		$form_edit->handleRequest($request);
-		$deleteForm = $this->createDeleteForm($chantier);
 		$biens = $chantier->getBiens();
 		$oneBien = '';
 
@@ -280,7 +279,6 @@ class ChantierController extends Controller
 			'chantier'    => $chantier,
 			'oneBien'     => $oneBien,
 			'form'        => $form_edit->createView(),
-			'delete_form' => $deleteForm->createView(),
 		));
 	}
 

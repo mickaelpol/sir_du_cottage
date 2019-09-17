@@ -19,13 +19,4 @@ $(document).ready(function () {
     let childrenNotif = notifGlobale.children();
 
     notification(notifGlobale, childrenNotif, 'notification', 'show', 'fade', 5000);
-
-    // if(childrenNotif.hasClass('notification')){
-    //     notifGlobale.addClass('show');
-    //     setTimeout(function(){
-    //         notifGlobale.removeClass('show')
-    //         notifGlobale.addClass('fade')
-    //         }, 5000);
-    //     console.log('il a la notif')
-    // }
 })

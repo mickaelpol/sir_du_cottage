@@ -27,9 +27,15 @@ class EditUserPasswordType extends AbstractType
 				],
 				'first_options'   => [
 					'label' => 'Mot de passe',
+                    'label_attr' => [
+                        'class' => 'bmd-label-floating text-white ft-24'
+                    ]
 				],
 				'second_options'  => [
 					'label' => 'Confirmation du mot de passe',
+                    'label_attr' => [
+                        'class' => 'bmd-label-floating text-white ft-24',
+                    ],
 				],
 				'invalid_message' => 'fos_user.password.mismatch',
 			]);
