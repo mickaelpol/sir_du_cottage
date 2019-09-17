@@ -14,58 +14,59 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class EditUserType extends AbstractType
 {
 
-	private $securityContext;
+    private $securityContext;
 
-	public function __construct(TokenStorageInterface $securityContext)
-	{
-		$this->securityContext = $securityContext;
-	}
+    public function __construct(TokenStorageInterface $securityContext)
+    {
+        $this->securityContext = $securityContext;
+    }
 
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$user = $this->securityContext->getToken()->getUser();
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $userRoles = $builder->getData()->getRoles($builder->getData());
+        $firstRole = $userRoles[0];
 
-		$builder
-			->add('username', TextType::class, [
-				'label'    => 'Nom de l\'utilisateur',
-				'label_attr' => [
-                    'class' => 'bmd-label-floating text-white ft-24'
-                ],
-				'required' => true,
-			])
-			->add('role', ChoiceType::class, [
-				'mapped'            => false,
-				'label'             => false,
+        $builder
+            ->add('username', TextType::class, [
+                'label'      => 'Nom de l\'utilisateur',
                 'label_attr' => [
-                    'class' => 'bmd-label-floating text-white ft-24'
+                    'class' => 'bmd-label-floating text-white ft-24',
                 ],
-				'choices'           => [
-					'Directeur'      => 'ROLE_DIRECTEUR',
-					'Chef d\'équipe' => 'ROLE_CHEF',
-					'Ouvrier'        => 'ROLE_USER',
-				],
-				'preferred_choices' => ['ROLE_DIRECTEUR', 'ROLE_CHEF'],
-			])
-			;
-	}
+                'required'   => true,
+            ])
+            ->add('role', ChoiceType::class, [
+                'mapped'            => false,
+                'label'             => false,
+                'label_attr'        => [
+                    'class' => 'bmd-label-floating text-white ft-24',
+                ],
+                'choices'           => [
+                    'Directeur'      => 'ROLE_DIRECTEUR',
+                    'Chef d\'équipe' => 'ROLE_CHEF',
+                    'Ouvrier'        => 'ROLE_USER',
+                ],
+                'data'              => $firstRole,
+                'preferred_choices' => ['ROLE_DIRECTEUR', 'ROLE_CHEF'],
+            ]);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\User',
-		));
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\User',
+        ));
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getBlockPrefix()
-	{
-		return 'appbundle_user';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'appbundle_user';
+    }
 
 }

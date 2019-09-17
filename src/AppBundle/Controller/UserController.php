@@ -96,7 +96,7 @@ class UserController extends Controller
 
             $this->addFlash(
                 notif::INFO,
-                sprintf('Les changements concernant l\'utilisateur %s ont bien été pris en compte', $user)
+                sprintf('Les modifications concernant l\'utilisateur %s ont bien été pris en compte', $user)
             );
 
             return $this->redirectToRoute('user_index');
@@ -130,7 +130,7 @@ class UserController extends Controller
 
             $this->addFlash(
                 notif::WARNING,
-                sprintf('Le mot de passe de l\utilisateur %s à bien été modifé', $user)
+                sprintf('Le mot de passe de l\'utilisateur %s à bien été modifé', $user)
             );
 
             return $this->redirectToRoute('user_index');

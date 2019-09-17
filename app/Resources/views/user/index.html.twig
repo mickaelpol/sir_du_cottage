@@ -64,10 +64,10 @@
                                 <input type="hidden" class="enabled-input">
                             </form>
                             <div class="col-xl-3 col-sm-3"><p><i class="material-icons d-block d-sm-none mx-auto">watch_later</i>{{ user.lastLogin|date('d/m/Y H:i') }}</p></div>
-                            <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_edit', { 'id': user.id }) }}">
+                            <a data-toggle="tooltip" data-placement="top" title="Editer {{ user }} ?"  class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_edit', { 'id': user.id }) }}">
                                 <p><i class="material-icons mx-auto">settings</i></p>
                             </a>
-                            <a class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_password_edit', { 'id': user.id }) }}">
+                            <a data-toggle="tooltip" data-placement="top" title="Editer le mot de passe de {{ user }} ?"  class="link-unstyled col-xl-1 col-sm-1" href="{{ path('user_password_edit', { 'id': user.id }) }}">
                                 <p><i class="material-icons mx-auto">settings_applications</i></p>
                             </a>
                             <div class="col-xl-1 col-sm-1 deleting-btn" data-toggle="modal" data-user="{{ user.username }}" data-route="{{ path('user_delete', {'id': user.id }) }}" data-target="#exampleModalCenter">
