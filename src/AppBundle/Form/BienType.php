@@ -21,7 +21,16 @@ class BienType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('nom', TextType::class, [])
+			->add('nom', TextType::class, [
+			    'label' => 'Nom du bien',
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white fz-07-rem',
+                ],
+                'attr'       => [
+                    'class'        => 'form-control text-white text-uppercase',
+                    'autocomplete' => 'off',
+                ],
+            ])
 			->add('preparationParquet', IntegerType::class, [])
 			->add('colorisParquets', CollectionType::class, [
 				'label'         => false,
@@ -39,7 +48,16 @@ class BienType extends AbstractType
 			->add('cadreTerrasse', IntegerType::class, [])
 			->add('platelageTerrasse', IntegerType::class, [])
 			->add('vissageTerrasse', IntegerType::class, [])
-			->add('superficieTerrasse', IntegerType::class, [])
+			->add('superficieTerrasse', IntegerType::class, [
+                'label' => 'Superficie m2',
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white fz-07-rem',
+                ],
+                'attr'       => [
+                    'class'        => 'form-control text-white text-uppercase',
+                    'autocomplete' => 'off',
+                ],
+            ])
 			->add('supplementParquets', CollectionType::class, [
 				'label'         => false,
 				'entry_type'    => SupplementParquetType::class,

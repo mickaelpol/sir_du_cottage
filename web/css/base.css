@@ -40,6 +40,9 @@ body, html {
     font-size: 48px;
 }
 
+.fz-07-rem {
+    font-size: 0.7rem !important;
+}
 
 .ft-14 {
     font-size: 14px;
