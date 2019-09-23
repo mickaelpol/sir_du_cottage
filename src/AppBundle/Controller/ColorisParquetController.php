@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ColorisParquet;
+use AppBundle\Form\AddColorisBienForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Colorisparquet controller.
@@ -53,8 +56,26 @@ class ColorisParquetController extends Controller
 
         return $this->render('colorisparquet/new.html.twig', array(
             'colorisParquet' => $colorisParquet,
-            'form' => $form->createView(),
+            'form'           => $form->createView(),
         ));
+    }
+
+    /**
+     * @Route(path="/coloris/{id}", name="ajout_coloris", condition="request.isXmlHttpRequest()")
+     * @param Request $request
+     * @return Response
+     */
+    public function addColorisBien(Request $request)
+    {
+        $coloris = new ColorisParquet();
+        $form = $this->createForm(AddColorisBienForm::class, $coloris, [
+            'action' => $this->generateUrl($request->get('_route'), ['id' => $request->get('id')]),
+            'data'     => $request->get('id'),
+        ]);
+
+        return $this->render('form/ajout_coloris_form.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -69,7 +90,7 @@ class ColorisParquetController extends Controller
 
         return $this->render('colorisparquet/show.html.twig', array(
             'colorisParquet' => $colorisParquet,
-            'delete_form' => $deleteForm->createView(),
+            'delete_form'    => $deleteForm->createView(),
         ));
     }
 
@@ -93,8 +114,8 @@ class ColorisParquetController extends Controller
 
         return $this->render('colorisparquet/edit.html.twig', array(
             'colorisParquet' => $colorisParquet,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'edit_form'      => $editForm->createView(),
+            'delete_form'    => $deleteForm->createView(),
         ));
     }
 
@@ -130,7 +151,6 @@ class ColorisParquetController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('colorisparquet_delete', array('id' => $colorisParquet->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

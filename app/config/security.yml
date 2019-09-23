@@ -34,7 +34,7 @@ security:
     access_control:
         - { path: ^/supplementterrasse, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
         - { path: ^/supplementparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
-        - { path: ^/colorisparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
+#        - { path: ^/colorisparquet, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
         - { path: ^/bien, role: [ ROLE_SUPER_ADMIN, ROLE_ADMIN ] }
         - { path: ^/chantier, role: [ ROLE_DIRECTEUR, ROLE_CHEF ] }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

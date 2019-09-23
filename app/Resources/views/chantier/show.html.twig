@@ -66,6 +66,11 @@
                 <i class="material-icons md-24">add_location</i>
             </a>
         </div>
+        <div class="col-sm-4 offset-sm-3">
+            <button id="button_url_coloris" data-path="{{ path('ajout_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris" class="btn btn-info bmd-btn-fab">
+                <i class="material-icons">add</i>
+            </button>
+        </div>
     </div>
 
     <div class="row mt-5">
@@ -851,8 +856,26 @@
     </ul>
 {% endblock %}
 
+{% block modal %}
+    {% include 'modal/ajout_coloris_global.html.twig' %}
+{% endblock %}
+
 
 {% block javascripts %}
     <script src="{{ asset('Js/creation_bien.js') }}"></script>
     <script src="{{ asset('Js/chantier/color_choice.js') }}"></script>
+    <script>
+        let url;
+        $('#button_url_coloris').click(function(){
+            url = $(this).data('path');
+        });
+        $('#modal_ajout_coloris').on('shown.bs.modal', function () {
+            let modal = $(this);
+            $.ajax(url, {
+                success: function(data) {
+                    modal.find('.modal-body').html(data);
+                }
+            });
+        });
+    </script>
 {% endblock %}

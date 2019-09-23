@@ -4,14 +4,18 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
+use AppBundle\Entity\ColorisParquet;
 use AppBundle\Entity\CommentaireChantier;
 use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
 use AppBundle\Entity\User;
+use AppBundle\Form\AddColorisBienForm;
 use AppBundle\Form\ChantierEditType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Constante\NotificationConstate as notif;
 
@@ -44,7 +48,7 @@ class ChantierController extends Controller
      * @Route(path="/new", name="chantier_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_CHEF')")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function newAction(Request $request)
     {
@@ -272,7 +276,7 @@ class ChantierController extends Controller
      * @Security("is_granted('ROLE_CHEF')")
      * @param Chantier $chantier
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showAction(Chantier $chantier, Request $request)
     {
@@ -373,7 +377,7 @@ class ChantierController extends Controller
      * @Security("is_granted('ROLE_DIRECTEUR')")
      *
      * @param $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function remove($id)
     {
@@ -395,4 +399,5 @@ class ChantierController extends Controller
         return $this->redirectToRoute('chantier_index');
 
     }
+
 }
