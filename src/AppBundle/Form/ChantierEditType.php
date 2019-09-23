@@ -41,8 +41,10 @@ class ChantierEditType extends AbstractType
                 ],
             ])
             ->add('biens', CollectionType::class, [
+                'label'         => false,
                 'entry_type'    => BienType::class,
                 'entry_options' => [
+                    'label' => false,
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,

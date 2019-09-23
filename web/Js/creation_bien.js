@@ -2,8 +2,8 @@ var $collectionHolder;
 var $collectionHolderCom;
 
 // setup an "add a tag" link
-var $addTagButton = $('<button type="button" class="add_tag_link">Ajouter un coloris</button>');
-var $newLinkLi = $('<li></li>').append($addTagButton);
+var $addTagButton = $('<button type="button" class="add_tag_link btn btn-info bmd-btn-fab mt-2"><i class="material-icons">add</i></button><p class="text-white">Ajouter un coloris</p>');
+var $newLinkLi = $('<div class="row row-modifier"></div>').append($addTagButton);
 
 // setup an "add a commentaire" link
 var $addTagButtonCom = $('<button type="button" class="add_com_link btn btn-info bmd-btn-fab mt-2"><i class="material-icons">add</i></button><p class="text-white">Ajouter un commentaire</p>');
@@ -12,9 +12,9 @@ var $newLinkLiCom = $('<li></li>').append($addTagButtonCom);
 
 $(document).ready(function() {
 
-    function addTagFormDeleteLink($tag, $id) {
+    function addTagFormDeleteLink($tag) {
         var $removeFormButton = $('<button type="button" class="btn btn-danger bmd-btn-fab"><i class="material-icons">close</i></button>');
-        $id.append($removeFormButton);
+        $tag.append($removeFormButton);
 
         $removeFormButton.on('click', function(e) {
             // remove the li for the tag form
@@ -60,7 +60,7 @@ $(document).ready(function() {
         var newForm = prototype;
         newForm = newForm.replace(/__name__/g, index);
         collection.data('index', index + 1);
-        var $newFormLi = $('<li></li>').append(newForm);
+        var $newFormLi = $('<div class="col-6 border-right border-white rounded"></div>').append(newForm);
         $(this).before($newFormLi);
         addTagFormDeleteLink($newFormLi);
     });
