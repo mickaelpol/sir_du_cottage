@@ -2,13 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Bien;
 use AppBundle\Entity\ColorisParquet;
 use AppBundle\Form\AddColorisBienForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Constante\NotificationConstate as notif;
 
 /**
  * Colorisparquet controller.
@@ -60,17 +63,54 @@ class ColorisParquetController extends Controller
         ));
     }
 
+	/**
+	 * @Route(path="/add-coloris", name="ajout_coloris", condition="request.isXmlHttpRequest()")
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function colorisAddToBien(Request $request)
+	{
+		if ($request){
+			if ($request->isXMLHttpRequest()) {
+				$em = $this->getDoctrine()->getManager();
+				$erBien = $em->getRepository(Bien::class);
+				$form = $request->request->all();
+				$arr = $form['appbundle_colorisparquet'];
+				$codeCouleur = $arr['codeCouleur'];
+				$biens = $arr['bien'];
+				foreach ($biens as $idBien) {
+					$colorisParquet = new ColorisParquet();
+					$bien = $erBien->find($idBien);
+					$colorisParquet->setBien($bien);
+					$colorisParquet->setCodeCouleur($codeCouleur);
+					$bien->addColorisParquet($colorisParquet);
+					$em->persist($bien);
+				}
+				$em->flush();
+
+				$this->addFlash(
+					notif::INFO,
+					sprintf('Le coloris %s à bien été ajouter à votre selection', $codeCouleur)
+				);
+
+				return new JsonResponse([
+					'data' => 'Coloris ajouté'
+				]);
+			}
+		}
+	}
+
     /**
-     * @Route(path="/coloris/{id}", name="ajout_coloris", condition="request.isXmlHttpRequest()")
+     * @Route(path="/coloris/{id}", name="get_form_coloris", condition="request.isXmlHttpRequest()")
      * @param Request $request
      * @return Response
      */
-    public function addColorisBien(Request $request)
+    public function getFormColoris(Request $request)
     {
         $coloris = new ColorisParquet();
         $form = $this->createForm(AddColorisBienForm::class, $coloris, [
-            'action' => $this->generateUrl($request->get('_route'), ['id' => $request->get('id')]),
-            'data'     => $request->get('id'),
+            'action' => $this->generateUrl('ajout_coloris'),
+            'chantier'     => $request->get('id'),
         ]);
 
         return $this->render('form/ajout_coloris_form.html.twig', [
@@ -94,12 +134,15 @@ class ColorisParquetController extends Controller
         ));
     }
 
-    /**
-     * Displays a form to edit an existing colorisParquet entity.
-     *
-     * @Route("/{id}/edit", name="colorisparquet_edit")
-     * @Method({"GET", "POST"})
-     */
+	/**
+	 * Displays a form to edit an existing colorisParquet entity.
+	 *
+	 * @Route("/{id}/edit", name="colorisparquet_edit")
+	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @param ColorisParquet $colorisParquet
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
     public function editAction(Request $request, ColorisParquet $colorisParquet)
     {
         $deleteForm = $this->createDeleteForm($colorisParquet);
@@ -119,12 +162,15 @@ class ColorisParquetController extends Controller
         ));
     }
 
-    /**
-     * Deletes a colorisParquet entity.
-     *
-     * @Route("/{id}", name="colorisparquet_delete")
-     * @Method("DELETE")
-     */
+	/**
+	 * Deletes a colorisParquet entity.
+	 *
+	 * @Route("/{id}", name="colorisparquet_delete")
+	 * @Method("DELETE")
+	 * @param Request $request
+	 * @param ColorisParquet $colorisParquet
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
     public function deleteAction(Request $request, ColorisParquet $colorisParquet)
     {
         $form = $this->createDeleteForm($colorisParquet);

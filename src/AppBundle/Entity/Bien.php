@@ -138,7 +138,6 @@ class Bien
 		return $this->nom;
 	}
 
-
 	/**
      * Get id
      *

@@ -265,11 +265,6 @@ class ChantierController extends Controller
         return $prop;
     }
 
-    private function calculPourcentageParBien($valProp)
-    {
-
-    }
-
     /**
      * Finds and displays a chantier entity.
      * @Route(path="/{id}", name="chantier_show", methods={"GET", "POST"})

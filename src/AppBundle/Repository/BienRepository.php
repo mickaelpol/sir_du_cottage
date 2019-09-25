@@ -22,4 +22,17 @@ class BienRepository extends \Doctrine\ORM\EntityRepository
 
 		return $qb->getQuery()->getSingleScalarResult();
 	}
+
+	public function getBienAsChantier($chantier)
+	{
+		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('b')
+			->from(Bien::class, 'b')
+			->where('b.chantier = :chantier')
+			->setParameter('chantier', $chantier)
+			->setMaxResults(1);
+
+		return $qb->getQuery()->getSingleResult();
+	}
 }

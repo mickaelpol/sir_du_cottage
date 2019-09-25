@@ -29,9 +29,26 @@
     {% set propriete_supp_parquet = nombreSuppParquet %}
     {% set total_propriete_parquet = propriete_parquet + propriete_supp_parquet %}
     {% set pourcentage_par_propriete = (100 / total_propriete_parquet)|round(0, 'ceil') %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
 
 
     {{ form_start(form) }}
+
+    <div id="replace" data-replace="{{ currentPath }}" type="hidden"></div>
+
+    <div class="dropdown dropdownScrollToTop ">
+        <button class="btn btn-info bmd-btn-fab dropdown-toggle" type="button" id="ex1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex1">
+            <button class="dropdown-item btn text-dark" id="button_url_coloris" data-to="{{ path('ajout_coloris') }}" data-path="{{ path('get_form_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris">
+                Ajouter un coloris global
+            </button>
+            <button id="button_url_add_bien" class="dropdown-item btn text-dark" data-to="{{ path('send_form_bien', {'id': chantier.id}) }}" data-path="{{ path('get_form_bien', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_bien">Ajouter des biens</button>
+            <button class="dropdown-item btn text-dark" type="button">Supprimer des biens</button>
+        </div>
+    </div>
 
     <div class="row mt-2">
         <div class="col-sm-3">
@@ -62,14 +79,11 @@
             </div>
         </div>
         <div class="col-sm-4">
-            <a class="btn btn-info bmd-btn-fab" target="_blank" href="{{ chantier.linkAdress }}">
+            <a data-toggle="tooltip" data-placement="top" title="Lien vers google map" class="btn btn-info bmd-btn-fab" target="_blank" href="{{ chantier.linkAdress }}">
                 <i class="material-icons md-24">add_location</i>
             </a>
         </div>
         <div class="col-sm-4 offset-sm-3">
-            <button id="button_url_coloris" data-path="{{ path('ajout_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris" class="btn btn-info bmd-btn-fab">
-                <i class="material-icons">add</i>
-            </button>
         </div>
     </div>
 
@@ -845,37 +859,31 @@
             </ul>
         </div>
     </div>
-    <input type="submit" class="hidden" value="editer">
+
+    <button class="btnScrollTotop btn btn-success btn-raised" type="submit">Valider les changements</button>
     {{ form_end(form) }}
 
-
-    <ul>
+    <ul class="list-unstyled mt-5">
         <li>
-            <a href="{{ path('chantier_index') }}">Back to the list</a>
+            <a class="link-unstyled" href="{{ path('chantier_index') }}">
+                <button type="button" class="btn btn-info btn-lg active">
+                    <i class="material-icons md-18 text-white">arrow_back</i>
+                </button>
+            </a>
         </li>
     </ul>
+
 {% endblock %}
 
 {% block modal %}
     {% include 'modal/ajout_coloris_global.html.twig' %}
+    {% include 'modal/ajout_bien.html.twig' %}
 {% endblock %}
 
 
 {% block javascripts %}
     <script src="{{ asset('Js/creation_bien.js') }}"></script>
     <script src="{{ asset('Js/chantier/color_choice.js') }}"></script>
-    <script>
-        let url;
-        $('#button_url_coloris').click(function(){
-            url = $(this).data('path');
-        });
-        $('#modal_ajout_coloris').on('shown.bs.modal', function () {
-            let modal = $(this);
-            $.ajax(url, {
-                success: function(data) {
-                    modal.find('.modal-body').html(data);
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('Js/ajax/chantier/color_add.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/get_form_bien.js') }}"></script>
 {% endblock %}
