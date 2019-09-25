@@ -15,23 +15,23 @@
     </head>
     <body>
 
-    <div class="notification-global">
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="notification-global">
-                <div class="notification">
-                    <div class="notification-header">
-                        <div class="mr-2 cercle cercle-{{ label }}"></div>
-                        <strong class="mr-auto">Notification</strong>
-                        <small>{{ "now"|date("H:i") }}</small>
-                    </div>
-                    <div class="notification-body">
-                        {{ message }}
+    <div id="notif">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="notification-global">
+                    <div class="notification">
+                        <div class="notification-header">
+                            <div class="mr-2 cercle cercle-{{ label }}"></div>
+                            <strong class="mr-auto">Notification</strong>
+                            <small>{{ "now"|date("H:i") }}</small>
+                        </div>
+                        <div class="notification-body">
+                            {{ message }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
     </div>
 
     <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
@@ -55,22 +55,22 @@
                     </header>
                     <ul class="list-group">
                         {% if is_granted('ROLE_USER') %}
-                            <a href="{{ path('chantier_index') }}" class="list-group-item text-dark font-weight-bold">
+                            <a href="{{ path('chantier_index') }}" class="{% if route == '/chantier/' %}actif {% else %}text-dark{% endif %} link-unstyled list-group-item font-weight-bold">
                                 <i class="material-icons md-24">
                                     location_city
                                 </i>
                                 <div class="ft-16">Liste des chantiers</div>
                             </a>
-                            <a href="{{ path('user_index') }}" class="list-group-item text-dark font-weight-bold">
+                            <a href="{{ path('user_index') }}" class="{% if route == '/user/' %}actif {% else %}text-dark{% endif %} link-unstyled list-group-item text-dark font-weight-bold">
                                 <i class="material-icons md-24">group</i>
                                 <div class="ft-16">Utilisateurs</div>
                             </a>
-                            <a href="{{ path('fos_user_security_logout') }}" class="list-group-item text-dark font-weight-bold">
+                            <a href="{{ path('fos_user_security_logout') }}" class="link-unstyled list-group-item text-dark font-weight-bold">
                                 <i class="material-icons md-24">exit_to_app</i>
                                 <div class="ft-16">Se deconnecter</div>
                             </a>
                         {% else %}
-                            <a href="{{ path('fos_user_security_login') }}" class="list-group-item text-dark font-weight-bold">
+                            <a href="{{ path('fos_user_security_login') }}" class="{% if route == '/login/' %}actif {% else %}text-dark{% endif %} list-group-item text-dark font-weight-bold">
                                 <i class="material-icons md-24">
                                     person
                                 </i>

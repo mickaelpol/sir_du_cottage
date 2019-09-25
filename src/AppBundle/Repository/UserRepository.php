@@ -13,18 +13,19 @@ use AppBundle\Entity\User;
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function getUserByRole()
+	public function getUserByRole($user)
 	{
-		$qb = $this->_em->createQueryBuilder();
-		$qb->select('u')
-			->from(User::class, 'u')
-			->where('u.roles LIKE :roles OR u.roles LIKE :roles2')
-			->andWhere('u.enabled = :enabled')
-			->setParameter('roles', '%"ROLE_CHEF"%')
-			->setParameter('roles2', '%"ROLE_USER"%')
-			->setParameter('enabled', true);
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('u')
+            ->from(User::class, 'u')
+            ->where('u.id != :user')
+            ->andWhere('u.roles LIKE :role1 OR u.roles LIKE :role2')
+			->setParameter('role1', '%{}%')
+			->setParameter('role2', '%"ROLE_CHEF"%')
+            ->setParameter('user', $user)
+        ;
 
-		return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
 	}
 
 	public function nombreDutilisateur()

@@ -1,0 +1,6 @@
+select option {
+    margin: 40px;
+    background: #FFFFFF;
+    color: #000000;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}

@@ -4,6 +4,10 @@
     Chantier : {{ chantier.nom }}
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/chantier/show.css') }}">
+{% endblock %}
+
 {% block body %}
 
     {% set nombreSuppTerrasse = 0 %}
@@ -21,139 +25,869 @@
 
     {% set pourcentTd  = 100 / (colspanParquet + colspanTerrasse + 1) %}
 
+    {% set propriete_parquet = 5 %}
+    {% set propriete_supp_parquet = nombreSuppParquet %}
+    {% set total_propriete_parquet = propriete_parquet + propriete_supp_parquet %}
+    {% set pourcentage_par_propriete = (100 / total_propriete_parquet)|round(0, 'ceil') %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
+
+
     {{ form_start(form) }}
 
-    <h1>Chantier {{ form_widget(form.nom) }}</h1>
-    <h2>
-        <label for="">Adresse</label>
-        {{ form_widget(form.adresse) }}
-        <a target="_blank" href="{{ chantier.linkAdress }}">
-            <i class="material-icons">add_location</i>
-        </a>
-    </h2>
-    <h3>{{ chantier.type }}</h3>
-    <h4>{{ chantier.nombreBiens }}</h4>
+    <div id="replace" data-replace="{{ currentPath }}" type="hidden"></div>
 
-    <table border="1" class="bg-darkin">
-        <tbody>
-        <tr>
-            <th colspan="1" bgcolor="black"></th>
-            {% if chantier.type == 'Parquet' %}
-                <th colspan="{{ colspanParquet }}">Parquet</th>
+    <div class="dropdown dropdownScrollToTop ">
+        <button class="btn btn-info bmd-btn-fab dropdown-toggle" type="button" id="ex1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex1">
+            {% if chantier.type == 'Parquet' or chantier.type == 'Terrasse / Parquet' %}
+                <button class="dropdown-item btn text-dark" id="button_url_coloris" data-to="{{ path('ajout_coloris') }}" data-path="{{ path('get_form_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris">
+                    Ajouter un coloris global
+                </button>
             {% endif %}
-            {% if chantier.type == 'Terrasse' %}
-                <th colspan="{{ colspanTerrasse }}">Terrasse</th>
-            {% endif %}
-        </tr>
-        <tr>
-            <th>Nom</th>
-            {% if chantier.type == 'Parquet' %}
-                <th>Superficie</th>
-                <th>Coloris</th>
-                <th>Préparation</th>
-                <th>Parquet</th>
-                <th>Plinthe</th>
-                <th>Acrylique</th>
-                <th>Seuil</th>
-                {% for supplementParquet in oneBien.supplementParquets %}
-                    <th>{{ supplementParquet.designation }}</th>
-                {% endfor %}
-            {% endif %}
-            {% if chantier.type == 'Terrasse' %}
-                <th>Superficie</th>
-                <th>Cadre</th>
-                <th>Platelage</th>
-                <th>Vissage</th>
-                {% for supplementTerrasse in oneBien.supplementTerrasses %}
-                    <th>{{ supplementTerrasse.designation }}</th>
-                {% endfor %}
-            {% endif %}
+            <button id="button_url_add_bien" class="dropdown-item btn text-dark" data-to="{{ path('send_form_bien', {'id': chantier.id}) }}" data-path="{{ path('get_form_bien', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_bien">Ajouter des biens</button>
+            <button id="button_url_suppression_bien" data-path="{{ path('get_form_suppression_bien', {'id': chantier.id}) }}" data-to="{{ path('send_form_delete_bien', {'id': chantier.id}) }}" class="dropdown-item btn text-dark" type="button" data-toggle="modal" data-target="#modal_suppression_bien">Supprimer des biens</button>
+        </div>
+    </div>
 
-        </tr>
+    <div class="row mt-2">
+        <div class="col-sm-3">
+            <div class="card bg-darkin border border-white rounded-recapitulatif">
+                <div class="card-body text-white">
+                    <h5 class="card-title">Type :
+                        <br>{{ chantier.type }}
+                    </h5>
+                    <p class="card-text">Ce chantier contient {{ chantier.nombreBiens }} bien{% if chantier.nombreBiens > 1 %}s{% endif %}</p>
+                    <div class="cercle-pourcentage-global bg-info">
+                        <span class="{% if pourcentageChantier > 99 %}texte-pourcentage-global-supp-100{% elseif pourcentageChantier < 99 %}texte-pourcentage-global{% endif %}">
+                            {{ pourcentageChantier }}%
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 offset-sm-1">
+            <div class="form-group">
+                {{ form_label(form.nom) }}
+                {{ form_widget(form.nom) }}
+                <span class="bmd-help">Nom du Chantier.</span>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.adresse) }}
+                {{ form_widget(form.adresse) }}
+                <span class="bmd-help">Adresse du Chantier (Entrez le code postal pour être plus précis).</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <a data-toggle="tooltip" data-placement="top" title="Lien vers google map" class="btn btn-info bmd-btn-fab" target="_blank" href="{{ chantier.linkAdress }}">
+                <i class="material-icons md-24">add_location</i>
+            </a>
+        </div>
+        <div class="col-sm-4 offset-sm-3">
+        </div>
+    </div>
+
+    <div class="row mt-5">
         {% for formulaire in form.biens.children %}
-            <tr>
-                <td>{{ form_widget(formulaire.children.nom) }}</td>
-                {% if chantier.type == 'Parquet' %}
-                    <td>{{ form_widget(formulaire.children.superficieParquet) }}</td>
-                    <td>
+            <div class="col-12 col-md-6 col-lg-4 col-modifier">
+                <div class="table-globale m-1 bg-darkin">
+                    <div class="col-6">
+                        <div class="cercle-pourcentage bg-info">
+                            <span class="{% if pourcentages[loop.index0] < 99 %}texte-pourcentage{% elseif pourcentages[loop.index0] > 99 %}texte-pourcentage-supp-100{% endif %}">
+                                {{ pourcentages[loop.index0] }}%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="table-header col-6 offset-3">
+                        <div class="table-header-name text-uppercase">
+                            <div class="form-group">
+                                {{ form_label(formulaire.children.nom) }}
+                                {{ form_widget(formulaire.children.nom) }}
+                            </div>
+                        </div>
+                        {% if chantier.type == "Terrasse" %}
+                            <div class="table-header-superficie text-uppercase">
+                                <div class="form-group">
+                                    {{ form_label(formulaire.children.superficieTerrasse) }}
+                                    {{ form_widget(formulaire.children.superficieTerrasse) }}
+                                </div>
+                            </div>
+                        {% elseif chantier.type == "Parquet" %}
+                            <div class="table-header-superficie text-uppercase">
+                                <div class="form-group">
+                                    {{ form_label(formulaire.children.superficieParquet) }}
+                                    {{ form_widget(formulaire.children.superficieParquet) }}
+                                </div>
+                            </div>
+                        {% elseif chantier.type == 'Terrasse / Parquet' %}
+                            <div class="table-header-superficie text-uppercase">
+                                <div class="form-group">
+                                    {{ form_label(formulaire.children.superficieTerrasse) }}
+                                    {{ form_widget(formulaire.children.superficieTerrasse) }}
+                                </div>
+                            </div>
+                            <div class="table-header-superficie text-uppercase">
+                                <div class="form-group">
+                                    {{ form_label(formulaire.children.superficieParquet) }}
+                                    {{ form_widget(formulaire.children.superficieParquet) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if chantier.type == 'Terrasse / Parquet' %}
                         <ul class="coloris" data-prototype="{{ form_widget(formulaire.colorisParquets.vars.prototype)|e('html_attr') }}">
-                            {% for coloris in formulaire.colorisParquets %}
-                                <div class="row js-delete-row">
-                                    <div class="js-coloris-parquet-item">
-                                        <li>
-                                            {{ form_widget(coloris.nom) }}
-                                            {{ form_widget(coloris.codeCouleur) }}
-                                            <a href="#" class="js-remove-coloris-parquet pull-right">
-                                                X
-                                                <span class="fa fa-close"></span>
-                                            </a>
-                                        </li>
+                            <div class="row row-modifier">
+                                {% for coloris in formulaire.colorisParquets %}
+                                    <div class="col-6 border-right border-white rounded">
+                                        <div class="js-delete-row">
+                                            <div class="js-coloris-parquet-item">
+                                                <a href="#" class="js-remove-coloris-parquet">
+                                                    <i class="material-icons text-danger md-24">close</i>
+                                                </a>
+                                                <div class="form-group">
+                                                    {{ form_label(coloris.nom) }}
+                                                    {{ form_widget(coloris.nom) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form_label(coloris.codeCouleur) }}
+                                                    {{ form_widget(coloris.codeCouleur) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    {% endif %}
+                    {% if chantier.type == "Parquet" %}
+                        <ul class="coloris" data-prototype="{{ form_widget(formulaire.colorisParquets.vars.prototype)|e('html_attr') }}">
+                            <div class="row row-modifier">
+                                {% for coloris in formulaire.colorisParquets %}
+                                    <div class="col-6 border-right border-white rounded">
+                                        <div class="js-delete-row">
+                                            <div class="js-coloris-parquet-item">
+                                                <a href="#" class="js-remove-coloris-parquet">
+                                                    <i class="material-icons text-danger md-24">close</i>
+                                                </a>
+                                                <div class="form-group">
+                                                    {{ form_label(coloris.nom) }}
+                                                    {{ form_widget(coloris.nom) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form_label(coloris.codeCouleur) }}
+                                                    {{ form_widget(coloris.codeCouleur) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    {% endif %}
+                    <div class="separation"></div>
+                    {% if chantier.type == "Terrasse" %}
+                    {{ form_widget(formulaire.children.superficieParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.preparationParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.parquetParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.plintheParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.acryliqueParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.seuilParquet, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.supplementParquets, {'type': 'hidden'}) }}
+                    <div class="table-contenu mt-2">
+                        <div class="row row-modifier">
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                {% if formulaire.children.cadreTerrasse.vars.value == 0 %}
+                                    red
+                                {% elseif formulaire.children.cadreTerrasse.vars.value == 1 %}
+                                    yellow
+                                {% elseif formulaire.children.cadreTerrasse.vars.value  == 2 %}
+                                    green
+                                {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                Cadre
+                                            </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.cadreTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                {% if formulaire.children.platelageTerrasse.vars.value == 0 %}
+                                    red
+                                {% elseif formulaire.children.platelageTerrasse.vars.value == 1 %}
+                                    yellow
+                                {% elseif formulaire.children.platelageTerrasse.vars.value  == 2 %}
+                                    green
+                                {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                Platelage
+                                            </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.platelageTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                {% if formulaire.children.vissageTerrasse.vars.value == 0 %}
+                                    red
+                                {% elseif formulaire.children.vissageTerrasse.vars.value == 1 %}
+                                    yellow
+                                {% elseif formulaire.children.vissageTerrasse.vars.value  == 2 %}
+                                    green
+                                {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                Vissage
+                                            </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.vissageTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for suppTerrasse in oneBien.supplementTerrasses %}
+                                <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                    <div class="jquery
+                                {% if formulaire.children.supplementTerrasses[loop.index0].etat.vars.value == 0 %}
+                                    red
+                                {% elseif formulaire.children.supplementTerrasses[loop.index0].etat.vars.value == 1 %}
+                                    yellow
+                                {% elseif formulaire.children.supplementTerrasses[loop.index0].etat.vars.value  == 2 %}
+                                    green
+                                {% endif %}">
+                                        <div class="selecteur_couleur">
+                                            <div class="dropdown">
+                                                <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                            class="caret _right"></span>
+                                                    <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    {{ suppTerrasse.designation }}
+                                                </span>
+                                                </button>
+                                                <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                    <li><span _text_display="0" class="color red"></span></li>
+                                                    <li><span _text_display="1" class="color yellow"></span></li>
+                                                    <li><span _text_display="2" class="color green"></span></li>
+                                                    <input type="hidden" class="_color"/>
+                                                </ul>
+                                                {{ form_widget(formulaire.children.supplementTerrasses[loop.index0].etat, {'type': 'hidden'}) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}
-                        </ul>
-                    </td>
-                    <td>{{ form_widget(formulaire.children.preparationParquet) }}</td>
-                    <td>{{ form_widget(formulaire.children.parquetParquet) }}</td>
-                    <td>{{ form_widget(formulaire.children.plintheParquet) }}</td>
-                    <td>{{ form_widget(formulaire.children.acryliqueParquet) }}</td>
-                    <td>{{ form_widget(formulaire.children.seuilParquet) }}</td>
-                    {% for supplementParquet in oneBien.supplementParquets %}
-                        <td>{{ form_widget(formulaire.children.supplementParquets[loop.index0]) }}</td>
-                    {% endfor %}
-                {% endif %}
-                {% if chantier.type == 'Terrasse' %}
-                    <td>{{ form_widget(formulaire.children.superficieTerrasse) }}</td>
-                    <td>{{ form_widget(formulaire.children.cadreTerrasse) }}</td>
-                    <td>{{ form_widget(formulaire.children.platelageTerrasse) }}</td>
-                    <td>{{ form_widget(formulaire.children.vissageTerrasse) }}</td>
-                    {% for supplementTerrasse in oneBien.supplementTerrasses %}
-                        <td>
-                            {{ form_widget(formulaire.children.supplementTerrasses[loop.index0].etat) }}
-                        </td>
-                    {% endfor %}
-                {% endif %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        </div>
+                    </div>
+                    {% elseif chantier.type == "Parquet" %}
+                    {{ form_widget(formulaire.children.superficieTerrasse, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.cadreTerrasse, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.platelageTerrasse, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.vissageTerrasse, {'type': 'hidden'}) }}
+                    {{ form_widget(formulaire.children.supplementTerrasses, {'type': 'hidden'}) }}
+                    <div class="table-contenu mt-2">
+                        <div class="row row-modifier">
+{#                             Preparation parquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.preparationParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.preparationParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.preparationParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Preparation parquet" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Preparation
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.preparationParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                             Fin preparation parquet#}
 
-    <ul class="commentaires" data-prototype="{{ form_widget(form.commentaires.vars.prototype)|e('html_attr') }}">
-        {% for com in form.commentaires %}
-            <div class="row js-genus-scientist-wrapper">
-                <div class="col-xs-4 js-genus-scientist-item">
-                    <li>{{ form_row(com.commentaire) }}</li>
-                    <a href="#" class="js-remove-scientist pull-right">
-                        <span class="fa fa-close">X</span>
-                    </a>
+{#                             Parquet Pose#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.parquetParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.parquetParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.parquetParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Parquet" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Parquet
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.parquetParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                             Fin parquet pose#}
+
+{#                             Plinthe parquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.plintheParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.plintheParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.plintheParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Plinthe" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Plinthe
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.plintheParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                             Fin plinthe parquet#}
+
+{#                             Acrylique parquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.acryliqueParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.acryliqueParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.acryliqueParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Acrylique" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Acrylique
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.acryliqueParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                             Fin acrylique parquet#}
+
+{#                             seuilParquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.seuilParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.seuilParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.seuilParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Seuil"  class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    Seuil
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.seuilParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+{#                             Fin seuilParquet#}
+
+                            {% for suppParquet in oneBien.supplementParquets %}
+                                <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                    <div class="jquery
+                                        {% if formulaire.children.supplementParquets[loop.index0].etat.vars.value == 0 %}
+                                            red
+                                        {% elseif formulaire.children.supplementParquets[loop.index0].etat.vars.value == 1 %}
+                                            yellow
+                                        {% elseif formulaire.children.supplementParquets[loop.index0].etat.vars.value  == 2 %}
+                                            green
+                                        {% endif %}">
+                                        <div class="selecteur_couleur">
+                                            <div class="dropdown">
+                                                <button title="{{ suppParquet.designation }}" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                            class="caret _right"></span>
+                                                    <div class="propriete text-center font-weight-bold fz-07-rem">
+                                                        {{ suppParquet.designation }}
+                                                    </div>
+                                                </button>
+                                                <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                    <li><span _text_display="0" class="color red"></span></li>
+                                                    <li><span _text_display="1" class="color yellow"></span></li>
+                                                    <li><span _text_display="2" class="color green"></span></li>
+                                                    <input type="hidden" class="_color"/>
+                                                </ul>
+                                                {{ form_widget(formulaire.children.supplementParquets[loop.index0].etat, {'type': 'hidden'}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% elseif chantier.type == 'Terrasse / Parquet' %}
+                    <div class="table-contenu mt-2">
+                        <div class="row row-modifier">
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.cadreTerrasse.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.cadreTerrasse.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.cadreTerrasse.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    Cadre
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.cadreTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.platelageTerrasse.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.platelageTerrasse.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.platelageTerrasse.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    Platelage
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.platelageTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.vissageTerrasse.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.vissageTerrasse.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.vissageTerrasse.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    Vissage
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.vissageTerrasse, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for suppTerrasse in oneBien.supplementTerrasses %}
+                                <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                    <div class="jquery
+                                        {% if formulaire.children.supplementTerrasses[loop.index0].etat.vars.value == 0 %}
+                                            red
+                                        {% elseif formulaire.children.supplementTerrasses[loop.index0].etat.vars.value == 1 %}
+                                            yellow
+                                        {% elseif formulaire.children.supplementTerrasses[loop.index0].etat.vars.value  == 2 %}
+                                            green
+                                        {% endif %}">
+                                        <div class="selecteur_couleur">
+                                            <div class="dropdown">
+                                                <button class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                            class="caret _right"></span>
+                                                    <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            {{ suppTerrasse.designation }}
+                                        </span>
+                                                </button>
+                                                <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                    <li><span _text_display="0" class="color red"></span></li>
+                                                    <li><span _text_display="1" class="color yellow"></span></li>
+                                                    <li><span _text_display="2" class="color green"></span></li>
+                                                    <input type="hidden" class="_color"/>
+                                                </ul>
+                                                {{ form_widget(formulaire.children.supplementTerrasses[loop.index0].etat, {'type': 'hidden'}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.preparationParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.preparationParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.preparationParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Preparation parquet" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Preparation
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.preparationParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                             Fin preparation parquet#}
+
+                            {#                             Parquet Pose#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.parquetParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.parquetParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.parquetParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Parquet" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Parquet
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.parquetParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                             Fin parquet pose#}
+
+                            {#                             Plinthe parquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.plintheParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.plintheParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.plintheParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Plinthe" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Plinthe
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.plintheParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                             Fin plinthe parquet#}
+
+                            {#                             Acrylique parquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.acryliqueParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.acryliqueParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.acryliqueParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Acrylique" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                            Acrylique
+                                        </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.acryliqueParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                             Fin acrylique parquet#}
+
+                            {#                             seuilParquet#}
+                            <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                <div class="jquery
+                                    {% if formulaire.children.seuilParquet.vars.value == 0 %}
+                                        red
+                                    {% elseif formulaire.children.seuilParquet.vars.value == 1 %}
+                                        yellow
+                                    {% elseif formulaire.children.seuilParquet.vars.value  == 2 %}
+                                        green
+                                    {% endif %}">
+                                    <div class="selecteur_couleur">
+                                        <div class="dropdown">
+                                            <button title="Seuil"  class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                        class="caret _right"></span>
+                                                <span class="propriete text-center font-weight-bold fz-07-rem">
+                                                    Seuil
+                                                </span>
+                                            </button>
+                                            <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                <li><span _text_display="0" class="color red"></span></li>
+                                                <li><span _text_display="1" class="color yellow"></span></li>
+                                                <li><span _text_display="2" class="color green"></span></li>
+                                                <input type="hidden" class="_color"/>
+                                            </ul>
+                                            {{ form_widget(formulaire.children.seuilParquet, {'type': 'hidden'}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                             Fin seuilParquet#}
+
+                            {% for suppParquet in oneBien.supplementParquets %}
+                                <div class="col-4 col-lg-4 col-sm-3 col-xl-3 col-modifier">
+                                    <div class="jquery
+                                        {% if formulaire.children.supplementParquets[loop.index0].etat.vars.value == 0 %}
+                                            red
+                                        {% elseif formulaire.children.supplementParquets[loop.index0].etat.vars.value == 1 %}
+                                            yellow
+                                        {% elseif formulaire.children.supplementParquets[loop.index0].etat.vars.value  == 2 %}
+                                            green
+                                        {% endif %}">
+                                        <div class="selecteur_couleur">
+                                            <div class="dropdown">
+                                                <button title="{{ suppParquet.designation }}" class="btn _select_color dropdown-toggle" type="button" id="dropdownMenu1"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                                                            class="caret _right"></span>
+                                                    <div class="propriete text-center font-weight-bold fz-07-rem">
+                                                        {{ suppParquet.designation }}
+                                                    </div>
+                                                </button>
+                                                <ul class="dropdown-menu _select_color_drop" aria-labelledby="dropdownMenu1">
+                                                    <li><span _text_display="0" class="color red"></span></li>
+                                                    <li><span _text_display="1" class="color yellow"></span></li>
+                                                    <li><span _text_display="2" class="color green"></span></li>
+                                                    <input type="hidden" class="_color"/>
+                                                </ul>
+                                                {{ form_widget(formulaire.children.supplementParquets[loop.index0].etat, {'type': 'hidden'}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
-    </ul>
+    </div>
 
-    <input type="submit" class="hidden" value="editer">
+    <div class="row mt-5">
+        <div class="col-12 col-sm-4 col-md-6 col-lg-4">
+            <ul class="commentaires" data-prototype="{{ form_widget(form.commentaires.vars.prototype)|e('html_attr') }}">
+                {% for com in form.commentaires %}
+                    <div class="row js-genus-scientist-wrapper">
+                        <div class="col-xs-4 js-genus-scientist-item">
+                            <li>
+                                <div class="card bg-darkin">
+                                    <a href="#" class="js-remove-scientist delete">
+                                        <i class="material-icons md-24">delete</i>
+                                    </a>
+                                    <div class="card-body text-white">
+                                        <h5 class="card-title">Commentaires</h5>
+                                        {{ form_label(com.commentaire) }}
+                                        {{ form_widget(com.commentaire) }}
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <button class="btnScrollTotop btn btn-success btn-raised" type="submit">Valider les changements</button>
     {{ form_end(form) }}
 
-
-    <ul>
+    <ul class="list-unstyled mt-5">
         <li>
-            <a href="{{ path('chantier_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+            <a class="link-unstyled" href="{{ path('chantier_index') }}">
+                <button type="button" class="btn btn-info btn-lg active">
+                    <i class="material-icons md-18 text-white">arrow_back</i>
+                </button>
+            </a>
         </li>
     </ul>
+
+{% endblock %}
+
+{% block modal %}
+    {% include 'modal/ajout_coloris_global.html.twig' %}
+    {% include 'modal/ajout_bien.html.twig' %}
+    {% include 'modal/suppression_bien.html.twig' %}
 {% endblock %}
 
 
 {% block javascripts %}
-    <script
-            src="https://code.jquery.com/jquery-3.4.1.js"
-            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-            crossorigin="anonymous">
-
-    </script>
     <script src="{{ asset('Js/creation_bien.js') }}"></script>
+    <script src="{{ asset('Js/chantier/color_choice.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/color_add.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/get_form_bien.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/get_form_suppression_bien.js') }}"></script>
 {% endblock %}

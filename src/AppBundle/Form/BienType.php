@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Bien;
 use AppBundle\Entity\ColorisParquet;
 use AppBundle\Entity\SupplementParquet;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,25 +22,56 @@ class BienType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('nom', TextType::class, [])
+			->add('nom', TextType::class, [
+				'label'      => 'Nom du bien',
+				'label_attr' => [
+					'class' => 'bmd-label-floating text-white fz-07-rem',
+				],
+				'attr'       => [
+					'class'        => 'form-control text-white text-uppercase',
+					'autocomplete' => 'off',
+				],
+			])
 			->add('preparationParquet', IntegerType::class, [])
 			->add('colorisParquets', CollectionType::class, [
 				'label'         => false,
 				'entry_type'    => ColorisParquetType::class,
-				'entry_options' => ['label' => false],
+				'entry_options' => [
+					'label' => false,
+					'attr'  => [
+						'class' => 'form-group',
+					],
+				],
 				'allow_add'     => true,
-				'allow_delete'     => true,
+				'allow_delete'  => true,
 				'by_reference'  => false,
 			])
 			->add('parquetParquet', IntegerType::class, [])
 			->add('plintheParquet', IntegerType::class, [])
 			->add('acryliqueParquet', IntegerType::class, [])
 			->add('seuilParquet', IntegerType::class, [])
-			->add('superficieParquet', IntegerType::class, [])
+			->add('superficieParquet', IntegerType::class, [
+				'label'      => 'Superficie Parquet m2',
+				'label_attr' => [
+					'class' => 'bmd-label-floating text-white fz-07-rem',
+				],
+				'attr'       => [
+					'class' => 'form-control text-white',
+				],
+			])
 			->add('cadreTerrasse', IntegerType::class, [])
 			->add('platelageTerrasse', IntegerType::class, [])
 			->add('vissageTerrasse', IntegerType::class, [])
-			->add('superficieTerrasse', IntegerType::class, [])
+			->add('superficieTerrasse', IntegerType::class, [
+				'label'      => 'Superficie Terrasses m2',
+				'label_attr' => [
+					'class' => 'bmd-label-floating text-white fz-07-rem',
+				],
+				'attr'       => [
+					'class'        => 'form-control text-white text-uppercase',
+					'autocomplete' => 'off',
+				],
+			])
 			->add('supplementParquets', CollectionType::class, [
 				'label'         => false,
 				'entry_type'    => SupplementParquetType::class,
@@ -68,7 +100,7 @@ class BienType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\Bien',
+			'data_class' => Bien::class,
 		));
 	}
 

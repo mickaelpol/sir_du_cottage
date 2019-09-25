@@ -16,54 +16,60 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class CommentaireChantierType extends AbstractType
 {
 
-	private $securityContext;
+    private $securityContext;
 
-	public function __construct(TokenStorageInterface $securityContext)
-	{
-		$this->securityContext = $securityContext;
-	}
+    public function __construct(TokenStorageInterface $securityContext)
+    {
+        $this->securityContext = $securityContext;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder
-			->add('commentaire', TextareaType::class, [
-				'label'    => false,
-				'required' => false,
-			]);
-		$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-			$user = $this->securityContext->getToken()->getUsername();
-			$utilisateur = $event->getData();
-			$form = $event->getForm();
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('commentaire', TextareaType::class, [
+                'label'      => false,
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white ft-18',
+                ],
+                'attr'       => [
+                    'class' => 'form-control text-white',
+                ],
+                'required'   => false,
+            ]);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $this->securityContext->getToken()->getUsername();
+            $utilisateur = $event->getData();
+            $form = $event->getForm();
 
-			if (!$utilisateur || null === $utilisateur->getId()) {
-				$form->add('utilisateur', HiddenType::class, [
-					'label' => false,
-					'data'  => $user,
-				]);
-			}
-		});
-	}
+            if (!$utilisateur || null === $utilisateur->getId()) {
+                $form->add('utilisateur', HiddenType::class, [
+                    'label' => false,
+                    'data'  => $user,
+                ]);
+            }
+        });
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\CommentaireChantier',
-		));
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\CommentaireChantier',
+        ));
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getBlockPrefix()
-	{
-		return 'appbundle_commentairechantier';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'appbundle_commentairechantier';
+    }
 
 
 }

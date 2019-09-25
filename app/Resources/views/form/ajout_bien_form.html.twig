@@ -1,0 +1,30 @@
+{{ form_start(form, {'attr': {'id': 'form_bien_ajax'}}) }}
+
+<ul class="add_biens list-unstyled form-group bmd-form-group" data-prototype="{{ form_row(form.biens.vars.prototype)|e('html_attr') }}">
+    <div class="row">
+        {% for bien in form.biens %}
+            <li>
+                <div class="form-group">
+                    {{ form_label(bien) }}
+                    {{ form_widget(bien) }}
+                </div>
+            </li>
+        {% endfor %}
+    </div>
+</ul>
+
+<div class="row mt-4">
+    <div class="col-6">
+        <button type="button" class="btn btn-block btn-raised btn-danger" data-dismiss="modal">Annuler</button>
+    </div>
+    <div class="col-6">
+        <button id="modal_ajax_submit" type="submit" class="btn btn-block btn-raised btn-primary">valider</button>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+{% block javascripts %}
+    <script src="{{ asset('Js/ajax/chantier/add_multiple_bien.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/send_form_bien.js') }}"></script>
+{% endblock %}

@@ -17,12 +17,22 @@ class ColorisParquetType extends AbstractType
 	{
 		$builder
 			->add('nom', TextType::class, [
-				'label'    => 'Nom de la pièce',
-				'required' => true,
+                'label'      => 'Pièce',
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white ft-18',
+                ],
+                'attr'       => [
+                    'class' => 'form-control text-white',
+                ],
 			])
 			->add('codeCouleur', IntegerType::class, [
-				'label'    => 'Code couleur du parquet',
-				'required' => true,
+                'label'      => 'Code couleur',
+                'label_attr' => [
+                    'class' => 'bmd-label-floating text-white ft-18',
+                ],
+                'attr'       => [
+                    'class' => 'form-control text-white',
+                ],
 			]);
 	}
 
