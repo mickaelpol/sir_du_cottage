@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
+use AppBundle\Entity\ColorisParquet;
 use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
 use AppBundle\Form\AddMultipleBienAjaxForm;
 use AppBundle\Form\AjoutParquetBienAjaxForm;
 use AppBundle\Form\BienType;
+use AppBundle\Form\DeleteBienAsChantierForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -275,6 +277,70 @@ class BienController extends Controller
 
 				return new JsonResponse([
 					'data' => 'Les biens on été ajoutés',
+				]);
+			}
+		}
+	}
+
+
+	/**
+	 * @Route(path="/get_form_suppression_bien/{id}", name="get_form_suppression_bien", condition="request.isXmlHttpRequest()")
+	 * @param Chantier $chantier
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function getFormSuppressionBienAjax(Chantier $chantier, Request $request)
+	{
+		$form = $this->createForm(DeleteBienAsChantierForm::class, $chantier, [
+			'action' => $this->generateUrl('get_form_suppression_bien', ['id' => $request->get('id')]),
+			'chantier'     => $chantier,
+		]);
+
+		return $this->render('form/suppression_bien_form.html.twig', [
+			'form' => $form->createView(),
+		]);
+	}
+
+
+	/**
+	 * @Route(path="/send_form_delete_bien/{id}", name="send_form_delete_bien", condition="request.isXmlHttpRequest()")
+	 * @param Chantier $chantier
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function deleteFormBienAjax(Chantier $chantier, Request $request)
+	{
+		if ($request) {
+			if ($request->isXMLHttpRequest()) {
+				$form = $request->request->all();
+				$arr = $form['appbundle_bien'];
+				$arrBiens = $arr['biens'];
+				$em = $this->getDoctrine()->getManager();
+				$erBien = $em->getRepository(Bien::class);
+
+				foreach ($arrBiens as $arrBien) {
+					$bien = $erBien->find($arrBien);
+					if (count($chantier->getBiens()) === 1){
+						$this->addFlash(
+							notif::DANGER,
+							'Il ne reste qu\'un seul bien, il est impossible de le supprimer! Veuillez en ajouter un avant de supprimer celui-ci'
+						);
+
+						return new JsonResponse([
+							'data' => 'Il ne reste qu\'un seul bien, il est impossible de le supprimer',
+							'label' => 'danger'
+						]);
+					} else {
+						$chantier->removeBien($bien);
+						$chantier->setNombreBiens(count($chantier->getBiens()));
+						$em->persist($chantier);
+					}
+				}
+				$em->flush();
+
+				return new JsonResponse([
+					'data' => 'Les biens ont été supprimer',
+					'label' => 'success'
 				]);
 			}
 		}

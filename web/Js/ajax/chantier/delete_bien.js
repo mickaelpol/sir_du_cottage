@@ -1,8 +1,8 @@
-$('#form_bien_ajax').submit(function (e) {
+$('#form_suppression_ajax').submit(function (e) {
     e.preventDefault();
 
     let $form2 = $(e.target);
-    let modal2 = $('#modal_ajout_bien');
+    let modal2 = $('#modal_suppression_bien');
 
     let $submitButton2 = $form2.find('button[type=submit]');
     $submitButton2.removeClass('btn-primary').addClass('btn btn-raised btn-secondary');
@@ -11,14 +11,15 @@ $('#form_bien_ajax').submit(function (e) {
 
     $.ajax({
         type: "POST",
-        url: to_form_bien,
+        url: to_form_suppression_bien,
         data: $form2.serialize(),
         success: function (data, dataType) {
+            /**/
             setTimeout(function () {
                 $submitButton2.removeClass('btn-secondary').addClass('btn btn-raised btn-primary');
                 $submitButton2.html('valider')
                 $submitButton2.prop('disabled', false);
-                $('#notif_ajax_bien').html(data.data).addClass('bg-success text-center text-light');
+                $('#notif_suppression_ajax').html(data.data).addClass(`bg-${data.label} text-center text-light`);
                 setTimeout(() => {
                     modal2.modal('toggle');
                 }, 1800);
@@ -32,13 +33,13 @@ $('#form_bien_ajax').submit(function (e) {
                 $submitButton2.removeClass('btn-secondary').addClass('btn btn-raised btn-primary');
                 $submitButton2.html('valider')
                 $submitButton2.prop('disabled', false);
-                $('#notif_ajax').html(textStatus).addClass('bg-danger text-center text-light');
+                $('#notif_suppression_ajax').html(textStatus).addClass('bg-danger text-center text-light');
                 setTimeout(() => {
                     modal2.modal('toggle');
                 }, 1800);
             }, 2000)
         },
-        complete: function () {
+        complete: function (data) {
             modal2.find('.modal-body').html('<div class="text-center"><div class="loading-black"></div></div>');
         }
     });
