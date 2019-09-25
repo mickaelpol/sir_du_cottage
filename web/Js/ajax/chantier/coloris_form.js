@@ -37,6 +37,9 @@ $('#form_ajax').submit(function (e) {
                     modal.modal('toggle');
                 }, 1800);
             }, 2000)
+        },
+        complete: function (data) {
+            modal.find('.modal-body').html('<div class="text-center"><div class="loading-black"></div></div>');
         }
     });
 })

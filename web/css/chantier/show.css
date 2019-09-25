@@ -215,6 +215,17 @@ button.delete {
     -webkit-animation: spin 1s ease-in-out infinite;
 }
 
+.loading-black {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid rgba(0,0,0,0.3);
+    border-radius: 50%;
+    border-top-color: #000000;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+}
+
 @keyframes spin {
     to { -webkit-transform: rotate(360deg); }
 }

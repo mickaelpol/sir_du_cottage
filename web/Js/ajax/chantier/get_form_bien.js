@@ -9,8 +9,16 @@ $('#button_url_add_bien').click(function(){
 $('#modal_ajout_bien').on('shown.bs.modal', function () {
     let modal = $(this);
     $.ajax(url_form_bien, {
-        success: function(data) {
-            modal.find('.modal-body').html(data);
+        success: function() {
+            modal.find('.modal-body').html('<div class="text-center"><div class="loading-black"></div></div>');
+        },
+        error: function () {
+            modal.find('.modal-body').html('Une erreur est survenue');
+        },
+        complete: function (data) {
+            setTimeout(function () {
+                modal.find('.modal-body').html(data.responseText);
+            }, 500)
         }
     });
 });

@@ -16,7 +16,6 @@ function addTagForm($collectionHolder, $newLinkLi) {
     // Replace '__name__label__' in the prototype's HTML to
     // instead be a number based on how many items we have
     // newForm = newForm.replace(/__name__label__/g, index);
-
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
     newForm = newForm.replace(/__name__/g, index);
@@ -24,9 +23,15 @@ function addTagForm($collectionHolder, $newLinkLi) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
+    let div = `<div class="card bg-darkin">
+                    <!--<button type="button" class="btn btn-danger bmd-btn-fab delete"><i class="material-icons">close</i></button>-->
+                    <div class="card-body text-white">${newForm}</div>
+                </div>`
+
+
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
-    $newLinkLi.before($newFormLi);
+    var $newFormLi = $('<div class="col-3 border-right border-white rounded mt-2"></div>').append(div);
+    $newLinkLi.parent().children('div.row').append($newFormLi)
 }
 
 $(document).ready(function() {

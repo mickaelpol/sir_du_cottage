@@ -42,11 +42,13 @@
             <i class="material-icons">more_vert</i>
         </button>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex1">
-            <button class="dropdown-item btn text-dark" id="button_url_coloris" data-to="{{ path('ajout_coloris') }}" data-path="{{ path('get_form_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris">
-                Ajouter un coloris global
-            </button>
+            {% if chantier.type == 'Parquet' or chantier.type == 'Terrasse / Parquet' %}
+                <button class="dropdown-item btn text-dark" id="button_url_coloris" data-to="{{ path('ajout_coloris') }}" data-path="{{ path('get_form_coloris', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_coloris">
+                    Ajouter un coloris global
+                </button>
+            {% endif %}
             <button id="button_url_add_bien" class="dropdown-item btn text-dark" data-to="{{ path('send_form_bien', {'id': chantier.id}) }}" data-path="{{ path('get_form_bien', {'id': chantier.id} ) }}" type="button" data-toggle="modal" data-target="#modal_ajout_bien">Ajouter des biens</button>
-            <button class="dropdown-item btn text-dark" type="button">Supprimer des biens</button>
+            <button id="button_url_suppression_bien" data-path="{{ path('get_form_suppression_bien', {'id': chantier.id}) }}" data-to="{{ path('send_form_delete_bien', {'id': chantier.id}) }}" class="dropdown-item btn text-dark" type="button" data-toggle="modal" data-target="#modal_suppression_bien">Supprimer des biens</button>
         </div>
     </div>
 
@@ -878,6 +880,7 @@
 {% block modal %}
     {% include 'modal/ajout_coloris_global.html.twig' %}
     {% include 'modal/ajout_bien.html.twig' %}
+    {% include 'modal/suppression_bien.html.twig' %}
 {% endblock %}
 
 
@@ -886,4 +889,5 @@
     <script src="{{ asset('Js/chantier/color_choice.js') }}"></script>
     <script src="{{ asset('Js/ajax/chantier/color_add.js') }}"></script>
     <script src="{{ asset('Js/ajax/chantier/get_form_bien.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/get_form_suppression_bien.js') }}"></script>
 {% endblock %}

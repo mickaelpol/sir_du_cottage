@@ -20,16 +20,15 @@ class AjoutParquetBienAjaxForm extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('id', HiddenType::class)
 			->add('nom', TextType::class, [
 				'attr' => [
-					'class'        => 'form-control text-dark text-uppercase',
+					'class'        => 'form-control text-white text-uppercase',
 					'autocomplete' => 'off',
 				],
 			])
 			->add('superficieParquet', IntegerType::class, [
 				'attr' => [
-					'class' => 'form-control text-dark',
+					'class' => 'form-control text-white',
 				],
 			]);
 	}

@@ -352,11 +352,16 @@ class ChantierController extends Controller
         }
 
         $sommeAvancementBien = 0;
-        $pourcentageAvancementChantier = 0;
-            for ($j = 0; $j < $chantier->getNombreBiens(); $j++) {
-                $sommeAvancementBien += $pourcentageAvancementBien[$j];
-            }
-        $pourcentageAvancementChantier = ceil($sommeAvancementBien / $chantier->getNombreBiens());
+	    $pourcentageAvancementChantier = 0;
+
+        if (count($chantier->getBiens()) === 1) {
+	        $pourcentageAvancementChantier = ceil($pourcentageAvancementBien[0]);
+        } else {
+	        for ($j = 0; $j < $chantier->getNombreBiens(); $j++) {
+		        $sommeAvancementBien += $pourcentageAvancementBien[$j];
+	        }
+	        $pourcentageAvancementChantier = ceil($sommeAvancementBien / $chantier->getNombreBiens());
+        }
 
         return $this->render('chantier/show.html.twig', array(
             'chantier'            => $chantier,
