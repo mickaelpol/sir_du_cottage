@@ -263,6 +263,11 @@ class BienController extends Controller
 						}
 					}
 				}
+				$updateNombreChantier = count($chantier->getBiens());
+				$chantier->setNombreBiens($updateNombreChantier);
+				$em->persist($chantier);
+				$em->flush($chantier);
+
 				$this->addFlash(
 					notif::INFO,
 					'Les biens  ont bien été ajouter au chantier'
