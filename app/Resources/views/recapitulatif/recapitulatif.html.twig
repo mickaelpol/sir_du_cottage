@@ -15,21 +15,6 @@
     </style>
     <div id="main">
         <div class="row row-offcanvas row-offcanvas-left">
-
-            {#<div class="dropdown dropdownScrollToTop ">#}
-                {#<button class="btn btn-primary bmd-btn-fab dropdown-toggle" type="button" id="ex1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-                    {#<i class="material-icons">more_vert</i>#}
-                {#</button>#}
-                {#<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex1">#}
-                    {#<a href="{{ path('chantier_new') }}" class="dropdown-item">#}
-                        {#Ajouter un chantier#}
-                    {#</a>#}
-                    {#<a href="{{ path('user_new') }}" class="dropdown-item">#}
-                        {#Ajouter un utilisateur#}
-                    {#</a>#}
-                {#</div>#}
-            {#</div>#}
-
             <!--/col-->
             <div class="col main pt-5 mt-3">
                 <div class="row mb-3">
@@ -112,7 +97,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h4 class="text-info text-center text-uppercase mt-3">{{ chantier.nom }}</h4>
+                                <a class="link-unstyled" href="{{ path('chantier_show', {'id': chantier.id}) }}">
+                                    <h4 class="text-info text-center text-uppercase mt-3">{{ chantier.nom }}</h4>
+                                </a>
                                 <span class="text-light">{{ chantier.type }}</span>
                             </div>
                         {% endfor %}
