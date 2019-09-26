@@ -28,6 +28,7 @@ class DefaultController extends Controller
 			'id' => 'DESC',
 		], 5);
 		$nombreDutilisateurs = $em->getRepository(User::class)->nombreDutilisateur();
+		$chantierAvancer = $em->getRepository(Chantier::class)->quattreChantierPlusAvancer();
 
 
 		return $this->render('recapitulatif/recapitulatif.html.twig', array(
@@ -35,6 +36,7 @@ class DefaultController extends Controller
 			'nombreBiens'            => $nombreBiens,
 			'cinqDernierComChantier' => $cinqDernierComChantiers,
 			'nombreDutilisateurs'    => $nombreDutilisateurs,
+			'chantiers'               => $chantierAvancer,
 		));
 	}
 }

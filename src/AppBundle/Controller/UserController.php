@@ -194,7 +194,6 @@ class UserController extends Controller
             die;
         }
 
-
     }
 
 }

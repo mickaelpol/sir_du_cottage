@@ -340,8 +340,21 @@ class ChantierController extends Controller
             }
         }
 
+	    $sommeAvancementBien = 0;
+	    $pourcentageAvancementChantier = 0;
+
+	    if (count($chantier->getBiens()) === 1) {
+		    $pourcentageAvancementChantier = ceil($pourcentageAvancementBien[0]);
+	    } else {
+		    for ($j = 0; $j < $chantier->getNombreBiens(); $j++) {
+			    $sommeAvancementBien += $pourcentageAvancementBien[$j];
+		    }
+		    $pourcentageAvancementChantier = ceil($sommeAvancementBien / $chantier->getNombreBiens());
+	    }
+
         if ($form_edit->isSubmitted() && $form_edit->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $chantier->setPourcentage($pourcentageAvancementChantier);
             $em->persist($chantier);
             $em->flush();
 
@@ -351,24 +364,11 @@ class ChantierController extends Controller
             );
         }
 
-        $sommeAvancementBien = 0;
-	    $pourcentageAvancementChantier = 0;
-
-        if (count($chantier->getBiens()) === 1) {
-	        $pourcentageAvancementChantier = ceil($pourcentageAvancementBien[0]);
-        } else {
-	        for ($j = 0; $j < $chantier->getNombreBiens(); $j++) {
-		        $sommeAvancementBien += $pourcentageAvancementBien[$j];
-	        }
-	        $pourcentageAvancementChantier = ceil($sommeAvancementBien / $chantier->getNombreBiens());
-        }
-
         return $this->render('chantier/show.html.twig', array(
             'chantier'            => $chantier,
             'oneBien'             => $oneBien,
             'form'                => $form_edit->createView(),
             'pourcentages'        => $pourcentageAvancementBien,
-            'pourcentageChantier' => $pourcentageAvancementChantier,
         ));
     }
 

@@ -4,3 +4,6 @@ app:
 
 fos_user_login:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_edit_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"

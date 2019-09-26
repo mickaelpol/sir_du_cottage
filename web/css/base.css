@@ -12,6 +12,10 @@ body, html {
     color: #FFFFFF !important;
 }
 
+.actif:hover, .actif:focus {
+    color: #FFFFFF;
+}
+
 .flex-grow {
     flex: 1 0 auto;
 }
@@ -58,11 +62,11 @@ body, html {
 }
 
 .ft-14 {
-    font-size: 1rem;
+    font-size: 1rem !important;
 }
 
 .ft-16 {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 .ft-18 {
@@ -78,19 +82,19 @@ body, html {
 }
 
 .ft-48 {
-    font-size: 48px;
+    font-size: 48px !important;
 }
 
 .ft-56 {
-    font-size: 56px;
+    font-size: 56px !important;
 }
 
 .ft-80 {
-    font-size: 80px;
+    font-size: 80px !important;
 }
 
 .ft-90 {
-    font-size: 90px;
+    font-size: 90px !important;
 }
 
 .bmd-layout-drawer[aria-expanded="true"] {

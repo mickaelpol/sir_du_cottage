@@ -61,8 +61,12 @@
                     </h5>
                     <p class="card-text">Ce chantier contient {{ chantier.nombreBiens }} bien{% if chantier.nombreBiens > 1 %}s{% endif %}</p>
                     <div class="cercle-pourcentage-global bg-info">
-                        <span class="{% if pourcentageChantier > 99 %}texte-pourcentage-global-supp-100{% elseif pourcentageChantier < 99 %}texte-pourcentage-global{% endif %}">
-                            {{ pourcentageChantier }}%
+                        <span class="{% if chantier.pourcentage > 99 %}texte-pourcentage-global-supp-100{% elseif chantier.pourcentage < 99 %}texte-pourcentage-global{% endif %}">
+                            {% if chantier.pourcentage == null %}
+                                0%
+                            {% else %}
+                                {{ chantier.pourcentage }}%
+                            {% endif %}
                         </span>
                     </div>
                 </div>
