@@ -4,3 +4,7 @@ app:
 
 fos_user_login:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_change_password:
+    path: /change-password
+    controller: "AppBundle:ChangePassword:changePassword"

@@ -67,6 +67,12 @@ class Chantier
 	 */
 	private $biens;
 
+	/**
+	 * @var int
+	 * @ORM\Column(name="pourcentage", type="integer", nullable=true)
+	 */
+	private $pourcentage;
+
 	public function __construct() {
 		$this->biens = new ArrayCollection();
 		$this->commentaires = new ArrayCollection();
@@ -268,4 +274,22 @@ class Chantier
     {
         return $this->commentaires;
     }
+
+	/**
+	 * @return int
+	 */
+	public function getPourcentage()
+	{
+		return $this->pourcentage;
+	}
+
+	/**
+	 * @param int $pourcentage
+	 * @return Chantier
+	 */
+	public function setPourcentage($pourcentage)
+	{
+		$this->pourcentage = $pourcentage;
+		return $this;
+	}
 }

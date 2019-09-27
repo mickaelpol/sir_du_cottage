@@ -193,8 +193,5 @@ class UserController extends Controller
             http_response_code(200);
             die;
         }
-
-
     }
-
 }

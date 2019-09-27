@@ -55,19 +55,57 @@
                     </header>
                     <ul class="list-group">
                         {% if is_granted('ROLE_USER') %}
-                            <a href="{{ path('chantier_index') }}" class="{% if route == '/chantier/' %}actif {% else %}text-dark{% endif %} link-unstyled list-group-item font-weight-bold">
-                                <i class="material-icons md-24">
-                                    location_city
-                                </i>
-                                <div class="ft-16">Liste des chantiers</div>
+                            <a href="{{ path('accueil') }}" class="{% if route == '/' %}actif{% else %}text-dark{% endif %} link-unstyled font-weight-bold">
+                                <li class="list-group-item">
+                                    <i class="material-icons md-24">home</i>
+                                    <div class="ft-16">Back office</div>
+                                </li>
                             </a>
-                            <a href="{{ path('user_index') }}" class="{% if route == '/user/' %}actif {% else %}text-dark{% endif %} link-unstyled list-group-item text-dark font-weight-bold">
-                                <i class="material-icons md-24">group</i>
-                                <div class="ft-16">Utilisateurs</div>
+                            <li class="dropdown-divider"></li>
+                            <li class="list-group-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons md-24">account_balance</i>
+                                        Chantier
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a href="{{ path('chantier_index') }}" class="dropdown-item {% if route == '/chantier/' %}actif{% else %}text-dark{% endif %} font-weight-bold">
+                                            Liste des chantiers
+                                        </a>
+                                        <a href="{{ path('chantier_new') }}" class="dropdown-item {% if route == '/chantier/new' %}actif{% else %}text-dark{% endif %} font-weight-bold">
+                                            Ajouter un chantier
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons md-24">people</i>
+                                        Utilisateurs
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a href="{{ path('user_index') }}" class="dropdown-item {% if route == '/user/' %}actif{% else %}text-dark{% endif %} font-weight-bold">
+                                            Liste des utilisateurs
+                                        </a>
+                                        <a href="{{ path('user_new') }}" class="dropdown-item {% if route == '/user/new' %}actif{% else %}text-dark{% endif %} font-weight-bold">
+                                            Ajouter un utilisateur
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <a href="{{ path('fos_user_change_password') }}" class="{% if route == '/change-password' %}actif {% else %}text-dark {% endif %}link-unstyled font-weight-bold">
+                                <li class="list-group-item ft-16">
+                                    <i class="material-icons md-24">security</i>
+                                    Mot de passe
+                                </li>
                             </a>
-                            <a href="{{ path('fos_user_security_logout') }}" class="link-unstyled list-group-item text-dark font-weight-bold">
-                                <i class="material-icons md-24">exit_to_app</i>
-                                <div class="ft-16">Se deconnecter</div>
+                            <a href="{{ path('fos_user_security_logout') }}" class="link-unstyled text-dark font-weight-bold">
+                                <li class="list-group-item ft-16">
+                                    <i class="material-icons md-24">exit_to_app</i>
+                                    Se deconnecter
+                                </li>
                             </a>
                         {% else %}
                             <a href="{{ path('fos_user_security_login') }}" class="{% if route == '/login/' %}actif {% else %}text-dark{% endif %} list-group-item text-dark font-weight-bold">

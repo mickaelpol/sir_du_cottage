@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block body %}
+    <style>
+        .dropdownScrollToTop {
+            z-index: 2;
+            position: fixed !important;
+            top: 60px !important;
+            right: 30px !important;
+        }
+    </style>
     <div id="main">
         <div class="row row-offcanvas row-offcanvas-left">
             <!--/col-->
@@ -78,46 +86,36 @@
                 <!--/row-->
                 <hr>
                 <div class="row placeholders mb-3">
-                    <div class="col-6 col-sm-2 placeholder text-center image">
-                        <div class="overlay-image">
-                            <img class="image mx-auto img-fluid rounded-circle bg-darkin" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
-                            <div class="text text-center">
-                                <div class="pourcentage font-weight-bold">80%</div>
+                    {% if chantiers %}
+                        {% for chantier in chantiers %}
+                            <div class="col-6 col-sm-2 placeholder text-center image">
+                                <div class="overlay-image">
+                                    <img class="image mx-auto img-fluid rounded-circle bg-darkin" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Fond de l'overlay" />
+                                    <div class="text text-center">
+                                        <div class="pourcentage font-weight-bold">
+                                            {{ chantier.pourcentage }}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="link-unstyled" href="{{ path('chantier_show', {'id': chantier.id}) }}">
+                                    <h4 class="text-info text-center text-uppercase mt-3">{{ chantier.nom }}</h4>
+                                </a>
+                                <span class="text-light">{{ chantier.type }}</span>
                             </div>
-                        </div>
-                        <h4 class="text-info text-center text-uppercase mt-3">Anatalia</h4>
-                        <span class="text-light">Parquet / Terrasse</span>
-                    </div>
-                    <div class="col-6 col-sm-2 placeholder text-center image">
-                        <div class="overlay-image">
-                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
-                            <div class="text text-center">
-                                <div class="pourcentage font-weight-bold">20%</div>
+                        {% endfor %}
+                        {% else %}
+                            <div class="col-sm-8 placeholder text-center image">
+                                <div class="jumbotron bg-darkin">
+                                    <h1 class="display-4 text-white text-uppercase">Aucun Chantier</h1>
+                                    <p class="lead text-white">
+                                        Pour en créer un cliquez sur le bouton ci-dessous
+                                    </p>
+                                    <p class="lead">
+                                        <a class="btn btn-raised btn-primary btn-lg" href="{{ path('chantier_new') }}" role="button">Créer un chantier</a>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <h4 class="text-info text-center text-uppercase mt-3">Magenta</h4>
-                        <span class="text-light">Terrasse</span>
-                    </div>
-                    <div class="col-6 col-sm-2 placeholder text-center">
-                        <div class="overlay-image">
-                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
-                            <div class="text text-center">
-                                <div class="pourcentage font-weight-bold">20%</div>
-                            </div>
-                        </div>
-                        <h4 class="text-info text-center text-uppercase mt-3">Overview</h4>
-                        <span class="text-light">Parquet</span>
-                    </div>
-                    <div class="col-6 col-sm-2 placeholder text-center">
-                        <div class="overlay-image">
-                            <img class="image mx-auto img-fluid rounded-circle" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Alt text" />
-                            <div class="text text-center">
-                                <div class="pourcentage font-weight-bold">20%</div>
-                            </div>
-                        </div>
-                        <h4 class="text-info text-center text-uppercase mt-3">SV9</h4>
-                        <span class="text-light">Parquet / Terrasse</span>
-                    </div>
+                    {% endif %}
                     <div class="col-sm-4">
                         <div id="accordion" role="tablist" aria-multiselectable="true">
                             <div class="card bg-secondary text-white">
