@@ -9,6 +9,23 @@
 {% endblock %}
 
 {% block body %}
+
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
+
+    <div id="replace" data-replace="{{ currentPath }}" type="hidden"></div>
+
+    <div class="dropdown dropdownScrollToTop ">
+        <button class="btn btn-info bmd-btn-fab dropdown-toggle" type="button" id="ex1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex1">
+            <button class="dropdown-item btn text-dark" id="button_delete_mult_chantier" data-path="{{ path('get_form_multiple_delete_chantier') }}" type="button" data-toggle="modal" data-target="#modal_delete_multiple_chantier">
+                Supprimer plusieurs chantier
+            </button>
+        </div>
+    </div>
+
     <div id="chantiers-list" class="text-white text-center mt-5">
         <div class="row"> {# Row #}
             <div class="col">
@@ -75,9 +92,13 @@
 
 {% endblock %}
 
-{% block modal %}{% include('modal/delete_chantier.html.twig') %}{% endblock %}
+{% block modal %}
+    {% include('modal/delete_chantier.html.twig') %}
+    {% include('modal/delete_multiple_chantier.html.twig') %}
+{% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('node_modules/list.js/dist/list.js') }}"></script>
     <script src="{{ asset('Js/chantier/index.js') }}"></script>
+    <script src="{{ asset('Js/ajax/chantier/get_form_delete_multiple_chantier.js') }}"></script>
 {% endblock %}

@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     let options = {
         valueNames: ['chantier-nom', 'chantier-type'],
-        page: 5,
+        page: 10,
         pagination: true,
     };
 
