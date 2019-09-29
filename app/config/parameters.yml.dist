@@ -15,5 +15,7 @@ parameters:
     mailer_user: ~
     mailer_password: ~
 
+    app_name: nom de l'application
+
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
