@@ -7,4 +7,4 @@ fos_user_login:
 
 fos_user_change_password:
     path: /change-password
-    controller: "AppBundle:ChangePassword:changePassword"
+    controller: AppBundle:ChangePassword:changePassword

@@ -50,4 +50,5 @@
 /.web-server-pid
 
 .idea
+/web/.idea
 .git-old/*
