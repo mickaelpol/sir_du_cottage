@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Constante\NotificationConstate as notif;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Chantier controller.
@@ -29,13 +30,34 @@ class ChantierController extends Controller
 {
 
 	/**
-	 * @Route(path="/get_form_multiple_delete_chantier", name="get_form_multiple_delete_chantier", condition="request.isXmlHttpRequest()")
+	 * @Route(path="/get_form_multiple_delete_chantier", name="get_form_multiple_delete_chantier", methods={"GET", "POST"})
+	 * @param Request $request
+	 * @return Response
 	 */
-	public function getFormDeleteChantierAjax()
+	public function getFormDeleteChantierAjax(Request $request)
 	{
-		$form = $this->createForm(DeleteMultipleChantierType::class, [
-			'action' => $this->generateUrl('get_form_multiple_delete_chantier'),
-		]);
+		$form = $this->createForm(DeleteMultipleChantierType::class, []);
+
+		$form->handleRequest($request);
+
+		if ($form->isValid() && $form->isSubmitted()) {
+			$em = $this->getDoctrine()->getManager();
+			$collectionChantiers = $form->getData();
+			foreach ($collectionChantiers as $arrChantier) {
+				foreach ($arrChantier as $chantier) {
+					if (!is_object($chantier)) {
+						throw new AccessDeniedException('This parameters isn\'t an object');
+					}
+					$em->remove($chantier);
+					$this->addFlash(
+						'success',
+						sprintf('Le chantier %s à bien été supprimé', $chantier)
+					);
+				}
+			}
+			$em->flush();
+			return $this->redirectToRoute('chantier_index');
+		}
 
 		return $this->render('form/form_delete_multiple_chantier.html.twig', [
 			'form' => $form->createView(),

@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,13 +28,13 @@ class DeleteMultipleChantierType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('nom', EntityType::class, [
-//				'label'        => 'selectionnez les chantiers à supprimer',
-				'class'        => Chantier::class,
-//				'choice_label' => 'nom',
-//				'multiple'     => true,
-//				'expanded'     => true,
-//				'data'         => null,
+			->add('chantier', EntityType::class, [
+				'label'         => 'selectionnez les biens à supprimer',
+				'class'         => Chantier::class,
+				'choice_label'  => 'nom',
+				'multiple'      => true,
+				'expanded'      => true,
+				'by_reference'  => false,
 			]);
 
 	}
