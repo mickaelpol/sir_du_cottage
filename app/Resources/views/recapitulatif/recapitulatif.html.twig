@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Back office
+{% endblock %}
+
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/recapitulatif.css') }}">
 {% endblock %}
 
 {% block body %}
-    <style>
-        .dropdownScrollToTop {
-            z-index: 2;
-            position: fixed !important;
-            top: 60px !important;
-            right: 30px !important;
-        }
-    </style>
     <div id="main">
         <div class="row row-offcanvas row-offcanvas-left">
             <!--/col-->

@@ -43,7 +43,12 @@
                             <i class="material-icons">menu</i>
                         </button>
                         <div class="text-white">
-                            <a class="text-white link-unstyled" href="{{ path('accueil') }}">{{ app_name|upper }}</a>
+                            <a class="text-white link-unstyled" href="{{ path('accueil') }}">
+                                <img src="{{ asset('image/favicon-32x32.png') }}"
+                                     alt="Logo de l'entreprise sir du cottage"
+                                     class="img-fluid">
+                                {{ app_name|upper }}
+                            </a>
                         </div>
                         <ul class="nav navbar-nav">
                         </ul>

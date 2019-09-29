@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('css/connexion.css') }}">
 {% endblock %}
 
+{% block title %}
+    Connexion
+{% endblock %}
+
 {% block fos_user_content %}
     {{ include('@FOSUser/Security/login_content.html.twig') }}
 {% endblock fos_user_content %}

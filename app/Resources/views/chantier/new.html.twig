@@ -4,30 +4,11 @@
     Nouveau chantier
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/chantier/new.css') }}">
+{% endblock %}
+
 {% block body %}
-
-    <style>
-        [class^='bmd-label'], [class*=' bmd-label'] {
-            color: grey;
-        }
-
-        .bmd-form-group.is-focused .bmd-label-floating, .bmd-form-group .is-focused .bmd-label-floating, .bmd-form-group.is-filled .bmd-label-floating, .bmd-form-group .is-filled .bmd-label-floating {
-            font-size: 1rem;
-        }
-
-        .is-focused [class^='bmd-label'], .is-focused [class*=' bmd-label'], .is-focused [class^='bmd-label'], .is-focused [class*=' bmd-label'] {
-            color: white;
-        }
-
-        .bmd-form-group .bmd-help {
-            font-size: 0.90rem;
-            color: lightgrey;
-        }
-
-        .bmd-form-group .checkbox label, .bmd-form-group .radio label, .bmd-form-group label {
-            color: white;
-        }
-    </style>
     <div class="row mt-5">
         <div class="col">
             <h1 class="text-center font-weigh-bold text-uppercase text-white">Création d'un chantier</h1>

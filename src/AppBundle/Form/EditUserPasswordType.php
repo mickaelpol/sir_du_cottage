@@ -32,7 +32,7 @@ class EditUserPasswordType extends AbstractType
                     ]
 				],
 				'second_options'  => [
-					'label' => 'Confirmation du mot de passe',
+					'label' => 'Confirmez',
                     'label_attr' => [
                         'class' => 'bmd-label-floating text-white ft-24',
                     ],
