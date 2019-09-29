@@ -21,20 +21,38 @@ class UserType extends AbstractType
 
 		$builder
 			->add('username', TextType::class, [
-				'label'    => 'Nom de l\'utilisateur',
-				'required' => true,
+				'label'      => 'Nom de l\'utilisateur',
+				'label_attr' => [
+					'class' => 'bmd-label-floating text-white ft-24',
+				],
+				'required'   => true,
+				'attr'       => [
+					'autocomplete' => 'off',
+				],
 			])
 			->add('roles', CollectionType::class, [
-				'entry_type' => ChoiceType::class,
+				'label'         => false,
+				'entry_type'    => ChoiceType::class,
 				'entry_options' => [
-					'label' => false,
-					'choices' => [
-						'Directeur' => 'ROLE_DIRECTEUR',
-						'Chef d\'équipe' => 'ROLE_CHEF',
-						'Ouvrier' => 'ROLE_USER',
+					'attr'              => [
+						'class' => 'form-control text-white ft-24',
 					],
+					'label'             => 'Roles',
+					'label_attr'        => [
+						'class' => 'bmd-label-floating text-white ft-24',
+					],
+					'choices'           => [
+						'Directeur'      => 'ROLE_DIRECTEUR',
+						'Chef d\'équipe' => 'ROLE_CHEF',
+						'Ouvrier'        => 'ROLE_USER',
+					],
+					'choice_attr'       => function ($allChoices, $currentChoiceKey) {
+						if ($currentChoiceKey) {
+							return array('class' => 'text-dark ft-24');
+						}
+					},
 					'preferred_choices' => ['ROLE_DIRECTEUR'],
-				]
+				],
 			])
 			->add('plainPassword', RepeatedType::class, [
 				'type'            => PasswordType::class,
@@ -46,10 +64,16 @@ class UserType extends AbstractType
 					],
 				],
 				'first_options'   => [
-					'label' => 'Mot de passe',
+					'label'      => 'Mot de passe',
+					'label_attr' => [
+						'class' => 'bmd-label-floating text-white ft-24',
+					],
 				],
 				'second_options'  => [
-					'label' => 'Confirmation du mot de passe',
+					'label'      => 'Confirmez',
+					'label_attr' => [
+						'class' => 'bmd-label-floating text-white ft-24',
+					],
 				],
 				'invalid_message' => 'fos_user.password.mismatch',
 			]);
