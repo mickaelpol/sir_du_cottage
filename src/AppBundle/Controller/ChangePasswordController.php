@@ -40,12 +40,14 @@ class ChangePasswordController extends BaseController
 		}
 
 		$event = new GetResponseUserEvent($user, $request);
+
 		$this->eventDispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_INITIALIZE, $event);
+
 
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();
 		}
-
+    
 		$form = $this->formFactory->createForm();
 		$form->setData($user);
 
@@ -61,16 +63,14 @@ class ChangePasswordController extends BaseController
 				$url = $this->generateUrl('accueil');
 				$response = new RedirectResponse($url);
 			}
-
+      
 			$this->eventDispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
-
 			return $response;
 		}
 
 		return $this->render('@FOSUser/ChangePassword/change_password.html.twig', array(
 			'form' => $form->createView(),
 		));
-
 	}
 
 }

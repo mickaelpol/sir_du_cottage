@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ChantierController extends Controller
 {
-
+  
 	/**
 	 * @Route(path="/get_form_multiple_delete_chantier", name="get_form_multiple_delete_chantier", methods={"GET", "POST"})
 	 * @param Request $request
