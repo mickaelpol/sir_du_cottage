@@ -59,3 +59,10 @@ input.search::placeholder {
     background-color: #6c757d;
     border-color: #000000;
 }
+
+.dropdownScrollToTop {
+    z-index: 2;
+    position: fixed !important;
+    top: 70px !important;
+    right: 30px !important;
+}

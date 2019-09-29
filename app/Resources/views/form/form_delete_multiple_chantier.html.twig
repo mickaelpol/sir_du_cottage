@@ -1,0 +1,36 @@
+{{ form_start(form, {'attr': {'id': 'form_suppression_multiple_ajax', 'action': path('get_form_multiple_delete_chantier') }}) }}
+
+<div class="row mt-2 mb-2">
+    <div class="col-12 text-center">
+        {{ form_label(form.chantier) }}
+    </div>
+</div>
+
+<div class="row mt-1">
+    {% for child in form.chantier %}
+        <div class="col-sm-2">
+            <label class="checkbox-inline">
+                {{ form_widget(child) }}
+                <span class="checkbox-decorator">
+                            <span class="check"></span>
+                        </span>
+                {{ form_label(child) }}
+            </label>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="row mt-4 mb-4">
+    <div class="col-6">
+        <button type="button" class="btn btn-block btn-raised btn-danger" data-dismiss="modal">Annuler</button>
+    </div>
+    <div class="col-6">
+        <button id="modal_ajax_submit" type="submit" class="btn btn-block btn-raised btn-primary">valider</button>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+{% block javascripts %}
+    <script src="{{ asset('Js/ajax/chantier/get_form_delete_multiple_chantier.js') }}"></script>
+{% endblock %}
