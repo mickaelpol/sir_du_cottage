@@ -96,12 +96,29 @@
     <div class="row mt-5">
         {% for formulaire in form.biens.children %}
             <div class="col-12 col-md-6 col-lg-4 col-modifier">
+                <input type="hidden" value="{{ app.user }}">
                 <div class="table-globale m-1 bg-darkin">
-                    <div class="col-6">
-                        <div class="cercle-pourcentage bg-info">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="cercle-pourcentage bg-info">
                             <span class="{% if pourcentages[loop.index0] < 99 %}texte-pourcentage{% elseif pourcentages[loop.index0] > 99 %}texte-pourcentage-supp-100{% endif %}">
                                 {{ pourcentages[loop.index0] }}%
                             </span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-primary rounded-recapitulatif">
+                                <div class="text-center text-white text-uppercase">
+                                        {{ biens[loop.index0].utilisateur }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-warning bmd-btn-fab">
+                                    <i class="material-icons">warning</i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="table-header col-6 offset-3">

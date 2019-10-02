@@ -3,6 +3,9 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Chantier;
+use Doctrine\Common\Cache\ApcuCache;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Mapping;
 
 /**
  * ChantierRepository
@@ -12,7 +15,6 @@ use AppBundle\Entity\Chantier;
  */
 class ChantierRepository extends \Doctrine\ORM\EntityRepository
 {
-
 	CONST MAX_RESULT = 4;
 
 	public function nombreChantiers()
@@ -28,11 +30,9 @@ class ChantierRepository extends \Doctrine\ORM\EntityRepository
 	public function quattreChantierPlusAvancer()
 	{
 		$qb = $this->createQueryBuilder('c');
-
 		$qb
 			->orderBy('c.pourcentage', 'DESC')
 			->setMaxResults(self::MAX_RESULT);
-
 		return $qb->getQuery()->getResult();
 	}
 

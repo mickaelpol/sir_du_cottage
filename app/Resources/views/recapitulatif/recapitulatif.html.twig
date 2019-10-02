@@ -89,7 +89,11 @@
                                     <img class="image mx-auto img-fluid rounded-circle bg-darkin" src="{{ asset('image/background_pourcentage.jpg') }}" alt="Fond de l'overlay" />
                                     <div class="text text-center">
                                         <div class="pourcentage font-weight-bold">
-                                            {{ chantier.pourcentage }}%
+                                            {% if chantier.pourcentage == null %}
+                                                0%
+                                            {% else %}
+                                                {{ chantier.pourcentage }}%
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

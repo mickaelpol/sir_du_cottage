@@ -9,13 +9,26 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class BienType extends AbstractType
 {
+
+
+	private $securityContext;
+
+	public function __construct(TokenStorageInterface $securityContext)
+	{
+		$this->securityContext = $securityContext;
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -92,6 +105,19 @@ class BienType extends AbstractType
 				'allow_delete'  => true,
 				'prototype'     => true,
 			]);
+
+//		$builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+//			$user = $this->securityContext->getToken()->getUsername();
+//			$utilisateur = $event->getData();
+//			$form = $event->getForm();
+//
+//			if (null !== $utilisateur) {
+//				$form->add('utilisateur', TextType::class, [
+//					'label' => false,
+//					'data'  => $user,
+//				]);
+//			}
+//		});
 	}
 
 	/**

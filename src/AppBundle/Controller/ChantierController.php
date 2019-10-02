@@ -12,8 +12,10 @@ use AppBundle\Entity\User;
 use AppBundle\Form\AddColorisBienForm;
 use AppBundle\Form\ChantierEditType;
 use AppBundle\Form\DeleteMultipleChantierType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +30,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ChantierController extends Controller
 {
-  
+
 	/**
 	 * @Route(path="/get_form_multiple_delete_chantier", name="get_form_multiple_delete_chantier", methods={"GET", "POST"})
 	 * @param Request $request
@@ -389,7 +391,11 @@ class ChantierController extends Controller
 			$pourcentageAvancementChantier = ceil($sommeAvancementBien / $chantier->getNombreBiens());
 		}
 
+
 		if ($form_edit->isSubmitted() && $form_edit->isValid()) {
+			$donneesChantier = $form_edit->getData();
+			$form_biens = $donneesChantier->getBiens();
+
 			$em = $this->getDoctrine()->getManager();
 			$chantier->setPourcentage($pourcentageAvancementChantier);
 			$em->persist($chantier);
@@ -403,6 +409,7 @@ class ChantierController extends Controller
 
 		return $this->render('chantier/show.html.twig', array(
 			'chantier'     => $chantier,
+			'biens'        => $biens,
 			'oneBien'      => $oneBien,
 			'form'         => $form_edit->createView(),
 			'pourcentages' => $pourcentageAvancementBien,
