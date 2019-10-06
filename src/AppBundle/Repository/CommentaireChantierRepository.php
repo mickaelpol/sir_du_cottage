@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class CommentaireChantierRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findByCache()
+	{
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT com FROM AppBundle:CommentaireChantier com 
+				  ORDER BY com.id DESC'
+		);
+
+		$qb->useResultCache(true, 3600, 'cinq_dernier_com_cache');
+
+		return $qb->getResult();
+	}
+
+	public function getCommentaire()
+	{
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT c FROM AppBundle:CommentaireChantier c'
+		);
+
+		return $qb->getResult();
+	}
+
 }

@@ -15,12 +15,12 @@ class BienRepository extends \Doctrine\ORM\EntityRepository
 
 	public function nombreBiens()
 	{
-		$qb = $this->_em->createQueryBuilder();
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT COUNT(b) FROM AppBundle:Bien b'
+		);
+		$qb->useResultCache(true, 3600, 'nombre_biens_cache');
 
-		$qb->select('COUNT(b)')
-			->from(Bien::class, 'b');
-
-		return $qb->getQuery()->getSingleScalarResult();
+		return $qb->getResult();
 	}
 
 	public function getBienAsChantier($chantier)

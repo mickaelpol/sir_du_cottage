@@ -30,11 +30,12 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
 	public function nombreDutilisateur()
 	{
-		$qb = $this->_em->createQueryBuilder();
-		$qb->select('COUNT(u)')
-			->from(User::class, 'u');
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT COUNT(u) FROM AppBundle:User u'
+		);
+		$qb->useResultCache(true, 3600, 'nombre_utilisateur_cache');
 
-		return $qb->getQuery()->getSingleScalarResult();
+		return $qb->getSingleScalarResult();
 	}
 
 }

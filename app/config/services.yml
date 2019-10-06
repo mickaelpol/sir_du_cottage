@@ -33,6 +33,28 @@ services:
         arguments:
             $formFactory: '@fos_user.change_password.form.factory'
 
+    chantier_listenner:
+      class: AppBundle\Listenner\ChantierListenner
+      arguments: [ "@app.persist_flush_with_update_cache" ]
+      tags:
+        - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Chantier , event: postPersist, lazy: true }
+        - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Chantier , event: postUpdate, lazy: true }
+        - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Chantier , event: postRemove, lazy: true }
+
+    simple_cache_app:
+        class: Symfony\Component\Cache\Adapter\SimpleCacheAdapter
+        arguments: [ "@cache.app" ]
+
+    AppBundle\Listenner\BienListenner:
+        class: AppBundle\Listenner\BienListenner
+        arguments: [ "@security.token_storage", "@app.persist_flush_with_update_cache", "@snc_redis.doctrine" ]
+        tags:
+          - { name: "doctrine.orm.entity_listener", entity: AppBundle\Entity\Bien, event: postUpdate }
+#          - { name: "doctrine.orm.entity_listener",entity: AppBundle\Entity\Bien, event: postPersist }
+
+    app.persist_flush_with_update_cache:
+      class: AppBundle\Services\PersistFlushWithUpdateCacheService
+      arguments: ["@doctrine.orm.entity_manager", "@snc_redis.doctrine"]
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

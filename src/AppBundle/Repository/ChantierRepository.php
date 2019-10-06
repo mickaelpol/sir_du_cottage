@@ -6,6 +6,7 @@ use AppBundle\Entity\Chantier;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * ChantierRepository
@@ -17,23 +18,36 @@ class ChantierRepository extends \Doctrine\ORM\EntityRepository
 {
 	CONST MAX_RESULT = 4;
 
+	public function findAllFromCache()
+	{
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT c FROM AppBundle:chantier c'
+		);
+		$qb->useResultCache(true, 3600, 'liste_chantier_cache');
+
+		return $qb->getResult();
+	}
+
+
 	public function nombreChantiers()
 	{
-		$qb = $this->_em->createQueryBuilder();
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT COUNT(c) FROM AppBundle:Chantier c'
+		);
 
-		$qb->select('COUNT(c)')
-			->from(Chantier::class, 'c');
-
-		return $qb->getQuery()->getSingleScalarResult();
+		$qb->useResultCache(true, 3600, 'nombre_chantiers_cache');
+		return $qb->getResult();
 	}
 
 	public function quattreChantierPlusAvancer()
 	{
-		$qb = $this->createQueryBuilder('c');
-		$qb
-			->orderBy('c.pourcentage', 'DESC')
-			->setMaxResults(self::MAX_RESULT);
-		return $qb->getQuery()->getResult();
+		$qb = $this->getEntityManager()->createQuery(
+			'SELECT c FROM AppBundle:Chantier c 
+				  ORDER BY c.pourcentage DESC'
+		)->setMaxResults(self::MAX_RESULT);
+
+		$qb->useResultCache(true, 3600, 'quattre_chantier_plus_avancer_cache');
+		return $qb->getResult();
 	}
 
 }

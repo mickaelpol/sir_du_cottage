@@ -9,7 +9,7 @@ use AppBundle\Entity\CommentaireChantier;
 use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
@@ -18,15 +18,14 @@ class DefaultController extends Controller
 	 * Lists all chantier entities.
 	 * @Route(path="/", name="accueil", methods={"GET"})
 	 * @Security("is_granted('ROLE_CHEF')")
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function backOfficeAction()
 	{
 		$em = $this->getDoctrine()->getManager();
 		$nombreChantiers = $em->getRepository(Chantier::class)->nombreChantiers();
 		$nombreBiens = $em->getRepository(Bien::class)->nombreBiens();
-		$cinqDernierComChantiers = $em->getRepository(CommentaireChantier::class)->findBy([], [
-			'id' => 'DESC',
-		], 5);
+		$cinqDernierComChantiers = $em->getRepository(CommentaireChantier::class)->findByCache();
 		$nombreDutilisateurs = $em->getRepository(User::class)->nombreDutilisateur();
 		$chantierAvancer = $em->getRepository(Chantier::class)->quattreChantierPlusAvancer();
 

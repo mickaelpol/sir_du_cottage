@@ -2,25 +2,22 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Constante\NotificationConstate as notif;
 use AppBundle\Entity\Bien;
 use AppBundle\Entity\Chantier;
-use AppBundle\Entity\ColorisParquet;
-use AppBundle\Entity\CommentaireChantier;
 use AppBundle\Entity\SupplementParquet;
 use AppBundle\Entity\SupplementTerrasse;
-use AppBundle\Entity\User;
-use AppBundle\Form\AddColorisBienForm;
 use AppBundle\Form\ChantierEditType;
 use AppBundle\Form\DeleteMultipleChantierType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Psr\SimpleCache\CacheInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\SimpleCacheAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use AppBundle\Constante\NotificationConstate as notif;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -67,6 +64,24 @@ class ChantierController extends Controller
 	}
 
 	/**
+	 * @param $key
+	 * @param $value
+	 * @return \Symfony\Component\Cache\CacheItem
+	 * @throws \Psr\Cache\InvalidArgumentException
+	 */
+	private function miseEnCache($key, $value)
+	{
+		$cache = $this->get('cache.app');
+		$cacheItem = $cache->getItem($key);
+
+		if (false === $cacheItem->isHit()) {
+			$cacheItem->set($value, $key);
+			$cache->save($cacheItem);
+		}
+		return $cacheItem;
+	}
+
+	/**
 	 * Lists all chantier entities.
 	 * @Route(path="/", name="chantier_index", methods={"GET"})
 	 * @Security("is_granted('ROLE_CHEF')")
@@ -74,11 +89,12 @@ class ChantierController extends Controller
 	public function indexAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-
-		$chantiers = $em->getRepository('AppBundle:Chantier')->findAll();
+		$chantiers = $em->getRepository('AppBundle:Chantier')->findAllFromCache();
+		$com = $em->getRepository('AppBundle:CommentaireChantier')->getCommentaire();
 
 		return $this->render('chantier/index.html.twig', array(
-			'chantiers' => $chantiers,
+			'chantiers'    => $chantiers,
+			'commentaires' => $com,
 		));
 	}
 
@@ -314,6 +330,10 @@ class ChantierController extends Controller
 	 */
 	public function showAction(Chantier $chantier, Request $request)
 	{
+
+//		dump($chantier, $request);
+//		die;
+//		$cacheChantier = $this->miseEnCache('chantier', $chantier);
 		$form_edit = $this->createForm(ChantierEditType::class, $chantier);
 		$form_edit->handleRequest($request);
 		$biens = $chantier->getBiens();
